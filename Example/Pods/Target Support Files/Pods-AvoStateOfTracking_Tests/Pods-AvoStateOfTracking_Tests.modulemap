@@ -1,0 +1,6 @@
+framework module Pods_AvoStateOfTracking_Tests {
+  umbrella header "Pods-AvoStateOfTracking_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

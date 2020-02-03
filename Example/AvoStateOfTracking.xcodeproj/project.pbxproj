@@ -20,7 +20,8 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		6003F5BC195388D20070C39A /* SimpleTypeSchemaExtractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* SimpleTypeSchemaExtractionTests.m */; };
+		6E65550423E5B3F700F271C8 /* ListSchemaExtractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E65550323E5B3F700F271C8 /* ListSchemaExtractionTests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		B8B2BD2AC15B597DC70A16F7 /* Pods_AvoStateOfTracking_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0385A7D967CD2A317A48054A /* Pods_AvoStateOfTracking_Tests.framework */; };
@@ -38,7 +39,7 @@
 
 /* Begin PBXFileReference section */
 		0385A7D967CD2A317A48054A /* Pods_AvoStateOfTracking_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		18EDCD8FB8CCED3A1897C0A4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		18EDCD8FB8CCED3A1897C0A4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		477A7DB1E300D6CCCB497073 /* Pods_AvoStateOfTracking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* AvoStateOfTracking_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvoStateOfTracking_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -57,16 +58,17 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
+		6003F5BB195388D20070C39A /* SimpleTypeSchemaExtractionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleTypeSchemaExtractionTests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		6E65550323E5B3F700F271C8 /* ListSchemaExtractionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListSchemaExtractionTests.m; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		87E70B6034DD8F288503AB25 /* Pods-AvoStateOfTracking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.release.xcconfig"; sourceTree = "<group>"; };
-		B28235AFC6E48D36D0E38644 /* AvoStateOfTracking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = AvoStateOfTracking.podspec; path = ../AvoStateOfTracking.podspec; sourceTree = "<group>"; };
+		B28235AFC6E48D36D0E38644 /* AvoStateOfTracking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AvoStateOfTracking.podspec; path = ../AvoStateOfTracking.podspec; sourceTree = "<group>"; };
 		B98C773A43DE3E8F6C478C85 /* Pods-AvoStateOfTracking_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BEB89237300F3787D57D1AAA /* Pods-AvoStateOfTracking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		C40667EBF43F696F5D928212 /* Pods-AvoStateOfTracking_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		DC6F3BAF63606FC6F49B5F57 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		DC6F3BAF63606FC6F49B5F57 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +161,8 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				6003F5BB195388D20070C39A /* Tests.m */,
+				6003F5BB195388D20070C39A /* SimpleTypeSchemaExtractionTests.m */,
+				6E65550323E5B3F700F271C8 /* ListSchemaExtractionTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -193,7 +196,6 @@
 				BEB89237300F3787D57D1AAA /* Pods-AvoStateOfTracking_Tests.debug.xcconfig */,
 				B98C773A43DE3E8F6C478C85 /* Pods-AvoStateOfTracking_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -208,7 +210,7 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				3BFEDACFFE8D4F3E2B032EC6 /* [CP] Embed Pods Frameworks */,
+				F4EDE24039A48C81617C4E41 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -259,6 +261,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -318,24 +321,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3BFEDACFFE8D4F3E2B032EC6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AvoStateOfTracking/AvoStateOfTracking.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AvoStateOfTracking.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4F4412A5B7DB7384DDFDE417 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -382,6 +367,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F4EDE24039A48C81617C4E41 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AvoStateOfTracking/AvoStateOfTracking.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AvoStateOfTracking.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -399,7 +402,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BC195388D20070C39A /* Tests.m in Sources */,
+				6003F5BC195388D20070C39A /* SimpleTypeSchemaExtractionTests.m in Sources */,
+				6E65550423E5B3F700F271C8 /* ListSchemaExtractionTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

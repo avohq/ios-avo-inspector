@@ -8,6 +8,11 @@
 
 #import "AVOViewController.h"
 
+#import <AvoStateOfTracking/AvoList.h>
+#import <AvoStateOfTracking/AvoInt.h>
+#import <AvoStateOfTracking/AvoNull.h>
+#import <AvoStateOfTracking/AvoStateOfTracking.h>
+
 @interface AVOViewController ()
 
 @end
@@ -18,6 +23,15 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    AvoList *avoList = [AvoList new];
+    
+    [[avoList subtypes] addObject: [AvoInt new]];
+    [[avoList subtypes] addObject: [AvoNull new]];
+    
+    NSLog(@"avoint: %@", [avoList name]);
+    
+    AvoStateOfTracking * avoSot = [AvoStateOfTracking new];
 }
 
 - (void)didReceiveMemoryWarning
