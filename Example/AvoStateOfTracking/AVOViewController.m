@@ -29,8 +29,6 @@
     [[avoList subtypes] addObject: [AvoInt new]];
     [[avoList subtypes] addObject: [AvoNull new]];
     
-    NSLog(@"avoint: %@", [avoList name]);
-    
     AvoStateOfTracking * avoSot = [AvoStateOfTracking new];
 }
 

@@ -26,12 +26,35 @@
 
 @synthesize isLogging;
 
--(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params {
-    return [NSDictionary new];
+-(instancetype) init {
+
 }
 
--(NSDictionary *) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema {
-    return [NSDictionary new];
+-(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params {
+    if (self.isLogging) {
+        NSLog(@"Avo State Of Tracking: Supplied event %@ with params %@", eventName, [params description]);
+    }
+    
+    NSDictionary * schema = [self extractSchema:params];
+    
+    [self trackSchema:eventName eventSchema:schema];
+    
+    return schema;
+}
+
+-(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema {
+    if (self.isLogging) {
+        
+        NSString * schemaString = @"";
+        
+        for(NSString *key in [schema allKeys]) {
+            NSString *value = [[schema objectForKey:key] name];
+            NSString *entry = [NSString stringWithFormat:@"\t\"%@\": \"%@\";\n", key, value];
+            schemaString = [schemaString stringByAppendingString:entry];
+        }
+        
+        NSLog(@"Avo State Of Tracking: Tracked event %@ with schema {\n%@}", eventName, schemaString);
+    }
 }
 
 -(NSDictionary *) extractSchema:(NSDictionary *) eventParams {

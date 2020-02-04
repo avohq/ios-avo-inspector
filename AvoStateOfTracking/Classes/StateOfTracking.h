@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readwrite, nonatomic) BOOL isLogging;
 
 -(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params;
--(NSDictionary *) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema;
+-(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema;
 
 -(NSDictionary *) extractSchema:(NSDictionary *) eventParams;
 

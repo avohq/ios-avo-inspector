@@ -9,7 +9,7 @@
 
 @implementation AvoList
 
--(id)init {
+-(id) init {
      if (self = [super init])  {
        self.subtypes = [NSMutableArray new];
      }
@@ -34,7 +34,7 @@
         listTypes = [listTypes stringByAppendingString:subtypeName];
     }
     
-    return [NSString stringWithFormat:@"list (%@)", listTypes];
+    return [NSString stringWithFormat:@"list(%@)", listTypes];
 }
 
 @end
