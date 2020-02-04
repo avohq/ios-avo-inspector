@@ -59,7 +59,7 @@ it(@"can extract string subtype array", ^{
    
    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list (string)");
+   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(string)");
 });
 
 it(@"can extract nullable string subtype array", ^{
@@ -75,7 +75,7 @@ it(@"can extract nullable string subtype array", ^{
    
    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list (string|null)");
+   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(string|null)");
 });
 
 it(@"can extract nullable string int float boolean subtype array", ^{
@@ -94,7 +94,7 @@ it(@"can extract nullable string int float boolean subtype array", ^{
    
    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list (string|null|int|float|boolean)");
+   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(string|null|int|float|boolean)");
 });
 
 it(@"can extract double subtype array", ^{
@@ -109,7 +109,7 @@ it(@"can extract double subtype array", ^{
    
    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list (float)");
+   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(float)");
 });
 
 SpecEnd

@@ -17,7 +17,7 @@
 
 @interface AvoStateOfTracking ()
 
-@property (readwrite, nonatomic) NSInteger appVersion;
+@property (readwrite, nonatomic) NSString * appVersion;
 @property (readwrite, nonatomic) NSInteger libVersion;
 
 @end
@@ -27,7 +27,13 @@
 @synthesize isLogging;
 
 -(instancetype) init {
+    self = [super init];
+    if (self) {
+        self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
+        self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
 
+    }
+    return self;
 }
 
 -(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params {

@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AvoStateOfTracking : NSObject <StateOfTracking>
 
-
+@property (readonly, nonatomic) NSString * appVersion;
+@property (readonly, nonatomic) NSInteger libVersion;
 
 @end
 
