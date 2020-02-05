@@ -7,10 +7,13 @@
 
 #import <Foundation/Foundation.h>
 #import "StateOfTracking.h"
+#import "AvoSessionTracker.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AvoStateOfTracking : NSObject <StateOfTracking>
+
+@property (readonly, nonatomic) AvoSessionTracker * sessionTracker;
 
 @property (readonly, nonatomic) NSString * appVersion;
 @property (readonly, nonatomic) NSInteger libVersion;

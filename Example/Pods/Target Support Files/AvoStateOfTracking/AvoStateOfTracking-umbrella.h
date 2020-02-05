@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "AvoSessionTracker.h"
 #import "AvoStateOfTracking.h"
 #import "AvoBoolean.h"
 #import "AvoEventSchemaType.h"
@@ -18,6 +19,7 @@
 #import "AvoList.h"
 #import "AvoNull.h"
 #import "AvoString.h"
+#import "AvoUnknownType.h"
 #import "StateOfTracking.h"
 
 FOUNDATION_EXPORT double AvoStateOfTrackingVersionNumber;

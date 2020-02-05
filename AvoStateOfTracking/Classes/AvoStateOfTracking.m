@@ -17,6 +17,8 @@
 
 @interface AvoStateOfTracking ()
 
+@property (readwrite, nonatomic) AvoSessionTracker * sessionTracker;
+
 @property (readwrite, nonatomic) NSString * appVersion;
 @property (readwrite, nonatomic) NSInteger libVersion;
 
@@ -31,7 +33,7 @@
     if (self) {
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
-
+        self.sessionTracker = [AvoSessionTracker new];
     }
     return self;
 }
@@ -61,6 +63,8 @@
         
         NSLog(@"Avo State Of Tracking: Tracked event %@ with schema {\n%@}", eventName, schemaString);
     }
+    
+    [self.sessionTracker schemaTracked:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
 }
 
 -(NSDictionary *) extractSchema:(NSDictionary *) eventParams {
