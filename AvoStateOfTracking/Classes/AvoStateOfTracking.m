@@ -92,15 +92,20 @@
     if ([paramType isEqual: @"__NSCFNumber"]) {
         const char *objCtype = [obj objCType];
         
-        if ([@"i" isEqualToString:@(objCtype)]) {
+        if ([@"i" isEqualToString:@(objCtype)]
+            || [@"s" isEqualToString:@(objCtype)]
+            || [@"q" isEqualToString:@(objCtype)]) {
             return [AvoInt new];
+        } else if ([@"c" isEqualToString:@(objCtype)]) {
+            return [AvoString new];
         } else {
             return [AvoFloat new];
         }
     } else if ([paramType  isEqual: @"__NSCFBoolean"]) {
         return [AvoBoolean new];
     } else if ([paramType  isEqual: @"__NSCFConstantString"] ||
-               [paramType  isEqual: @"__NSCFString"]) {
+               [paramType  isEqual: @"__NSCFString"] ||
+               [paramType   isEqual: @"NSTaggedPointerString"]) {
         return [AvoString new];
     } else if ([paramType  isEqual: @"__NSArrayI"] ||
                [paramType  isEqual: @"__NSArrayM"]) {

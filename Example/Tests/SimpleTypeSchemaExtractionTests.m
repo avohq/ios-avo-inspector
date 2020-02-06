@@ -31,6 +31,62 @@ describe(@"testing primitive type extraction", ^{
         expect([extractedSchema objectForKey:@"int key"]).equal([AvoInt new]);
     });
          
+     it(@"can extract long long", ^{
+         AvoStateOfTracking * sut = [AvoStateOfTracking new];
+          
+         NSMutableDictionary * testParams = [NSMutableDictionary new];
+         
+         long long int longlon = 16;
+    
+         [testParams setObject:@(longlon) forKey:@"longlong key"];
+         
+         NSDictionary * extractedSchema = [sut extractSchema:testParams];
+         
+         expect([extractedSchema objectForKey:@"longlong key"]).equal([AvoInt new]);
+     });
+         
+     it(@"can extract long", ^{
+          AvoStateOfTracking * sut = [AvoStateOfTracking new];
+           
+          NSMutableDictionary * testParams = [NSMutableDictionary new];
+          
+          long int lon = 16;
+     
+          [testParams setObject:@(lon) forKey:@"long key"];
+          
+          NSDictionary * extractedSchema = [sut extractSchema:testParams];
+          
+          expect([extractedSchema objectForKey:@"long key"]).equal([AvoInt new]);
+      });
+     
+     it(@"can extract short", ^{
+             AvoStateOfTracking * sut = [AvoStateOfTracking new];
+              
+             NSMutableDictionary * testParams = [NSMutableDictionary new];
+             
+             short int shor = 16;
+        
+             [testParams setObject:@(shor) forKey:@"short key"];
+             
+             NSDictionary * extractedSchema = [sut extractSchema:testParams];
+             
+             expect([extractedSchema objectForKey:@"short key"]).equal([AvoInt new]);
+         });
+         
+     it(@"can extract char", ^{
+         AvoStateOfTracking * sut = [AvoStateOfTracking new];
+          
+         NSMutableDictionary * testParams = [NSMutableDictionary new];
+         
+         char ch = 'c';
+    
+         [testParams setObject:@(ch) forKey:@"char key"];
+         
+         NSDictionary * extractedSchema = [sut extractSchema:testParams];
+         
+         expect([extractedSchema objectForKey:@"char key"]).equal([AvoString new]);
+     });
+         
      it(@"can extract double", ^{
         AvoStateOfTracking * sut = [AvoStateOfTracking new];
           
