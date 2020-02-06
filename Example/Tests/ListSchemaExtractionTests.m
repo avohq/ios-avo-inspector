@@ -15,7 +15,7 @@
 #import <AvoStateOfTracking/AvoString.h>
 //#import <AvoStateOfTracking/AvoUnknownType.h>
 
-SpecBegin(ListExtractionSpecs)
+SpecBegin(ListExtraction)
 
 it(@"can extract array", ^{
     AvoStateOfTracking * sut = [AvoStateOfTracking new];

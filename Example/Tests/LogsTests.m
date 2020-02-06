@@ -8,7 +8,7 @@
 
 #import <AvoStateOfTracking/AvoStateOfTracking.h>
 
-SpecBegin(LoggingSpecs)
+SpecBegin(Logging)
 
 it(@"logs event parameters", ^{
    

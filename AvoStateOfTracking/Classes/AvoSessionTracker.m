@@ -19,8 +19,7 @@
 -(instancetype) init {
     self = [super init];
     if (self) {
-        
-        self.lastSessionTimestamp = [[NSUserDefaults standardUserDefaults] doubleForKey:@"AvoStateOfTrackingSession"];
+        self.lastSessionTimestamp = [[NSUserDefaults standardUserDefaults] doubleForKey:[AvoSessionTracker cacheKey]];
         if (self.lastSessionTimestamp == 0.0) {
             self.lastSessionTimestamp = INT_MIN;
         }
@@ -37,11 +36,15 @@
     }
     
     self.lastSessionTimestamp = [atUnixTime doubleValue];
-    [[NSUserDefaults standardUserDefaults] setDouble:self.lastSessionTimestamp forKey:@"AvoStateOfTrackingSession"];
+    [[NSUserDefaults standardUserDefaults] setDouble:self.lastSessionTimestamp forKey:[AvoSessionTracker cacheKey]];
 }
 
 - (void) callSessionStarted {
         
+}
+
++ (NSString *) cacheKey {
+    return @"AvoStateOfTrackingSession";
 }
 
 @end

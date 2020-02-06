@@ -23,11 +23,11 @@
 @end
 
 
-SpecBegin(SessionSpecs)
+SpecBegin(Session)
 describe(@"Sessions", ^{
     
     beforeEach(^{
-        [[NSUserDefaults standardUserDefaults] setDouble:INT_MIN forKey:@"AvoStateOfTrackingSession"];
+        [[NSUserDefaults standardUserDefaults] setDouble:INT_MIN forKey:[AvoSessionTracker cacheKey]];
     });
 
     it(@"session starts when trackSchemaFromEvent", ^{

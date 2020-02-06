@@ -14,6 +14,7 @@
 #import "AvoString.h"
 #import "AvoUnknownType.h"
 #import "AvoNull.h"
+#import "AvoInstallationId.h"
 
 @interface AvoStateOfTracking ()
 
@@ -21,6 +22,7 @@
 
 @property (readwrite, nonatomic) NSString * appVersion;
 @property (readwrite, nonatomic) NSInteger libVersion;
+@property (readwrite, nonatomic) NSString *apiKey;
 
 @end
 
@@ -28,12 +30,13 @@
 
 @synthesize isLogging;
 
--(instancetype) init {
+-(instancetype) initWithApiKey: (NSString *) apiKey {
     self = [super init];
     if (self) {
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
         self.sessionTracker = [AvoSessionTracker new];
+        self.apiKey = apiKey;
     }
     return self;
 }
@@ -65,6 +68,21 @@
     }
     
     [self.sessionTracker schemaTracked:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+    
+    NSString * installationId = [[AvoInstallationId new] getInstallationId];
+    
+    NSMutableArray * props = [NSMutableArray new];
+    
+    for(NSString *key in [schema allKeys]) {
+        NSString *value = [[schema objectForKey:key] name];
+        
+        NSMutableDictionary *prop = [NSMutableDictionary new];
+        
+        [prop setObject:key forKey:@"propertyName"];
+        [prop setObject:value forKey:@"propertyValue"];
+        
+        [props addObject:prop];
+    }
 }
 
 -(NSDictionary *) extractSchema:(NSDictionary *) eventParams {

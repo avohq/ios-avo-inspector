@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "AvoInstallationId.h"
 #import "AvoSessionTracker.h"
 #import "AvoStateOfTracking.h"
 #import "AvoBoolean.h"
@@ -21,6 +22,7 @@
 #import "AvoString.h"
 #import "AvoUnknownType.h"
 #import "StateOfTracking.h"
+#import "Utils.h"
 
 FOUNDATION_EXPORT double AvoStateOfTrackingVersionNumber;
 FOUNDATION_EXPORT const unsigned char AvoStateOfTrackingVersionString[];

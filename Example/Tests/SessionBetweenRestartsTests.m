@@ -11,18 +11,17 @@
 
 @interface AvoSessionTracker ()
 
+@property (nonatomic) NSTimeInterval lastSessionTimestamp;
+
 - (void) callSessionStarted;
 
 @end
 
-SpecBegin(SessionBetweenRestartsSpecs)
+SpecBegin(SessionBetweenRestarts)
 describe(@"Sessions between restarts", ^{
-    
-    beforeAll(^{
-        [[NSUserDefaults standardUserDefaults] setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"AvoStateOfTrackingSession"];
-    });
 
     it(@"AvoSessionTracker reads session timestamp from disk when created", ^{
+        [[NSUserDefaults standardUserDefaults] setDouble:[[NSDate date] timeIntervalSince1970] forKey:[AvoSessionTracker cacheKey]];
        AvoSessionTracker * sut = [AvoSessionTracker new];
        
        id partialMock = OCMPartialMock(sut);
@@ -36,6 +35,18 @@ describe(@"Sessions between restarts", ^{
        
        expect(sessionStartCallCount).equal(0);
     });
+         
+     it(@"AvoSessionTracker writes session timestamp to disk when session is updated", ^{
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker cacheKey]];
+        AvoSessionTracker * sut = [AvoSessionTracker new];
+        
+        expect(sut.lastSessionTimestamp).equal(INT_MIN);
+    
+        double timestamp = [[NSDate date] timeIntervalSince1970];
+        [sut schemaTracked:@(timestamp)];
+    
+        expect([[NSUserDefaults standardUserDefaults] doubleForKey:[AvoSessionTracker cacheKey]]).equal(timestamp);
+     });
 });
 SpecEnd
 

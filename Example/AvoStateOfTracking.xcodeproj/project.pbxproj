@@ -24,6 +24,7 @@
 		6E1A24CD23E9A667008F5724 /* InitializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24CC23E9A667008F5724 /* InitializationTests.m */; };
 		6E1A24CF23EA9FB2008F5724 /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24CE23EA9FB2008F5724 /* SessionTests.m */; };
 		6E1A24D523EAFE2B008F5724 /* SessionBetweenRestartsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24D423EAFE2B008F5724 /* SessionBetweenRestartsTests.m */; };
+		6E1A24DB23EC4A2A008F5724 /* InstallationIdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24DA23EC4A2A008F5724 /* InstallationIdTests.m */; };
 		6E65550423E5B3F700F271C8 /* ListSchemaExtractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E65550323E5B3F700F271C8 /* ListSchemaExtractionTests.m */; };
 		6E771B7623E80E6A002E404C /* LogsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E771B7523E80E6A002E404C /* LogsTests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
@@ -67,6 +68,7 @@
 		6E1A24CC23E9A667008F5724 /* InitializationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InitializationTests.m; sourceTree = "<group>"; };
 		6E1A24CE23EA9FB2008F5724 /* SessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
 		6E1A24D423EAFE2B008F5724 /* SessionBetweenRestartsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionBetweenRestartsTests.m; sourceTree = "<group>"; };
+		6E1A24DA23EC4A2A008F5724 /* InstallationIdTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstallationIdTests.m; sourceTree = "<group>"; };
 		6E65550323E5B3F700F271C8 /* ListSchemaExtractionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListSchemaExtractionTests.m; sourceTree = "<group>"; };
 		6E771B7523E80E6A002E404C /* LogsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogsTests.m; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				6E1A24CC23E9A667008F5724 /* InitializationTests.m */,
 				6E1A24CE23EA9FB2008F5724 /* SessionTests.m */,
 				6E1A24D423EAFE2B008F5724 /* SessionBetweenRestartsTests.m */,
+				6E1A24DA23EC4A2A008F5724 /* InstallationIdTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -421,6 +424,7 @@
 				6E1A24CF23EA9FB2008F5724 /* SessionTests.m in Sources */,
 				6E65550423E5B3F700F271C8 /* ListSchemaExtractionTests.m in Sources */,
 				6E1A24CD23E9A667008F5724 /* InitializationTests.m in Sources */,
+				6E1A24DB23EC4A2A008F5724 /* InstallationIdTests.m in Sources */,
 				6E1A24D523EAFE2B008F5724 /* SessionBetweenRestartsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

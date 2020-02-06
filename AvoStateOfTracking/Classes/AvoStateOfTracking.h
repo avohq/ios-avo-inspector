@@ -18,6 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString * appVersion;
 @property (readonly, nonatomic) NSInteger libVersion;
 
+@property (readonly, nonatomic) NSString *apiKey;
+
+-(instancetype) initWithApiKey: (NSString *) apiKey;
+
 @end
 
 NS_ASSUME_NONNULL_END

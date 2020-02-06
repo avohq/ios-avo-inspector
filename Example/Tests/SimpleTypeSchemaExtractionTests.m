@@ -16,7 +16,7 @@
 #import <AvoStateOfTracking/AvoString.h>
 //#import <AvoStateOfTracking/AvoUnknownType.h>
 
-SpecBegin(PrimitiveTypeExtractionSpecs)
+SpecBegin(PrimitiveTypeExtraction)
 
 describe(@"testing primitive type extraction", ^{
     it(@"can extract int", ^{
