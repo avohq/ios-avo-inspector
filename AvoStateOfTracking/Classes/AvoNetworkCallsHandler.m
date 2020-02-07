@@ -121,7 +121,7 @@
             }
             NSError *jsonError = nil;
             NSDictionary *responseJSON = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
-            NSNumber *rate = responseJSON[@"sa"];
+            NSNumber *rate = responseJSON[@"samplingRate"];
             if (rate != nil && self.samplingRate != [rate doubleValue]) {
                 self.samplingRate = [rate doubleValue];
             }

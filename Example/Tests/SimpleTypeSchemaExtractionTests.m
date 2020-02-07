@@ -14,7 +14,6 @@
 #import <AvoStateOfTracking/AvoBoolean.h>
 #import <AvoStateOfTracking/AvoNull.h>
 #import <AvoStateOfTracking/AvoString.h>
-//#import <AvoStateOfTracking/AvoUnknownType.h>
 
 SpecBegin(PrimitiveTypeExtraction)
 
