@@ -16,7 +16,7 @@
 @property (readwrite, nonatomic) NSString *appVersion;
 @property (readwrite, nonatomic) NSString *libVersion;
 
-@property (readwrite, atomic) double samplingRate;
+@property (readwrite, nonatomic) double samplingRate;
 
 @end
 
@@ -100,7 +100,7 @@
                                                           options:NSJSONWritingPrettyPrinted
                                                             error:&error];
     
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://api.avo.app/"]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://api.avo.app/datascope/track"]];
     [request setHTTPMethod:@"POST"];
 
     [self writeCallHeader:request];
@@ -119,16 +119,12 @@
             if (error != nil || data == nil) {
                 return;
             }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSError *jsonError = nil;
-                NSDictionary *responseJSON = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSNumber *rate = responseJSON[@"sa"];
-                    if (rate != nil) {
-                        self.samplingRate = [rate doubleValue];
-                    }
-                });
-            });
+            NSError *jsonError = nil;
+            NSDictionary *responseJSON = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+            NSNumber *rate = responseJSON[@"sa"];
+            if (rate != nil && self.samplingRate != [rate doubleValue]) {
+                self.samplingRate = [rate doubleValue];
+            }
         }
     }];
     
