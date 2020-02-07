@@ -14,7 +14,7 @@ it(@"logs event parameters", ^{
    
     AvoStateOfTracking * sut = [AvoStateOfTracking new];
     
-    sut.isLogging = YES;
+    [AvoStateOfTracking setLogging:YES];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
      

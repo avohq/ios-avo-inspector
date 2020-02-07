@@ -28,6 +28,7 @@
 		6E65550423E5B3F700F271C8 /* ListSchemaExtractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E65550323E5B3F700F271C8 /* ListSchemaExtractionTests.m */; };
 		6E771B7623E80E6A002E404C /* LogsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E771B7523E80E6A002E404C /* LogsTests.m */; };
 		6EA681E523ED6A8600A89C34 /* NetworkCallsHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA681E423ED6A8600A89C34 /* NetworkCallsHandlerTests.m */; };
+		6EA681E723EDA69F00A89C34 /* SamplingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA681E623EDA69F00A89C34 /* SamplingTests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		B8B2BD2AC15B597DC70A16F7 /* Pods_AvoStateOfTracking_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0385A7D967CD2A317A48054A /* Pods_AvoStateOfTracking_Tests.framework */; };
@@ -73,6 +74,7 @@
 		6E65550323E5B3F700F271C8 /* ListSchemaExtractionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListSchemaExtractionTests.m; sourceTree = "<group>"; };
 		6E771B7523E80E6A002E404C /* LogsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogsTests.m; sourceTree = "<group>"; };
 		6EA681E423ED6A8600A89C34 /* NetworkCallsHandlerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkCallsHandlerTests.m; sourceTree = "<group>"; };
+		6EA681E623EDA69F00A89C34 /* SamplingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SamplingTests.m; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		87E70B6034DD8F288503AB25 /* Pods-AvoStateOfTracking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				6E1A24D423EAFE2B008F5724 /* SessionBetweenRestartsTests.m */,
 				6E1A24DA23EC4A2A008F5724 /* InstallationIdTests.m */,
 				6EA681E423ED6A8600A89C34 /* NetworkCallsHandlerTests.m */,
+				6EA681E623EDA69F00A89C34 /* SamplingTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -422,6 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EA681E723EDA69F00A89C34 /* SamplingTests.m in Sources */,
 				6E771B7623E80E6A002E404C /* LogsTests.m in Sources */,
 				6003F5BC195388D20070C39A /* SimpleTypeSchemaExtractionTests.m in Sources */,
 				6E1A24CF23EA9FB2008F5724 /* SessionTests.m in Sources */,

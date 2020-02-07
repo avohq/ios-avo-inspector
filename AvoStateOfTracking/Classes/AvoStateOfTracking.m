@@ -30,7 +30,15 @@
 
 @implementation AvoStateOfTracking
 
-@synthesize isLogging;
+static BOOL logging = NO;
+
++ (BOOL) isLogging {
+    return logging;
+}
+
++ (void) setLogging: (BOOL) isLogging {
+    logging = isLogging;
+}
 
 -(instancetype) initWithApiKey: (NSString *) apiKey {
     self = [super init];
@@ -41,14 +49,12 @@
         
         self.sessionTracker = [[AvoSessionTracker alloc] initWithNetworkHandler:self.networkCallsHandler];
         self.apiKey = apiKey;
-        
-    
     }
     return self;
 }
 
 -(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params {
-    if (self.isLogging) {
+    if ([AvoStateOfTracking isLogging]) {
         NSLog(@"Avo State Of Tracking: Supplied event %@ with params %@", eventName, [params description]);
     }
     
@@ -60,7 +66,7 @@
 }
 
 -(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema {
-    if (self.isLogging) {
+    if ([AvoStateOfTracking isLogging]) {
         
         NSString * schemaString = @"";
         

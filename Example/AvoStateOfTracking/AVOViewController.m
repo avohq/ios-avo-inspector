@@ -74,7 +74,7 @@ AvoStateOfTracking * avoSot;
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, self.scrollView.bounds.size.height*3)];
     
     avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey"];
-    avoSot.isLogging = YES;
+    [AvoStateOfTracking setLogging:YES];
     
     [self.eventNameInput becomeFirstResponder];
 }

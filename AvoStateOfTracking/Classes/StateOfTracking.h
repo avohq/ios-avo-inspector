@@ -11,12 +11,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol StateOfTracking <NSObject>
 
-@property (readwrite, nonatomic) BOOL isLogging;
-
 -(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params;
 -(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema;
 
 -(NSDictionary *) extractSchema:(NSDictionary *) eventParams;
+
++ (BOOL) isLogging;
++ (void) setLogging: (BOOL) isLogging;
 
 @end
 

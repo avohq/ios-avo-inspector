@@ -8,12 +8,15 @@
 #import "AvoNetworkCallsHandler.h"
 #import "AvoInstallationId.h"
 #import "AvoUtils.h"
+#import "AvoStateOfTracking.h"
 
 @interface AvoNetworkCallsHandler()
 
 @property (readwrite, nonatomic) NSString *apiKey;
 @property (readwrite, nonatomic) NSString *appVersion;
 @property (readwrite, nonatomic) NSString *libVersion;
+
+@property (readwrite, atomic) double samplingRate;
 
 @end
 
@@ -25,6 +28,7 @@
         self.appVersion = appVersion;
         self.libVersion = libVersion;
         self.apiKey = apiKey;
+        self.samplingRate = 1.0;
     }
     return self;
 }
@@ -84,6 +88,13 @@
 }
 
 - (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody {
+     if (drand48() > self.samplingRate) {
+         if ([AvoStateOfTracking isLogging]) {
+             NSLog(@"Last event schema dropped due to sampling rate");
+         }
+         return;
+    }
+    
     NSError *error;
     NSData *bodyData = [NSJSONSerialization  dataWithJSONObject:batchBody
                                                           options:NSJSONWritingPrettyPrinted
@@ -95,11 +106,32 @@
     [self writeCallHeader:request];
     [request setHTTPBody:bodyData];
 
+    [self sendHttpRequest:request];
+}
+
+- (void)sendHttpRequest:(NSMutableURLRequest *)request {
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {}];
-
+    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if(error == nil)
+        {
+            if (error != nil || data == nil) {
+                return;
+            }
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                NSError *jsonError = nil;
+                NSDictionary *responseJSON = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSNumber *rate = responseJSON[@"sa"];
+                    if (rate != nil) {
+                        self.samplingRate = [rate doubleValue];
+                    }
+                });
+            });
+        }
+    }];
+    
     [postDataTask resume];
 }
 
