@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Utils : NSObject
+@interface AvoUtils : NSObject
 
 + (NSString *) currentTimeAsISO8601UTCString;
 

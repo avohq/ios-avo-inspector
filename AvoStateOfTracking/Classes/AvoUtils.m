@@ -5,9 +5,9 @@
 //  Created by Alex Verein on 06.02.2020.
 //
 
-#import "Utils.h"
+#import "AvoUtils.h"
 
-@implementation Utils
+@implementation AvoUtils
 
 + (NSString *) currentTimeAsISO8601UTCString {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

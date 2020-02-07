@@ -14,7 +14,7 @@
 #import "AvoString.h"
 #import "AvoUnknownType.h"
 #import "AvoNull.h"
-#import "AvoInstallationId.h"
+#import "AvoNetworkCallsHandler.h"
 
 @interface AvoStateOfTracking ()
 
@@ -23,6 +23,8 @@
 @property (readwrite, nonatomic) NSString * appVersion;
 @property (readwrite, nonatomic) NSInteger libVersion;
 @property (readwrite, nonatomic) NSString *apiKey;
+
+@property (readwrite, nonatomic) AvoNetworkCallsHandler *networkCallsHandler;
 
 @end
 
@@ -35,8 +37,12 @@
     if (self) {
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
-        self.sessionTracker = [AvoSessionTracker new];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appVersion:self.appVersion libVersion:[@(self.libVersion) stringValue]];
+        
+        self.sessionTracker = [[AvoSessionTracker alloc] initWithNetworkHandler:self.networkCallsHandler];
         self.apiKey = apiKey;
+        
+    
     }
     return self;
 }
@@ -69,20 +75,7 @@
     
     [self.sessionTracker schemaTracked:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
     
-    NSString * installationId = [[AvoInstallationId new] getInstallationId];
-    
-    NSMutableArray * props = [NSMutableArray new];
-    
-    for(NSString *key in [schema allKeys]) {
-        NSString *value = [[schema objectForKey:key] name];
-        
-        NSMutableDictionary *prop = [NSMutableDictionary new];
-        
-        [prop setObject:key forKey:@"propertyName"];
-        [prop setObject:value forKey:@"propertyValue"];
-        
-        [props addObject:prop];
-    }
+    [self.networkCallsHandler callTrackSchema:eventName schema:schema];
 }
 
 -(NSDictionary *) extractSchema:(NSDictionary *) eventParams {

@@ -79,22 +79,22 @@ it(@"can extract nullable string subtype array", ^{
 });
 
 it(@"can extract nullable string int float boolean subtype array", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoStateOfTracking * sut = [AvoStateOfTracking new];
    
-   NSMutableDictionary * testParams = [NSMutableDictionary new];
+    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
-   NSMutableArray * mutableArray = [NSMutableArray new];
-   [mutableArray addObject:@"Hello world"];
-   [mutableArray addObject:NSNull.null];
+    NSMutableArray * mutableArray = [NSMutableArray new];
+    [mutableArray addObject:@"Hello world"];
+    [mutableArray addObject:NSNull.null];
     [mutableArray addObject:@42];
     [mutableArray addObject:@41.1f];
-     [mutableArray addObject:@YES];
+    [mutableArray addObject:@YES];
    
-   [testParams setObject:mutableArray forKey:@"string array key"];
+    [testParams setObject:mutableArray forKey:@"string array key"];
    
-   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(string|null|int|float|boolean)");
+    expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(string|null|int|float|boolean)");
 });
 
 it(@"can extract double subtype array", ^{

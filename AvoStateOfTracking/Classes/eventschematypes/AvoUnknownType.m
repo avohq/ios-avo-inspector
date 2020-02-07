@@ -9,7 +9,7 @@
 
 @implementation AvoUnknownType
 
-+ (NSString *) name {
+- (NSString *) name {
     return @"unknown";
 }
 
