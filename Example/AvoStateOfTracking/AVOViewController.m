@@ -145,7 +145,7 @@ AvoStateOfTracking * avoSot;
     [self parseKey:self.param9Key.text value:self.param9Value.text to:testParams];
     [self parseKey:self.param10Key.text value:self.param10Value.text to:testParams];
     
-    [avoSot trackSchemaFromEvent:eventName eventParams:testParams];
+    [avoSot trackSchemaFromEvent:eventName eventParams:(NSDictionary *)testParams];
 }
 
 -(void)dismissKeyboard

@@ -9,26 +9,18 @@
 Pod::Spec.new do |s|
   s.name             = 'AvoStateOfTracking'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of AvoStateOfTracking.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.summary          = 'Avo Datascope iOS SDK'
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+A powerful suite of features that analyze your current state of tracking and guide you from your current, messy taxonomy to a more consistent and reliable tracking process across your teams, products, and platforms.
                        DESC
 
-  s.homepage         = 'https://github.com/Alexey Verein/AvoStateOfTracking'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  s.homepage         = 'https://github.com/avohq/ios-datascope'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Alexey Verein' => 'tpom6oh@gmail.com' }
-  s.source           = { :git => 'https://github.com/Alexey Verein/AvoStateOfTracking.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { 'Avo (https://www.avo.app)' => 'friends@avo.app' }
+  s.source           = { :git => 'https://github.com/avohq/ios-datascope', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '11.0'
 
   s.source_files = 'AvoStateOfTracking/Classes/**/*'
   
