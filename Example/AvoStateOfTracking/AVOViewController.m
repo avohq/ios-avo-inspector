@@ -13,6 +13,10 @@
 #import <AvoStateOfTracking/AvoNull.h>
 #import <AvoStateOfTracking/AvoString.h>
 #import <AvoStateOfTracking/AvoStateOfTracking.h>
+#import <Analytics/SEGAnalyticsConfiguration.h>
+#import <Analytics/SEGAnalytics.h>
+#import <Analytics/SEGMiddleware.h>
+
 
 @interface AVOViewController ()
 
@@ -76,6 +80,30 @@ AvoStateOfTracking * avoSot;
     
     avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey"];
     [AvoStateOfTracking setLogging:YES];
+    
+    SEGAnalyticsConfiguration * config = [SEGAnalyticsConfiguration configurationWithWriteKey: @"YOUR_WRITEKEY_HERE"];
+    config.trackApplicationLifecycleEvents = true;
+    config.trackDeepLinks = true;
+    config.recordScreenViews = true;
+   
+    SEGBlockMiddleware * avoMiddleware = [[SEGBlockMiddleware alloc] initWithBlock:^(SEGContext * _Nonnull context, SEGMiddlewareNext  _Nonnull next) {
+        SEGPayload * payload = [context payload];
+        if ([payload isKindOfClass:[SEGTrackPayload class]]) {
+            SEGTrackPayload * trackPayload = (SEGTrackPayload *) payload;
+            [avoSot trackSchemaFromEvent:[trackPayload event] eventParams:[trackPayload properties]];
+        } else if ([payload isKindOfClass:[SEGScreenPayload class]]) {
+            SEGScreenPayload * screenPayload = (SEGScreenPayload *) payload;
+            [avoSot trackSchemaFromEvent:[screenPayload name] eventParams:[screenPayload properties]];
+        }
+        next(context);
+    }];
+    
+    config.middlewares = @[avoMiddleware];
+    
+    [SEGAnalytics setupWithConfiguration:config];
+    
+    [[SEGAnalytics sharedAnalytics] track:@"Item Purchased"
+    properties:@{ @"item": @"Sword of Heracles", @"revenue": @2.95 }];
     
     [self.eventNameInput becomeFirstResponder];
 }
@@ -147,6 +175,7 @@ AvoStateOfTracking * avoSot;
     [self parseKey:self.param10Key.text value:self.param10Value.text to:testParams];
     
     [avoSot trackSchemaFromEvent:eventName eventParams:(NSDictionary *)testParams];
+
 }
 
 -(void)dismissKeyboard

@@ -1,9 +1,10 @@
 use_frameworks!
 
-platform :ios, '8.0'
+platform :ios, '11.0'
 
 target 'AvoStateOfTracking_Example' do
   pod 'AvoStateOfTracking', :path => '../'
+  pod 'Analytics', '~> 3.6.0'
 
   target 'AvoStateOfTracking_Tests' do
     inherit! :search_paths

@@ -130,7 +130,8 @@ static BOOL logging = NO;
         return [AvoBoolean new];
     } else if ([paramType isEqual: @"__NSCFConstantString"] ||
                [paramType isEqual: @"__NSCFString"] ||
-               [paramType isEqual: @"NSTaggedPointerString"]) {
+               [paramType isEqual: @"NSTaggedPointerString"] ||
+               [paramType isEqual: @"Swift.__SharedStringStorage"]) {
         return [AvoString new];
     } else if ([paramType isEqual: @"__NSArrayI"] ||
                [paramType isEqual: @"__NSArrayM"] ||
