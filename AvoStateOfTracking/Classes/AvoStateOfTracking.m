@@ -53,7 +53,8 @@ static BOOL logging = NO;
     return self;
 }
 
--(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params {
+// params are [ String : Any ]
+-(NSDictionary<NSString *, AvoEventSchemaType *> *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary<NSString *, id> *) params {
     if ([AvoStateOfTracking isLogging]) {
         NSLog(@"Avo State Of Tracking: Supplied event %@ with params %@", eventName, [params description]);
     }
@@ -65,7 +66,14 @@ static BOOL logging = NO;
     return schema;
 }
 
--(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema {
+// schema is [ String : AvoEventSchemaType ]
+-(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
+    for(NSString *key in [schema allKeys]) {
+        if (![[schema objectForKey:key] isKindOfClass:[AvoEventSchemaType class]]) {
+            [NSException raise:@"Schema types should be of type AvoEventSchemaType" format:@"Provided %@", [[[schema objectForKey:key] class] description]];
+        }
+    }
+    
     if ([AvoStateOfTracking isLogging]) {
         
         NSString * schemaString = @"";
@@ -84,7 +92,7 @@ static BOOL logging = NO;
     [self.networkCallsHandler callTrackSchema:eventName schema:schema];
 }
 
--(NSDictionary *) extractSchema:(NSDictionary *) eventParams {
+-(NSDictionary<NSString *, AvoEventSchemaType *> *) extractSchema:(NSDictionary<NSString *, id> *) eventParams {
     NSMutableDictionary * result = [NSMutableDictionary new];
     
     for (id paramName in [eventParams allKeys]) {
@@ -118,14 +126,15 @@ static BOOL logging = NO;
         } else {
             return [AvoFloat new];
         }
-    } else if ([paramType  isEqual: @"__NSCFBoolean"]) {
+    } else if ([paramType isEqual: @"__NSCFBoolean"]) {
         return [AvoBoolean new];
-    } else if ([paramType  isEqual: @"__NSCFConstantString"] ||
-               [paramType  isEqual: @"__NSCFString"] ||
-               [paramType   isEqual: @"NSTaggedPointerString"]) {
+    } else if ([paramType isEqual: @"__NSCFConstantString"] ||
+               [paramType isEqual: @"__NSCFString"] ||
+               [paramType isEqual: @"NSTaggedPointerString"]) {
         return [AvoString new];
-    } else if ([paramType  isEqual: @"__NSArrayI"] ||
-               [paramType  isEqual: @"__NSArrayM"]) {
+    } else if ([paramType isEqual: @"__NSArrayI"] ||
+               [paramType isEqual: @"__NSArrayM"] ||
+               [paramType isEqual: @"Swift.__SwiftDeferredNSArray"]) {
         AvoList * result = [AvoList new];
         
         for (id item in obj) {

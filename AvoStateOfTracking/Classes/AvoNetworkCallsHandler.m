@@ -33,6 +33,7 @@
     return self;
 }
 
+// schema is [ String : AvoEventSchemaType ]
 - (void) callTrackSchema: (NSString *) eventName schema: (NSDictionary *) schema {
     NSMutableDictionary * trackSchemaBody = [self bodyForTrackSchemaCall:eventName schema: schema];
     [self callStateOfTrackingWithBatchBody: @[trackSchemaBody]];

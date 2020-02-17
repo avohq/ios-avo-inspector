@@ -272,6 +272,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Alexey Verein";
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = G7H6Q48U3Z;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -553,11 +556,13 @@
 			baseConfigurationReference = C40667EBF43F696F5D928212 /* Pods-AvoStateOfTracking_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = G7H6Q48U3Z;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AvoStateOfTracking/AvoStateOfTracking-Prefix.pch";
 				INFOPLIST_FILE = "AvoStateOfTracking/AvoStateOfTracking-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoStateOfTracking-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
@@ -569,11 +574,13 @@
 			baseConfigurationReference = 87E70B6034DD8F288503AB25 /* Pods-AvoStateOfTracking_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = G7H6Q48U3Z;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AvoStateOfTracking/AvoStateOfTracking-Prefix.pch";
 				INFOPLIST_FILE = "AvoStateOfTracking/AvoStateOfTracking-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoStateOfTracking-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;

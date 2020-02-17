@@ -22,17 +22,57 @@ pod 'AvoStateOfTracking'
 
 # Initializing
 
+Obj-C
+
     AvoStateOfTracking *avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey"];
+        
+Swift
+
+    let avoSot = AvoStateOfTracking(apiKey: "apiKey")
     
 # Enabling logs
 
+Obj-C
+
     [AvoStateOfTracking setLogging:YES];
+        
+Swift
+
+    AvoStateOfTracking.setLogging(true)
 
 # Sending event schemas
 
-Whenever you send tracking event post it to Avo State of Tracking.
+Whenever you send tracking event call one of the following methods:
 
-    [avoSot trackSchemaFromEvent:@"Event Name" eventParams:(NSDictionary *)eventParams];
+### 1.
+
+Obj-C
+
+    [avoSot trackSchemaFromEvent:@"Event Name" eventParams:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
+    
+Swift
+    
+    avoSot.trackSchema(fromEvent: "Event Name", eventParams: ["id": "sdf-334fsg-334f", "number": 41])
+    
+### 2.
+
+Obj-C
+
+    [avoSot trackSchema:@"Event Name" eventSchema:@{@"id": [[AvoString alloc] init], @"number": [[AvoInt alloc] init]}];
+    
+Swift
+
+    avoSot.trackSchema("Event Name", eventSchema: ["id": AvoString(), "number": AvoInt()])
+
+# Extract event schema manually
+
+Obj-C
+
+    NSDictionary * schema = [avoSot extractSchema:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
+    
+Swift
+    
+    let schema = avoSot.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
 
 ## Author
 

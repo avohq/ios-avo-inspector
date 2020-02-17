@@ -6,15 +6,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AvoEventSchemaType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol StateOfTracking <NSObject>
 
--(NSDictionary *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary *) params;
--(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary *) schema;
+-(NSDictionary<NSString *, AvoEventSchemaType *> *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary<NSString *, id> *) params;
+-(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema;
 
--(NSDictionary *) extractSchema:(NSDictionary *) eventParams;
+-(NSDictionary<NSString *, AvoEventSchemaType *> *) extractSchema:(NSDictionary<NSString *, id> *) eventParams;
 
 + (BOOL) isLogging;
 + (void) setLogging: (BOOL) isLogging;

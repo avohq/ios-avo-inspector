@@ -11,6 +11,7 @@
 #import <AvoStateOfTracking/AvoList.h>
 #import <AvoStateOfTracking/AvoInt.h>
 #import <AvoStateOfTracking/AvoNull.h>
+#import <AvoStateOfTracking/AvoString.h>
 #import <AvoStateOfTracking/AvoStateOfTracking.h>
 
 @interface AVOViewController ()

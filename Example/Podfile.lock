@@ -1,5 +1,5 @@
 PODS:
-  - AvoStateOfTracking (0.1.0)
+  - AvoStateOfTracking (0.1.1)
   - Expecta (1.0.6)
   - "Expecta+Snapshots (3.1.1)":
     - Expecta (~> 1.0)
@@ -34,7 +34,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AvoStateOfTracking: 48f75c1989a5ac585d65aa8cc6bb0b471da408f7
+  AvoStateOfTracking: e835a62ce3880ce8b48f7fde803fc0b92a8e1f97
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   "Expecta+Snapshots": dcff217eef506dabd6dfdc7864ea2da321fafbb8
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
