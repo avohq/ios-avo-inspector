@@ -8,8 +8,12 @@
 
 @import UIKit;
 
+#import <AvoStateOfTracking/AvoStateOfTracking.h>
+
 @interface AVOAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
++ (AvoStateOfTracking *) getAvoSot;
 
 @end

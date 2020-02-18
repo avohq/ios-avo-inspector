@@ -33,12 +33,6 @@
     return self;
 }
 
-// schema is [ String : AvoEventSchemaType ]
-- (void) callTrackSchema: (NSString *) eventName schema: (NSDictionary *) schema {
-    NSMutableDictionary * trackSchemaBody = [self bodyForTrackSchemaCall:eventName schema: schema];
-    [self callStateOfTrackingWithBatchBody: @[trackSchemaBody]];
-}
-
 - (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary *) schema {
     NSMutableArray * propsSchema = [NSMutableArray new];
     
@@ -62,11 +56,6 @@
     return baseBody;
 }
 
-- (void) callSessionStarted {
-    NSMutableDictionary * sessionStartedBody = [self bodyForSessionStartedCall];
-    [self callStateOfTrackingWithBatchBody: @[sessionStartedBody]];
-}
-
 - (NSMutableDictionary *) bodyForSessionStartedCall  {
      NSMutableDictionary * baseBody = [self createBaseCallBody];
     
@@ -81,19 +70,32 @@
     [body setValue:self.apiKey forKey:@"apiKey"];
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
-    [body setValue:@"ios" forKey:@"platform"];
+    [body setValue:@"ios" forKey:@"libPlatform"];
     [body setValue:[[AvoInstallationId new] getInstallationId] forKey:@"trackingId"];
     [body setValue:[AvoUtils currentTimeAsISO8601UTCString] forKey:@"createdAt"];
 
     return body;
 }
 
-- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody {
-     if (drand48() > self.samplingRate) {
+- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(void))completionHandler {
+    if (batchBody == nil) {
+        return;
+    }
+    
+    if (drand48() > self.samplingRate) {
          if ([AvoStateOfTracking isLogging]) {
              NSLog(@"Last event schema dropped due to sampling rate");
          }
          return;
+    }
+    
+    if ([AvoStateOfTracking isLogging]) {
+        for(NSDictionary *batchItem in batchBody) {
+            NSString * eventName = [batchItem objectForKey:@"eventName"];
+            NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
+            
+            NSLog(@"Avo State Of Tracking: Sending event %@ with schema {\n%@}\n\n", eventName, [eventProps description]);
+        }
     }
     
     NSError *error;
@@ -101,16 +103,16 @@
                                                           options:NSJSONWritingPrettyPrinted
                                                             error:&error];
     
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://api.avo.app/datascope/v0/track"]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://api.avo.app/datascope/track"]];
     [request setHTTPMethod:@"POST"];
 
     [self writeCallHeader:request];
     [request setHTTPBody:bodyData];
 
-    [self sendHttpRequest:request];
+    [self sendHttpRequest:request completionHandler:completionHandler];
 }
 
-- (void)sendHttpRequest:(NSMutableURLRequest *)request {
+- (void)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(void))completionHandler {
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     
@@ -126,6 +128,8 @@
             if (rate != nil && self.samplingRate != [rate doubleValue]) {
                 self.samplingRate = [rate doubleValue];
             }
+            
+            completionHandler();
         }
     }];
     

@@ -15,6 +15,7 @@
 #import "AvoUnknownType.h"
 #import "AvoNull.h"
 #import "AvoNetworkCallsHandler.h"
+#import "AvoBatcher.h"
 
 @interface AvoStateOfTracking ()
 
@@ -25,6 +26,7 @@
 @property (readwrite, nonatomic) NSString *apiKey;
 
 @property (readwrite, nonatomic) AvoNetworkCallsHandler *networkCallsHandler;
+@property (readwrite, nonatomic) AvoBatcher *avoBatcher;
 
 @end
 
@@ -45,9 +47,12 @@ static BOOL logging = NO;
     if (self) {
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
-        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appVersion:self.appVersion libVersion:[@(self.libVersion) stringValue]];
         
-        self.sessionTracker = [[AvoSessionTracker alloc] initWithNetworkHandler:self.networkCallsHandler];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appVersion:self.appVersion libVersion:[@(self.libVersion) stringValue]];
+        self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler];
+        
+        self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
+        
         self.apiKey = apiKey;
     }
     return self;
@@ -84,12 +89,12 @@ static BOOL logging = NO;
             schemaString = [schemaString stringByAppendingString:entry];
         }
         
-        NSLog(@"Avo State Of Tracking: Tracked event %@ with schema {\n%@}", eventName, schemaString);
+        NSLog(@"Avo State Of Tracking: Saved event %@ with schema {\n%@}", eventName, schemaString);
     }
     
     [self.sessionTracker schemaTracked:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
     
-    [self.networkCallsHandler callTrackSchema:eventName schema:schema];
+    [self.avoBatcher handleTrackSchema:eventName schema:schema];
 }
 
 -(NSDictionary<NSString *, AvoEventSchemaType *> *) extractSchema:(NSDictionary<NSString *, id> *) eventParams {

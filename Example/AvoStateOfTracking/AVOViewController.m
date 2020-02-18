@@ -7,6 +7,7 @@
 //
 
 #import "AVOViewController.h"
+#import "AVOAppDelegate.h"
 
 #import <AvoStateOfTracking/AvoList.h>
 #import <AvoStateOfTracking/AvoInt.h>
@@ -78,7 +79,7 @@ AvoStateOfTracking * avoSot;
     
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, self.scrollView.bounds.size.height*3)];
     
-    avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey"];
+    avoSot = [AVOAppDelegate getAvoSot];
     [AvoStateOfTracking setLogging:YES];
     
     SEGAnalyticsConfiguration * config = [SEGAnalyticsConfiguration configurationWithWriteKey: @"YOUR_WRITEKEY_HERE"];
@@ -91,9 +92,6 @@ AvoStateOfTracking * avoSot;
         if ([payload isKindOfClass:[SEGTrackPayload class]]) {
             SEGTrackPayload * trackPayload = (SEGTrackPayload *) payload;
             [avoSot trackSchemaFromEvent:[trackPayload event] eventParams:[trackPayload properties]];
-        } else if ([payload isKindOfClass:[SEGScreenPayload class]]) {
-            SEGScreenPayload * screenPayload = (SEGScreenPayload *) payload;
-            [avoSot trackSchemaFromEvent:[screenPayload name] eventParams:[screenPayload properties]];
         }
         next(context);
     }];

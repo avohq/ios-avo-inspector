@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "AvoBatcher.h"
 #import "AvoInstallationId.h"
 #import "AvoNetworkCallsHandler.h"
 #import "AvoSessionTracker.h"

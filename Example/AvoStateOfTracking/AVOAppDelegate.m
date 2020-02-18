@@ -10,10 +10,18 @@
 
 @implementation AVOAppDelegate
 
+AvoStateOfTracking * avoSot;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey"];
+    
     return YES;
+}
+
++ (AvoStateOfTracking *)getAvoSot {
+    return avoSot;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
