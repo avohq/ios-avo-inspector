@@ -33,8 +33,8 @@ describe(@"Sampling", ^{
         OCMStub([partialMock sendHttpRequest:[OCMArg any]]).andDo(theBlock);
     
         for (int i = 0; i < 999; i++) {
-            [sut callSessionStarted];
-            [sut callTrackSchema:@"Schema" schema:[NSDictionary new]];
+    //        [sut callSessionStarted];
+     //       [sut callTrackSchema:@"Schema" schema:[NSDictionary new]];
         }
            
         expect(httpRequestsCount).to.equal(0);
@@ -53,8 +53,8 @@ describe(@"Sampling", ^{
          OCMStub([partialMock sendHttpRequest:[OCMArg any]]).andDo(theBlock);
      
          for (int i = 0; i < 1000; i++) {
-             [sut callSessionStarted];
-             [sut callTrackSchema:@"Schema" schema:[NSDictionary new]];
+       //      [sut callSessionStarted];
+       //      [sut callTrackSchema:@"Schema" schema:[NSDictionary new]];
          }
             
          expect(httpRequestsCount).to.equal(2000);

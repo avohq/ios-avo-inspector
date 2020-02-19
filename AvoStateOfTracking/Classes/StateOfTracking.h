@@ -20,6 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL) isLogging;
 + (void) setLogging: (BOOL) isLogging;
 
++ (int) getBatchSize;
++ (void) setBatchSize: (int) newBatchSize;
+
++ (int) getBatchFlustSeconds;
++ (void) setBatchFlustSeconds: (int) newBatchFlushSeconds;
+
 @end
 
 NS_ASSUME_NONNULL_END

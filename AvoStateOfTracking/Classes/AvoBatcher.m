@@ -6,6 +6,7 @@
 //
 
 #import "AvoBatcher.h"
+#import "AvoStateOfTracking.h"
 
 @interface AvoBatcher()
 
@@ -15,14 +16,11 @@
 
 @property (readwrite, nonatomic) NSLock *lock;
 
-@property (readwrite, nonatomic) NSTimeInterval batchFlushTime;
+@property (readwrite, nonatomic) NSTimeInterval batchFlushAttemptTime;
 
 @end
 
 @implementation AvoBatcher
-
-static NSInteger maxBatchSize = 20;
-static NSInteger maxBatchTime = 30;
 
 - (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler {
     self = [super init];
@@ -31,9 +29,7 @@ static NSInteger maxBatchTime = 30;
         
         self.networkCallsHandler = networkCallsHandler;
         
-        self.events = [NSMutableArray new];
-        
-        self.batchFlushTime = [[NSDate date] timeIntervalSince1970];
+        self.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970];
         
         [self enterForeground];
         [self addObservers];
@@ -55,11 +51,22 @@ static NSInteger maxBatchTime = 30;
 }
 
 - (void)enterBackground {
+    if ([self.events count] > 500) {
+        NSInteger extraElements = [self.events count] - 500;
+        [self.events removeObjectsInRange:NSMakeRange(0, extraElements)];
+    }
+    
     [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:self.events forKey:[AvoBatcher cacheKey]];
 }
 
 - (void)enterForeground {
     self.events = [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] objectForKey:[AvoBatcher cacheKey]];
+    
+    if (self.events == nil) {
+        self.events = [NSMutableArray new];
+    } else {
+        self.events = [[NSMutableArray alloc] initWithArray:self.events];
+    }
     
     [self postAllAvailableEventsAndClearCache:YES];
 }
@@ -67,13 +74,7 @@ static NSInteger maxBatchTime = 30;
 - (void) handleSessionStarted {
     NSMutableDictionary * sessionStartedBody = [self.networkCallsHandler bodyForSessionStartedCall];
     
-    [self.lock lock];
-    @try {
-        [self.events addObject:sessionStartedBody];
-    }
-    @finally {
-        [self.lock unlock];
-    }
+    [self saveEvent:sessionStartedBody];
     
     [self checkIfBatchNeedsToBeSent];
 }
@@ -81,38 +82,48 @@ static NSInteger maxBatchTime = 30;
 // schema is [ String : AvoEventSchemaType ]
 - (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
     NSMutableDictionary * trackSchemaBody = [self.networkCallsHandler bodyForTrackSchemaCall:eventName schema: schema];
+    
+    [self saveEvent:trackSchemaBody];
+    
+    [self checkIfBatchNeedsToBeSent];
+}
+
+- (void)saveEvent:(NSMutableDictionary *)trackSchemaBody {
     [self.lock lock];
     @try {
         [self.events addObject:trackSchemaBody];
     }
     @finally {
-       [self.lock unlock];
+        [self.lock unlock];
     }
-    
-    [self checkIfBatchNeedsToBeSent];
 }
 
 - (void) checkIfBatchNeedsToBeSent {
     
     NSUInteger batchSize = [self.events count];
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-    NSTimeInterval timeSinceLastFlush = now - self.batchFlushTime;
+    NSTimeInterval timeSinceLastFlushAttempt = now - self.batchFlushAttemptTime;
     
-    if (batchSize >= maxBatchSize || timeSinceLastFlush >= maxBatchTime) {
+    if (batchSize % [AvoStateOfTracking getBatchSize] == 0 || timeSinceLastFlushAttempt >= [AvoStateOfTracking getBatchFlustSeconds]) {
         [self postAllAvailableEventsAndClearCache:NO];
     }
 }
 
 - (void) postAllAvailableEventsAndClearCache: (BOOL)shouldClearCache {
-    self.batchFlushTime = [[NSDate date] timeIntervalSince1970];
+    self.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970];
     
-    [self.networkCallsHandler callStateOfTrackingWithBatchBody:self.events completionHandler:^{
+    NSArray *sendingEvents = [[NSArray alloc] initWithArray:self.events];
+    self.events = [NSMutableArray new];
+    
+    [self.networkCallsHandler callStateOfTrackingWithBatchBody:sendingEvents completionHandler:^(NSError * _Nullable error) {
         if (shouldClearCache) {
             [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] removeObjectForKey:[AvoBatcher cacheKey]];
         }
+        
+        if (error != nil) {
+            [self.events addObjectsFromArray:sendingEvents];
+        }
     }];
-    
-    self.events = [NSMutableArray new];
 }
 
 - (void) dealloc {

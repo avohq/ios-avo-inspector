@@ -33,6 +33,8 @@
 @implementation AvoStateOfTracking
 
 static BOOL logging = NO;
+static int maxBatchSize = 30;
+static int batchFlushSTime = 30;
 
 + (BOOL) isLogging {
     return logging;
@@ -40,6 +42,22 @@ static BOOL logging = NO;
 
 + (void) setLogging: (BOOL) isLogging {
     logging = isLogging;
+}
+
++ (int) getBatchSize {
+    return maxBatchSize;
+}
+
++ (void) setBatchSize: (int) newBatchSize {
+    maxBatchSize = newBatchSize;
+}
+
++ (int) getBatchFlustSeconds {
+    return batchFlushSTime;
+}
+
++ (void) setBatchFlustSeconds: (int) newBatchFlushSeconds {
+    batchFlushSTime = newBatchFlushSeconds;
 }
 
 -(instancetype) initWithApiKey: (NSString *) apiKey {

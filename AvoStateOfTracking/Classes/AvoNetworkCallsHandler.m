@@ -77,7 +77,7 @@
     return body;
 }
 
-- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(void))completionHandler {
+- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(NSError * _Nullable error))completionHandler {
     if (batchBody == nil) {
         return;
     }
@@ -112,7 +112,7 @@
     [self sendHttpRequest:request completionHandler:completionHandler];
 }
 
-- (void)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(void))completionHandler {
+- (void)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError *error))completionHandler {
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     
@@ -128,9 +128,11 @@
             if (rate != nil && self.samplingRate != [rate doubleValue]) {
                 self.samplingRate = [rate doubleValue];
             }
-            
-            completionHandler();
+        } else if ([AvoStateOfTracking isLogging]) {
+            NSLog(@"Avo State Of Tracking: Failed sending events. Will retry later.");
         }
+        
+        completionHandler(error);
     }];
     
     [postDataTask resume];

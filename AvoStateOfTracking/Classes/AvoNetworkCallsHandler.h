@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithApiKey: (NSString *) apiKey appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion;
 
-- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(void))completionHandler;
+- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(NSError *error))completionHandler;
 
 - (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary *) schema;
 - (NSMutableDictionary *) bodyForSessionStartedCall;

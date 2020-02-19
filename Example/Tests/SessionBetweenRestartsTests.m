@@ -22,12 +22,12 @@ SpecBegin(SessionBetweenRestarts)
 describe(@"Sessions between restarts", ^{
 
     it(@"AvoSessionTracker reads session timestamp from disk when created", ^{
-        id mockNetworkHandler = OCMClassMock([AvoNetworkCallsHandler class]);
+        id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
         [[NSUserDefaults standardUserDefaults] setDouble:[[NSDate date] timeIntervalSince1970] forKey:[AvoSessionTracker cacheKey]];
-        AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithNetworkHandler:mockNetworkHandler];
+        AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
        
         __block int sessionStartCallCount = 0;
-        OCMStub([mockNetworkHandler callSessionStarted]).andDo(^(NSInvocation *invocation) {
+        OCMStub([mockAvoBatcher handleSessionStarted]).andDo(^(NSInvocation *invocation) {
             ++sessionStartCallCount;
         });
        
@@ -37,9 +37,9 @@ describe(@"Sessions between restarts", ^{
     });
          
      it(@"AvoSessionTracker writes session timestamp to disk when session is updated", ^{
-        id mockNetworkHandler = OCMClassMock([AvoNetworkCallsHandler class]);
+        id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker cacheKey]];
-        AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithNetworkHandler:mockNetworkHandler];
+        AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
         
         expect(sut.lastSessionTimestamp).equal(INT_MIN);
     
