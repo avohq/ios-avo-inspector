@@ -11,7 +11,7 @@
 
 @interface AvoNetworkCallsHandler ()
 
-- (BOOL)sendHttpRequest:(NSMutableURLRequest *)request;
+- (BOOL)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError *error))completionHandler;
 
 @property (readwrite, atomic) double samplingRate;
 
@@ -30,11 +30,11 @@ describe(@"Sampling", ^{
         void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
             httpRequestsCount += 1;
         };
-        OCMStub([partialMock sendHttpRequest:[OCMArg any]]).andDo(theBlock);
+        OCMStub([partialMock sendHttpRequest:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
     
         for (int i = 0; i < 999; i++) {
-    //        [sut callSessionStarted];
-     //       [sut callTrackSchema:@"Schema" schema:[NSDictionary new]];
+            [sut callStateOfTrackingWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
+            [sut callStateOfTrackingWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
         }
            
         expect(httpRequestsCount).to.equal(0);
@@ -50,16 +50,15 @@ describe(@"Sampling", ^{
          void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
              httpRequestsCount += 1;
          };
-         OCMStub([partialMock sendHttpRequest:[OCMArg any]]).andDo(theBlock);
+         OCMStub([partialMock sendHttpRequest:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
      
          for (int i = 0; i < 1000; i++) {
-       //      [sut callSessionStarted];
-       //      [sut callTrackSchema:@"Schema" schema:[NSDictionary new]];
+             [sut callStateOfTrackingWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
+             [sut callStateOfTrackingWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
          }
             
          expect(httpRequestsCount).to.equal(2000);
      });
-         
 });
 
 SpecEnd

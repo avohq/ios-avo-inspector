@@ -18,11 +18,13 @@
 
 @property (readwrite, nonatomic) NSTimeInterval batchFlushAttemptTime;
 
+@property (readwrite, nonatomic) NSNotificationCenter *notificationCenter;
+
 @end
 
 @implementation AvoBatcher
 
-- (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler {
+- (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler withNotificationCenter: (NSNotificationCenter *) center {
     self = [super init];
     if (self) {
         self.lock = [[NSLock alloc] init];
@@ -32,25 +34,30 @@
         self.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970];
         
         [self enterForeground];
+        
+        self.notificationCenter = center;
         [self addObservers];
     }
     return self;
 }
 
 - (void) addObservers {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self
+    [self.notificationCenter addObserver:self
                selector:@selector(enterBackground)
                    name:UIApplicationDidEnterBackgroundNotification
                  object:nil];
     
-    [center addObserver:self
+    [self.notificationCenter addObserver:self
                selector:@selector(enterForeground)
                    name:UIApplicationWillEnterForegroundNotification
                  object:nil];
 }
 
 - (void)enterBackground {
+    if ([self.events count] == 0) {
+        return;
+    }
+    
     if ([self.events count] > 500) {
         NSInteger extraElements = [self.events count] - 500;
         [self.events removeObjectsInRange:NSMakeRange(0, extraElements)];
@@ -115,21 +122,20 @@
     NSArray *sendingEvents = [[NSArray alloc] initWithArray:self.events];
     self.events = [NSMutableArray new];
     
+    __weak AvoBatcher *weakSelf = self;
     [self.networkCallsHandler callStateOfTrackingWithBatchBody:sendingEvents completionHandler:^(NSError * _Nullable error) {
         if (shouldClearCache) {
             [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] removeObjectForKey:[AvoBatcher cacheKey]];
         }
-        
+
         if (error != nil) {
-            [self.events addObjectsFromArray:sendingEvents];
+            [weakSelf.events addObjectsFromArray:sendingEvents];
         }
     }];
 }
 
 - (void) dealloc {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [center removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+    [self.notificationCenter removeObserver:self];
 }
 
 + (NSString *) suiteKey {

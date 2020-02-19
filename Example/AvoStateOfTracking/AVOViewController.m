@@ -100,8 +100,7 @@ AvoStateOfTracking * avoSot;
     
     [SEGAnalytics setupWithConfiguration:config];
     
-    [[SEGAnalytics sharedAnalytics] track:@"Item Purchased"
-    properties:@{ @"item": @"Sword of Heracles", @"revenue": @2.95 }];
+    [[SEGAnalytics sharedAnalytics] track:@"Item Purchased" properties:@{ @"item": @"Sword of Heracles", @"revenue": @2.95 }];
     
     [self.eventNameInput becomeFirstResponder];
 }

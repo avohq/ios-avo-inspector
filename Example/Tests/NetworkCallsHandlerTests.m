@@ -6,9 +6,6 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-
-
-
 #import <AvoStateOfTracking/AvoNetworkCallsHandler.h>
 #import <AvoStateOfTracking/AvoList.h>
 #import <AvoStateOfTracking/AvoInt.h>
@@ -23,6 +20,8 @@
 
 - (void) callStateOfTrackingWithBatchBody: (NSArray *) body;
 
+@property (readwrite, nonatomic) double samplingRate;
+
 @end
 
 SpecBegin(NetworkCalls)
@@ -34,38 +33,25 @@ describe(@"Handling network calls", ^{
         expect(sut.apiKey).to.equal(@"testApiKey");
         expect(sut.appVersion).to.equal(@"testAppVersion");
         expect(sut.libVersion).to.equal(@"testLibVersion");
+        expect(sut.samplingRate).to.equal(1.0);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for session tracking", ^{
         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
-        id partialMock = OCMPartialMock(sut);
 
-        __block int blockCallsCount = 0;
-        void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
-            __unsafe_unretained NSArray * batchBody;
-            [invocation getArgument:&batchBody atIndex:2];
-            
-            NSDictionary * sessionStartedBody = batchBody[0];
-            expect([sessionStartedBody objectForKey:@"type"]).to.equal(@"sessionStarted");
-            expect([sessionStartedBody objectForKey:@"apiKey"]).to.equal(@"testApiKey");
-            expect([sessionStartedBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
-            expect([sessionStartedBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
-            expect([sessionStartedBody objectForKey:@"platform"]).to.equal(@"ios");
-            expect([sessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
-            expect([sessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
-            
-            blockCallsCount += 1;
-        };
-        OCMStub([partialMock callStateOfTrackingWithBatchBody:[OCMArg any]]).andDo(theBlock);
-    
-        [partialMock callSessionStarted];
+        NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
         
-        expect(blockCallsCount).to.beGreaterThan(0);
+        expect([actualSessionStartedBody objectForKey:@"type"]).to.equal(@"sessionStarted");
+        expect([actualSessionStartedBody objectForKey:@"apiKey"]).to.equal(@"testApiKey");
+        expect([actualSessionStartedBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
+        expect([actualSessionStartedBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
+        expect([actualSessionStartedBody objectForKey:@"libPlatform"]).to.equal(@"ios");
+        expect([actualSessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
+        expect([actualSessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
          AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
-        id partialMock = OCMPartialMock(sut);
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoList * list = [AvoList new];
@@ -78,33 +64,21 @@ describe(@"Handling network calls", ^{
         [schema setObject:[AvoNull new] forKey:@"null key"];
         [schema setObject:[AvoUnknownType new] forKey:@"unknown type key"];
         // TODO verify other properties except list
-
-        __block int blockCallsCount = 0;
-        void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
-            NSDictionary * expectedListSchema = @{@"propertyName" : @"list key", @"propertyValue" : @"list(int|float|boolean|string|null|unknown|list())"};
-            
-            __unsafe_unretained NSArray * batchBody;
-            [invocation getArgument:&batchBody atIndex:2];
-            
-            NSDictionary * sessionStartedBody = batchBody[0];
-            expect([sessionStartedBody objectForKey:@"type"]).to.equal(@"event");
-            expect([sessionStartedBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
-            expect([sessionStartedBody objectForKey:@"eventProperties"][0]).to.equal(expectedListSchema);
-            
-            expect([sessionStartedBody objectForKey:@"apiKey"]).to.equal(@"testApiKey");
-            expect([sessionStartedBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
-            expect([sessionStartedBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
-            expect([sessionStartedBody objectForKey:@"platform"]).to.equal(@"ios");
-            expect([sessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
-            expect([sessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
-            
-            blockCallsCount += 1;
-        };
-        OCMStub([partialMock callStateOfTrackingWithBatchBody:[OCMArg any]]).andDo(theBlock);
     
-        [partialMock callTrackSchema:@"Test Event Name" schema:schema];
-        
-        expect(blockCallsCount).to.beGreaterThan(0);
+        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema];
+    
+        NSDictionary * expectedListSchema = @{@"propertyName" : @"list key", @"propertyValue" : @"list(int|float|boolean|string|null|unknown|list())"};
+           
+        expect([actualTrackSchemaBody objectForKey:@"type"]).to.equal(@"event");
+        expect([actualTrackSchemaBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
+        expect([actualTrackSchemaBody objectForKey:@"eventProperties"][0]).to.equal(expectedListSchema);
+              
+        expect([actualTrackSchemaBody objectForKey:@"apiKey"]).to.equal(@"testApiKey");
+        expect([actualTrackSchemaBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
+        expect([actualTrackSchemaBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
+        expect([actualTrackSchemaBody objectForKey:@"libPlatform"]).to.equal(@"ios");
+        expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
+        expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
     });
 });
 

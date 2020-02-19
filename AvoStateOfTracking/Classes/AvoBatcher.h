@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AvoBatcher : NSObject
 
-- (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler;
+- (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler withNotificationCenter: (NSNotificationCenter *) center;
 
 - (void) handleSessionStarted;
 - (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema;

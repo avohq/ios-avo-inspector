@@ -116,6 +116,7 @@
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     
+    __weak AvoNetworkCallsHandler *weakSelf = self;
     NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(error == nil)
         {
@@ -125,8 +126,8 @@
             NSError *jsonError = nil;
             NSDictionary *responseJSON = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
             NSNumber *rate = responseJSON[@"samplingRate"];
-            if (rate != nil && self.samplingRate != [rate doubleValue]) {
-                self.samplingRate = [rate doubleValue];
+            if (rate != nil && weakSelf.samplingRate != [rate doubleValue]) {
+                weakSelf.samplingRate = [rate doubleValue];
             }
         } else if ([AvoStateOfTracking isLogging]) {
             NSLog(@"Avo State Of Tracking: Failed sending events. Will retry later.");
