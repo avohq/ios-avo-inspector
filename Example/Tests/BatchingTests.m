@@ -162,6 +162,8 @@ SpecBegin(Batching)
         });
 
         it(@"Sends batch if time has come", ^{
+            [AvoStateOfTracking setBatchSize:30];
+        
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
             OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any]]).andReturn([NSMutableDictionary new]);
@@ -186,13 +188,6 @@ SpecBegin(Batching)
 
             // When
             sut.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970] - [AvoStateOfTracking getBatchFlustSeconds];
-            [sut handleTrackSchema:@"Test" schema:[NSDictionary new]];
-
-            // Then
-            expect(postBatchCount).to.equal(startBatchCount + 1);
-        
-            // When (to make sure that the batch size is not 2)
-            [sut handleSessionStarted];
             [sut handleTrackSchema:@"Test" schema:[NSDictionary new]];
 
             // Then

@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) NSString *apiKey;
 
--(instancetype) initWithApiKey: (NSString *) apiKey;
+-(instancetype) initWithApiKey: (NSString *) apiKey isDebug: (BOOL) isDebug;
 
 @end
 

@@ -22,6 +22,7 @@
 @property (readwrite, nonatomic) AvoSessionTracker * sessionTracker;
 
 @property (readwrite, nonatomic) NSString * appVersion;
+@property (readwrite, nonatomic) NSString * appName;
 @property (readwrite, nonatomic) NSInteger libVersion;
 @property (readwrite, nonatomic) NSString *apiKey;
 
@@ -60,9 +61,14 @@ static int batchFlushSTime = 30;
     batchFlushSTime = newBatchFlushSeconds;
 }
 
--(instancetype) initWithApiKey: (NSString *) apiKey {
+-(instancetype) initWithApiKey: (NSString *) apiKey isDebug: (BOOL) isDebug {
     self = [super init];
     if (self) {
+        if (isDebug) {
+            [AvoStateOfTracking setBatchSize:1];
+        }
+        
+        self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
         
