@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AvoStateOfTracking'
-  s.version          = '0.1.1'
+  s.version          = '0.9.0'
   s.summary          = 'Avo Datascope iOS SDK'
 
   s.description      = <<-DESC
