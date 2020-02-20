@@ -1,6 +1,5 @@
 # AvoStateOfTracking
 
-[![CI Status](https://img.shields.io/travis/AlexeyVerein/AvoStateOfTracking.svg?style=flat)](https://travis-ci.org/AlexeyVerein/AvoStateOfTracking)
 [![Version](https://img.shields.io/cocoapods/v/AvoStateOfTracking.svg?style=flat)](https://cocoapods.org/pods/AvoStateOfTracking)
 [![License](https://img.shields.io/cocoapods/l/AvoStateOfTracking.svg?style=flat)](https://cocoapods.org/pods/AvoStateOfTracking)
 [![Platform](https://img.shields.io/cocoapods/p/AvoStateOfTracking.svg?style=flat)](https://cocoapods.org/pods/AvoStateOfTracking)
