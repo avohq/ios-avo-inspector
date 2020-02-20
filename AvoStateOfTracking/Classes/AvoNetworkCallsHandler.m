@@ -13,6 +13,7 @@
 @interface AvoNetworkCallsHandler()
 
 @property (readwrite, nonatomic) NSString *apiKey;
+@property (readwrite, nonatomic) NSString *appName;
 @property (readwrite, nonatomic) NSString *appVersion;
 @property (readwrite, nonatomic) NSString *libVersion;
 
@@ -22,11 +23,12 @@
 
 @implementation AvoNetworkCallsHandler
 
-- (instancetype) initWithApiKey: (NSString *) apiKey appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion {
+- (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion {
     self = [super init];
     if (self) {
         self.appVersion = appVersion;
         self.libVersion = libVersion;
+        self.appName = appName;
         self.apiKey = apiKey;
         self.samplingRate = 1.0;
     }
@@ -68,9 +70,11 @@
 - (NSMutableDictionary *) createBaseCallBody {
     NSMutableDictionary *body = [NSMutableDictionary new];
     [body setValue:self.apiKey forKey:@"apiKey"];
+    [body setValue:self.appName forKey:@"appId"];
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
     [body setValue:@"ios" forKey:@"libPlatform"];
+    [body setValue:[[NSUUID UUID] UUIDString] forKey:@"messageId"];
     [body setValue:[[AvoInstallationId new] getInstallationId] forKey:@"trackingId"];
     [body setValue:[AvoUtils currentTimeAsISO8601UTCString] forKey:@"createdAt"];
 

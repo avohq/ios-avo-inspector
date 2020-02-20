@@ -28,16 +28,17 @@ SpecBegin(NetworkCalls)
 describe(@"Handling network calls", ^{
          
     it(@"AvoNetworkCallsHandler saves values when init", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
         
         expect(sut.apiKey).to.equal(@"testApiKey");
         expect(sut.appVersion).to.equal(@"testAppVersion");
         expect(sut.libVersion).to.equal(@"testLibVersion");
+        expect(sut.appName).to.equal(@"testAppName");
         expect(sut.samplingRate).to.equal(1.0);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for session tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
 
         NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
         
@@ -46,12 +47,14 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
         expect([actualSessionStartedBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
         expect([actualSessionStartedBody objectForKey:@"libPlatform"]).to.equal(@"ios");
+        expect([actualSessionStartedBody objectForKey:@"appId"]).to.equal(@"testAppName");
         expect([actualSessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
+        expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
-         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoList * list = [AvoList new];
@@ -77,8 +80,10 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
         expect([actualTrackSchemaBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
         expect([actualTrackSchemaBody objectForKey:@"libPlatform"]).to.equal(@"ios");
+        expect([actualTrackSchemaBody objectForKey:@"appId"]).to.equal(@"testAppName");
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
+        expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
     });
 });
 

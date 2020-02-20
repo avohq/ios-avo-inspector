@@ -21,7 +21,7 @@ SpecBegin(Sampling)
 describe(@"Sampling", ^{
          
     it(@"Do not send data with sampling rate set to 0", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+    AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
         sut.samplingRate = 0.0;
     
         id partialMock = OCMPartialMock(sut);
@@ -41,7 +41,7 @@ describe(@"Sampling", ^{
     });
          
      it(@"Sends data every time with sampling rate set to 1", ^{
-         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
          sut.samplingRate = 1.0;
      
          id partialMock = OCMPartialMock(sut);
