@@ -22,6 +22,7 @@
 #import "AvoInt.h"
 #import "AvoList.h"
 #import "AvoNull.h"
+#import "AvoObject.h"
 #import "AvoString.h"
 #import "AvoUnknownType.h"
 #import "StateOfTracking.h"

@@ -11,7 +11,7 @@
 SpecBegin(Init)
 
 it(@"inititalizes with app version", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"appId" isDebug: NO];
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDebug: NO];
 
    NSString * appVersion = sut.appVersion;
 
@@ -19,7 +19,7 @@ it(@"inititalizes with app version", ^{
 });
 
 it(@"inititalizes with lib version", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"appId" isDebug: NO];
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDebug: NO];
 
    NSInteger libVersion = sut.libVersion;
 
@@ -27,9 +27,9 @@ it(@"inititalizes with lib version", ^{
 });
 
 it(@"inititalizes with app id", ^{
-    AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"appId" isDebug: NO];
+    AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDebug: NO];
 
-   expect(sut.apiKey).to.equal(@"appId");
+   expect(sut.apiKey).to.equal(@"apiKey");
 });
    
 it(@"inititalizes with session tracker", ^{

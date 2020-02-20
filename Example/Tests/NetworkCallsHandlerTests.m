@@ -47,7 +47,7 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
         expect([actualSessionStartedBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
         expect([actualSessionStartedBody objectForKey:@"libPlatform"]).to.equal(@"ios");
-        expect([actualSessionStartedBody objectForKey:@"appId"]).to.equal(@"testAppName");
+        expect([actualSessionStartedBody objectForKey:@"appName"]).to.equal(@"testAppName");
         expect([actualSessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
@@ -58,7 +58,7 @@ describe(@"Handling network calls", ^{
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoList * list = [AvoList new];
-        list.subtypes = [[NSMutableArray alloc] initWithArray:@[[AvoInt new], [AvoFloat new], [AvoBoolean new], [AvoString new], [AvoNull new], [AvoUnknownType new], [AvoList new]]];
+        list.subtypes = [[NSSet alloc] initWithArray:[[NSMutableArray alloc] initWithArray:@[[AvoInt new], [AvoFloat new], [AvoBoolean new], [AvoString new], [AvoNull new], [AvoUnknownType new], [AvoList new]]]];
         [schema setObject:list forKey:@"list key"];
         [schema setObject:[AvoInt new] forKey:@"int key"];
         [schema setObject:[AvoFloat new] forKey:@"float key"];
@@ -71,16 +71,26 @@ describe(@"Handling network calls", ^{
         NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema];
     
         NSDictionary * expectedListSchema = @{@"propertyName" : @"list key", @"propertyValue" : @"list(int|float|boolean|string|null|unknown|list())"};
+    
+        NSString * propertyValue = [[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyValue"];
            
         expect([actualTrackSchemaBody objectForKey:@"type"]).to.equal(@"event");
         expect([actualTrackSchemaBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
-        expect([actualTrackSchemaBody objectForKey:@"eventProperties"][0]).to.equal(expectedListSchema);
-              
+        expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyName"]).to.equal(@"list key");
+        expect(propertyValue).to.startWith(@"list(");
+        expect(propertyValue).to.contain(@"int");
+        expect(propertyValue).to.contain(@"float");
+        expect(propertyValue).to.contain(@"boolean");
+        expect(propertyValue).to.contain(@"string");
+        expect(propertyValue).to.contain(@"null");
+        expect(propertyValue).to.contain(@"unknown");
+        expect(propertyValue).to.contain(@"list()");
+    
         expect([actualTrackSchemaBody objectForKey:@"apiKey"]).to.equal(@"testApiKey");
         expect([actualTrackSchemaBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
         expect([actualTrackSchemaBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
         expect([actualTrackSchemaBody objectForKey:@"libPlatform"]).to.equal(@"ios");
-        expect([actualTrackSchemaBody objectForKey:@"appId"]).to.equal(@"testAppName");
+        expect([actualTrackSchemaBody objectForKey:@"appName"]).to.equal(@"testAppName");
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();

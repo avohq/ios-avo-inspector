@@ -28,7 +28,7 @@ Obj-C
         
 Swift
 
-    let avoSot = AvoStateOfTracking(apiKey: "apiKey" isDebug: debugFlag)
+    let avoSot = AvoStateOfTracking(apiKey: "apiKey", isDebug: debugFlag)
     
 # Enabling logs
 
@@ -73,6 +73,21 @@ Obj-C
 Swift
     
     let schema = avoSot.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
+    
+# Batching control
+
+Default batch size is 30 and default batch flust timeout is 30 seconds.
+In debug mode default batch size is 1, i.e. every event schema is sent to the server as soon as it is reported.
+
+Obj-C
+
+    [AvoStateOfTracking setBatchSize:15];
+    [AvoStateOfTracking setBatchFlustSeconds:10];
+    
+Swift
+    
+    AvoStateOfTracking.setBatchSize(15)
+    AvoStateOfTracking.setBatchFlustSeconds(10)
 
 ## Author
 

@@ -13,7 +13,6 @@
 #import <AvoStateOfTracking/AvoBoolean.h>
 #import <AvoStateOfTracking/AvoNull.h>
 #import <AvoStateOfTracking/AvoString.h>
-//#import <AvoStateOfTracking/AvoUnknownType.h>
 
 SpecBegin(ListExtraction)
 
@@ -31,6 +30,48 @@ it(@"can extract array", ^{
    expect([[extractedSchema objectForKey:@"array key"] class]).equal([AvoList class]);
 });
 
+it(@"can extract single object array", ^{
+    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    
+    NSMutableDictionary * testParams = [NSMutableDictionary new];
+    
+    NSArray * array = @[@"test"];
+   
+   [testParams setObject:array forKey:@"array key"];
+   
+   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+   
+   expect([[extractedSchema objectForKey:@"array key"] class]).equal([AvoList class]);
+});
+
+it(@"can extract single object set", ^{
+    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    
+    NSMutableDictionary * testParams = [NSMutableDictionary new];
+    
+    NSSet * set = [[NSSet alloc] initWithArray:@[@""]];
+   
+   [testParams setObject:set forKey:@"set key"];
+   
+   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+   
+   expect([[extractedSchema objectForKey:@"set key"] class]).equal([AvoList class]);
+});
+
+it(@"can extract multiple objecta set", ^{
+    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    
+    NSMutableDictionary * testParams = [NSMutableDictionary new];
+    
+    NSSet * set = [[NSSet alloc] initWithObjects:@"1", @42, nil];
+   
+   [testParams setObject:set forKey:@"set key"];
+   
+   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+   
+   expect([[extractedSchema objectForKey:@"set key"] class]).equal([AvoList class]);
+});
+
 it(@"can extract mutable array", ^{
    AvoStateOfTracking * sut = [AvoStateOfTracking new];
    
@@ -39,6 +80,21 @@ it(@"can extract mutable array", ^{
    NSMutableArray * mutableArray = [NSMutableArray new];
    [mutableArray addObject:@"test"];
    [mutableArray addObject:@42];
+    
+   [testParams setObject:mutableArray forKey:@"mutable array key"];
+   
+   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+   
+   expect([[extractedSchema objectForKey:@"mutable array key"] class]).equal([AvoList class]);
+});
+
+it(@"can extract mutable single object array", ^{
+   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   
+   NSMutableDictionary * testParams = [NSMutableDictionary new];
+   
+   NSMutableArray * mutableArray = [NSMutableArray new];
+   [mutableArray addObject:@"test"];
     
    [testParams setObject:mutableArray forKey:@"mutable array key"];
    
@@ -60,6 +116,22 @@ it(@"can extract string subtype array", ^{
    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
    expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(string)");
+});
+
+it(@"do not duplicate types in name", ^{
+   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   
+   NSMutableDictionary * testParams = [NSMutableDictionary new];
+   
+   NSMutableArray * mutableArray = [NSMutableArray new];
+   [mutableArray addObject:@[@"Hello world"]];
+   [mutableArray addObject:@[@"Give me a sign"]];
+   
+   [testParams setObject:mutableArray forKey:@"string array key"];
+   
+   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+   
+   expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(list(string))");
 });
 
 it(@"can extract nullable string subtype array", ^{
@@ -94,7 +166,14 @@ it(@"can extract nullable string int float boolean subtype array", ^{
    
     NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-    expect([[extractedSchema objectForKey:@"string array key"] name]).equal(@"list(string|null|int|float|boolean)");
+    NSString * propertyValue = [[extractedSchema objectForKey:@"string array key"] name];
+   
+    expect(propertyValue).to.startWith(@"list(");
+    expect(propertyValue).to.contain(@"int");
+    expect(propertyValue).to.contain(@"float");
+    expect(propertyValue).to.contain(@"boolean");
+    expect(propertyValue).to.contain(@"string");
+    expect(propertyValue).to.contain(@"null");
 });
 
 it(@"can extract double subtype array", ^{

@@ -70,7 +70,7 @@
 - (NSMutableDictionary *) createBaseCallBody {
     NSMutableDictionary *body = [NSMutableDictionary new];
     [body setValue:self.apiKey forKey:@"apiKey"];
-    [body setValue:self.appName forKey:@"appId"];
+    [body setValue:self.appName forKey:@"appName"];
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
     [body setValue:@"ios" forKey:@"libPlatform"];

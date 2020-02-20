@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AvoList : AvoEventSchemaType
 
-@property (nonatomic, nonnull) NSMutableArray *subtypes;
+@property (nonatomic, nonnull) NSMutableSet *subtypes;
 
 @end
 

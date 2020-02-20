@@ -22,4 +22,12 @@
     return [[self name] isEqual:[other name]];
 }
 
+- (NSString *) description {
+    return [self name];
+}
+
+- (NSUInteger) hash {
+    return [[self name] hash];
+}
+
 @end

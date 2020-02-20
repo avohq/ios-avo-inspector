@@ -8,6 +8,7 @@
 #import "AvoStateOfTracking.h"
 #import "AvoEventSchemaType.h"
 #import "AvoList.h"
+#import "AvoObject.h"
 #import "AvoInt.h"
 #import "AvoFloat.h"
 #import "AvoBoolean.h"
@@ -61,7 +62,7 @@ static int batchFlushSTime = 30;
     batchFlushSTime = newBatchFlushSeconds;
 }
 
--(instancetype) initWithApiKey: (NSString *) apiKey isDebug: (BOOL) isDebug {
+-(instancetype) initWithApiKey: (NSString *) apiKey isDebug: (Boolean) isDebug {
     self = [super init];
     if (self) {
         if (isDebug) {
@@ -162,9 +163,10 @@ static int batchFlushSTime = 30;
                [paramType isEqual: @"NSTaggedPointerString"] ||
                [paramType isEqual: @"Swift.__SharedStringStorage"]) {
         return [AvoString new];
-    } else if ([paramType isEqual: @"__NSArrayI"] ||
-               [paramType isEqual: @"__NSArrayM"] ||
-               [paramType isEqual: @"Swift.__SwiftDeferredNSArray"]) {
+    } else if ([paramType containsString: @"NSSet"] ||
+               [paramType isEqual: @"__NSSingleObjectSetI"] ||
+               [paramType isEqual: @"__NSSingleObjectArrayI"] ||
+               [paramType containsString: @"NSArray"]) {
         AvoList * result = [AvoList new];
         
         for (id item in obj) {
@@ -173,6 +175,19 @@ static int batchFlushSTime = 30;
             } else {
                 [result.subtypes addObject:[self objectToAvoSchemaType:item]];
             }
+        }
+        
+        return result;
+    } else if ([paramType containsString: @"NSDictionary"] ||
+               [paramType isEqual: @"__NSSingleEntryDictionaryI"]) {
+        AvoObject * result = [AvoObject new];
+        
+        for (id paramName in [obj allKeys]) {
+            id paramValue = [obj valueForKey:paramName];
+                
+            AvoEventSchemaType * paramType = [self objectToAvoSchemaType:paramValue];
+            
+            [result.fields setObject:paramType forKey:paramName];
         }
         
         return result;
