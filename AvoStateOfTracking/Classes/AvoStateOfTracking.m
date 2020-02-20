@@ -8,6 +8,7 @@
 #import "AvoStateOfTracking.h"
 #import "AvoEventSchemaType.h"
 #import "AvoList.h"
+#import "AvoObject.h"
 #import "AvoInt.h"
 #import "AvoFloat.h"
 #import "AvoBoolean.h"
@@ -15,22 +16,27 @@
 #import "AvoUnknownType.h"
 #import "AvoNull.h"
 #import "AvoNetworkCallsHandler.h"
+#import "AvoBatcher.h"
 
 @interface AvoStateOfTracking ()
 
 @property (readwrite, nonatomic) AvoSessionTracker * sessionTracker;
 
 @property (readwrite, nonatomic) NSString * appVersion;
+@property (readwrite, nonatomic) NSString * appName;
 @property (readwrite, nonatomic) NSInteger libVersion;
 @property (readwrite, nonatomic) NSString *apiKey;
 
 @property (readwrite, nonatomic) AvoNetworkCallsHandler *networkCallsHandler;
+@property (readwrite, nonatomic) AvoBatcher *avoBatcher;
 
 @end
 
 @implementation AvoStateOfTracking
 
 static BOOL logging = NO;
+static int maxBatchSize = 30;
+static int batchFlushSTime = 30;
 
 + (BOOL) isLogging {
     return logging;
@@ -40,14 +46,38 @@ static BOOL logging = NO;
     logging = isLogging;
 }
 
--(instancetype) initWithApiKey: (NSString *) apiKey {
++ (int) getBatchSize {
+    return maxBatchSize;
+}
+
++ (void) setBatchSize: (int) newBatchSize {
+    maxBatchSize = newBatchSize;
+}
+
++ (int) getBatchFlustSeconds {
+    return batchFlushSTime;
+}
+
++ (void) setBatchFlustSeconds: (int) newBatchFlushSeconds {
+    batchFlushSTime = newBatchFlushSeconds;
+}
+
+-(instancetype) initWithApiKey: (NSString *) apiKey isDebug: (Boolean) isDebug {
     self = [super init];
     if (self) {
+        if (isDebug) {
+            [AvoStateOfTracking setBatchSize:1];
+        }
+        
+        self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
-        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appVersion:self.appVersion libVersion:[@(self.libVersion) stringValue]];
         
-        self.sessionTracker = [[AvoSessionTracker alloc] initWithNetworkHandler:self.networkCallsHandler];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:[@(self.libVersion) stringValue]];
+        self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler withNotificationCenter: [NSNotificationCenter defaultCenter]];
+        
+        self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
+        
         self.apiKey = apiKey;
     }
     return self;
@@ -84,12 +114,12 @@ static BOOL logging = NO;
             schemaString = [schemaString stringByAppendingString:entry];
         }
         
-        NSLog(@"Avo State Of Tracking: Tracked event %@ with schema {\n%@}", eventName, schemaString);
+        NSLog(@"Avo State Of Tracking: Saved event %@ with schema {\n%@}", eventName, schemaString);
     }
     
     [self.sessionTracker schemaTracked:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
     
-    [self.networkCallsHandler callTrackSchema:eventName schema:schema];
+    [self.avoBatcher handleTrackSchema:eventName schema:schema];
 }
 
 -(NSDictionary<NSString *, AvoEventSchemaType *> *) extractSchema:(NSDictionary<NSString *, id> *) eventParams {
@@ -133,9 +163,10 @@ static BOOL logging = NO;
                [paramType isEqual: @"NSTaggedPointerString"] ||
                [paramType isEqual: @"Swift.__SharedStringStorage"]) {
         return [AvoString new];
-    } else if ([paramType isEqual: @"__NSArrayI"] ||
-               [paramType isEqual: @"__NSArrayM"] ||
-               [paramType isEqual: @"Swift.__SwiftDeferredNSArray"]) {
+    } else if ([paramType containsString: @"NSSet"] ||
+               [paramType isEqual: @"__NSSingleObjectSetI"] ||
+               [paramType isEqual: @"__NSSingleObjectArrayI"] ||
+               [paramType containsString: @"NSArray"]) {
         AvoList * result = [AvoList new];
         
         for (id item in obj) {
@@ -144,6 +175,19 @@ static BOOL logging = NO;
             } else {
                 [result.subtypes addObject:[self objectToAvoSchemaType:item]];
             }
+        }
+        
+        return result;
+    } else if ([paramType containsString: @"NSDictionary"] ||
+               [paramType isEqual: @"__NSSingleEntryDictionaryI"]) {
+        AvoObject * result = [AvoObject new];
+        
+        for (id paramName in [obj allKeys]) {
+            id paramValue = [obj valueForKey:paramName];
+                
+            AvoEventSchemaType * paramType = [self objectToAvoSchemaType:paramValue];
+            
+            [result.fields setObject:paramType forKey:paramName];
         }
         
         return result;

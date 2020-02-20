@@ -6,13 +6,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AvoNetworkCallsHandler.h"
+#import "AvoBatcher.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AvoSessionTracker : NSObject
 
--(instancetype) initWithNetworkHandler: (AvoNetworkCallsHandler *) networkCallsHandler;
+-(instancetype) initWithBatcher: (AvoBatcher *) avoBatcher;
 
 - (void) schemaTracked: (NSNumber *) atUnixTime;
 

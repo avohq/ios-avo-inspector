@@ -13,6 +13,7 @@
 @interface AvoNetworkCallsHandler()
 
 @property (readwrite, nonatomic) NSString *apiKey;
+@property (readwrite, nonatomic) NSString *appName;
 @property (readwrite, nonatomic) NSString *appVersion;
 @property (readwrite, nonatomic) NSString *libVersion;
 
@@ -22,21 +23,16 @@
 
 @implementation AvoNetworkCallsHandler
 
-- (instancetype) initWithApiKey: (NSString *) apiKey appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion {
+- (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion {
     self = [super init];
     if (self) {
         self.appVersion = appVersion;
         self.libVersion = libVersion;
+        self.appName = appName;
         self.apiKey = apiKey;
         self.samplingRate = 1.0;
     }
     return self;
-}
-
-// schema is [ String : AvoEventSchemaType ]
-- (void) callTrackSchema: (NSString *) eventName schema: (NSDictionary *) schema {
-    NSMutableDictionary * trackSchemaBody = [self bodyForTrackSchemaCall:eventName schema: schema];
-    [self callStateOfTrackingWithBatchBody: @[trackSchemaBody]];
 }
 
 - (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary *) schema {
@@ -62,11 +58,6 @@
     return baseBody;
 }
 
-- (void) callSessionStarted {
-    NSMutableDictionary * sessionStartedBody = [self bodyForSessionStartedCall];
-    [self callStateOfTrackingWithBatchBody: @[sessionStartedBody]];
-}
-
 - (NSMutableDictionary *) bodyForSessionStartedCall  {
      NSMutableDictionary * baseBody = [self createBaseCallBody];
     
@@ -79,21 +70,36 @@
 - (NSMutableDictionary *) createBaseCallBody {
     NSMutableDictionary *body = [NSMutableDictionary new];
     [body setValue:self.apiKey forKey:@"apiKey"];
+    [body setValue:self.appName forKey:@"appName"];
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
-    [body setValue:@"ios" forKey:@"platform"];
+    [body setValue:@"ios" forKey:@"libPlatform"];
+    [body setValue:[[NSUUID UUID] UUIDString] forKey:@"messageId"];
     [body setValue:[[AvoInstallationId new] getInstallationId] forKey:@"trackingId"];
     [body setValue:[AvoUtils currentTimeAsISO8601UTCString] forKey:@"createdAt"];
 
     return body;
 }
 
-- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody {
-     if (drand48() > self.samplingRate) {
+- (void) callStateOfTrackingWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(NSError * _Nullable error))completionHandler {
+    if (batchBody == nil) {
+        return;
+    }
+    
+    if (drand48() > self.samplingRate) {
          if ([AvoStateOfTracking isLogging]) {
              NSLog(@"Last event schema dropped due to sampling rate");
          }
          return;
+    }
+    
+    if ([AvoStateOfTracking isLogging]) {
+        for(NSDictionary *batchItem in batchBody) {
+            NSString * eventName = [batchItem objectForKey:@"eventName"];
+            NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
+            
+            NSLog(@"Avo State Of Tracking: Sending event %@ with schema {\n%@}\n\n", eventName, [eventProps description]);
+        }
     }
     
     NSError *error;
@@ -107,13 +113,14 @@
     [self writeCallHeader:request];
     [request setHTTPBody:bodyData];
 
-    [self sendHttpRequest:request];
+    [self sendHttpRequest:request completionHandler:completionHandler];
 }
 
-- (void)sendHttpRequest:(NSMutableURLRequest *)request {
+- (void)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError *error))completionHandler {
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
     
+    __weak AvoNetworkCallsHandler *weakSelf = self;
     NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(error == nil)
         {
@@ -123,10 +130,14 @@
             NSError *jsonError = nil;
             NSDictionary *responseJSON = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
             NSNumber *rate = responseJSON[@"samplingRate"];
-            if (rate != nil && self.samplingRate != [rate doubleValue]) {
-                self.samplingRate = [rate doubleValue];
+            if (rate != nil && weakSelf.samplingRate != [rate doubleValue]) {
+                weakSelf.samplingRate = [rate doubleValue];
             }
+        } else if ([AvoStateOfTracking isLogging]) {
+            NSLog(@"Avo State Of Tracking: Failed sending events. Will retry later.");
         }
+        
+        completionHandler(error);
     }];
     
     [postDataTask resume];

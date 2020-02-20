@@ -20,7 +20,7 @@
         NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
         self.installationId = [userDefaults stringForKey:[AvoInstallationId cacheKey]];
         if (self.installationId == nil) {
-            self.installationId = [[NSUUID UUID] UUIDString];;
+            self.installationId = [[NSUUID UUID] UUIDString];
             [userDefaults setObject:self.installationId forKey:[AvoInstallationId cacheKey]];
         }
     }

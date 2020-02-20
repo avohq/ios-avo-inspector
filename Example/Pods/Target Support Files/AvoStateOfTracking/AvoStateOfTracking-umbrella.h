@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "AvoBatcher.h"
 #import "AvoInstallationId.h"
 #import "AvoNetworkCallsHandler.h"
 #import "AvoSessionTracker.h"
@@ -21,6 +22,7 @@
 #import "AvoInt.h"
 #import "AvoList.h"
 #import "AvoNull.h"
+#import "AvoObject.h"
 #import "AvoString.h"
 #import "AvoUnknownType.h"
 #import "StateOfTracking.h"

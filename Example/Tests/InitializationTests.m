@@ -11,7 +11,7 @@
 SpecBegin(Init)
 
 it(@"inititalizes with app version", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"appId"];
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDebug: NO];
 
    NSString * appVersion = sut.appVersion;
 
@@ -19,7 +19,7 @@ it(@"inititalizes with app version", ^{
 });
 
 it(@"inititalizes with lib version", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"appId"];
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDebug: NO];
 
    NSInteger libVersion = sut.libVersion;
 
@@ -27,15 +27,31 @@ it(@"inititalizes with lib version", ^{
 });
 
 it(@"inititalizes with app id", ^{
-    AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"appId"];
+    AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDebug: NO];
 
-   expect(sut.apiKey).to.equal(@"appId");
+   expect(sut.apiKey).to.equal(@"apiKey");
 });
    
 it(@"inititalizes with session tracker", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey"];
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDebug: NO];
 
   expect(sut.sessionTracker).notTo.beNil();
+});
+
+it(@"debug inititalization sets batch size to 1", ^{
+   [AvoStateOfTracking setBatchSize:30];
+   
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDebug: YES];
+
+  expect([AvoStateOfTracking getBatchSize]).to.equal(1);
+});
+
+it(@"not debug inititalization does not set batch size to 1", ^{
+   [AvoStateOfTracking setBatchSize:30];
+   
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDebug: NO];
+
+  expect([AvoStateOfTracking getBatchSize]).to.equal(30);
 });
 
 SpecEnd

@@ -11,7 +11,7 @@
 
 -(id) init {
      if (self = [super init])  {
-       self.subtypes = [NSMutableArray new];
+       self.subtypes = [NSMutableSet new];
      }
      return self;
 }
@@ -29,7 +29,7 @@
         
         subtypeName = [subtypeName stringByAppendingString:[subtype name]];
         
-        first = false;
+        first = NO;
         
         listTypes = [listTypes stringByAppendingString:subtypeName];
     }

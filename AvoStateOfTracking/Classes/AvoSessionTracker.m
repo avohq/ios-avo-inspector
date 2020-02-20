@@ -11,30 +11,30 @@
 
 @property (nonatomic) NSTimeInterval lastSessionTimestamp;
 @property (readonly, nonatomic) NSTimeInterval sessionLength;
-@property (readonly, nonatomic) AvoNetworkCallsHandler * networkCallsHandler;
+@property (readonly, nonatomic) AvoBatcher * avoBatcher;
 
 @end
 
 @implementation AvoSessionTracker
 
--(instancetype) initWithNetworkHandler: (AvoNetworkCallsHandler *) networkCallsHandler {
+-(instancetype) initWithBatcher: (AvoBatcher *) avoBatcher {
     self = [super init];
     if (self) {
         self.lastSessionTimestamp = [[NSUserDefaults standardUserDefaults] doubleForKey:[AvoSessionTracker cacheKey]];
         if (self.lastSessionTimestamp == 0.0) {
             self.lastSessionTimestamp = INT_MIN;
         }
-        _networkCallsHandler = networkCallsHandler;
-        _sessionLength = 20 * 60 * 1000;
+        _avoBatcher = avoBatcher;
+        _sessionLength = 5 * 60;
     }
     return self;
 }
 
 - (void) schemaTracked: (NSNumber *) atUnixTime {
     
-    NSTimeInterval minTimeThatCanBeCountedThisSession = [atUnixTime doubleValue] - self.sessionLength;
-    if (self.lastSessionTimestamp < minTimeThatCanBeCountedThisSession) {
-        [self.networkCallsHandler callSessionStarted];
+    NSTimeInterval timeSinceLastSession = [atUnixTime doubleValue] - self.lastSessionTimestamp;
+    if (timeSinceLastSession > self.sessionLength) {
+        [self.avoBatcher handleSessionStarted];
     }
     
     self.lastSessionTimestamp = [atUnixTime doubleValue];
