@@ -9,6 +9,7 @@
 #import "AvoInstallationId.h"
 #import "AvoUtils.h"
 #import "AvoStateOfTracking.h"
+#import "AvoObject.h"
 
 @interface AvoNetworkCallsHandler()
 
@@ -44,8 +45,22 @@
         NSMutableDictionary *prop = [NSMutableDictionary new];
         
         [prop setObject:key forKey:@"propertyName"];
-        [prop setObject:value forKey:@"propertyValue"];
-        
+        if ([[schema objectForKey:key] isKindOfClass:[AvoObject class]]) {
+            NSError *error = nil;
+            id nestedSchema = [NSJSONSerialization
+                              JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding]
+                              options:0
+                              error:&error];
+            if (!error && [nestedSchema isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *results = nestedSchema;
+                
+                [prop setObject:@"object" forKey:@"propertyValue"];
+                
+                [prop setObject:[self bodyFromJson:results] forKey:@"children"];
+            }
+        } else {
+            [prop setObject:value forKey:@"propertyValue"];
+        }
         [propsSchema addObject:prop];
     }
     
@@ -56,6 +71,29 @@
     [baseBody setValue:propsSchema forKey:@"eventProperties"];
     
     return baseBody;
+}
+
+- (NSMutableArray *) bodyFromJson:(NSDictionary *) schema {
+    NSMutableArray * propsSchema = [NSMutableArray new];
+    
+    for(NSString *key in [schema allKeys]) {
+        id value = [schema objectForKey:key];
+        
+        NSMutableDictionary *prop = [NSMutableDictionary new];
+        
+        [prop setObject:key forKey:@"propertyName"];
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *results = value;
+            
+            [prop setObject:@"object" forKey:@"propertyValue"];
+            [prop setObject:[self bodyFromJson:results] forKey:@"children"];
+        } else {
+            [prop setObject:value forKey:@"propertyValue"];
+        }
+        [propsSchema addObject:prop];
+    }
+    
+    return propsSchema;
 }
 
 - (NSMutableDictionary *) bodyForSessionStartedCall  {

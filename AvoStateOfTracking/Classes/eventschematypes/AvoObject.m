@@ -22,7 +22,11 @@
     for (NSString * fieldKey in [self.fields allKeys]) {
         objectSchema = [objectSchema stringByAppendingString:[NSString stringWithFormat:@"\"%@\"", fieldKey]];
         objectSchema = [objectSchema stringByAppendingString:@":"];
-        objectSchema = [objectSchema stringByAppendingString:[NSString stringWithFormat:@"\"%@\",", [[self.fields valueForKey:fieldKey] name]]];
+        if ([[self.fields valueForKey:fieldKey] isKindOfClass:[AvoObject class]]) {
+            objectSchema = [objectSchema stringByAppendingString:[NSString stringWithFormat:@"%@,", [[self.fields valueForKey:fieldKey] name]]];
+        } else {
+            objectSchema = [objectSchema stringByAppendingString:[NSString stringWithFormat:@"\"%@\",", [[self.fields valueForKey:fieldKey] name]]];
+        }
     }
     objectSchema = [objectSchema stringByAppendingString:@"}"];
     

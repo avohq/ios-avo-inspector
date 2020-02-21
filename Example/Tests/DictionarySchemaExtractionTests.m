@@ -96,7 +96,7 @@ it(@"can extract nullable string int float boolean list(string) object{field0:st
     NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
     expect([[extractedSchema objectForKey:@"complex object key"] name])
-   .to.equal( @"{\"strKey\":\"string\",\"intKey\":\"int\",\"nullStrKey\":\"null\",\"nestedObjKey\":\"{\"field0\":\"string\",\"filed1\":\"int\",\"filed3\":\"list(null)\",}\",\"listKey\":\"list(string)\",\"boolKey\":\"boolean\",\"floatKey\":\"float\",}");
+   .to.equal( @"{\"strKey\":\"string\",\"intKey\":\"int\",\"nullStrKey\":\"null\",\"nestedObjKey\":{\"field0\":\"string\",\"filed1\":\"int\",\"filed3\":\"list(null)\",},\"listKey\":\"list(string)\",\"boolKey\":\"boolean\",\"floatKey\":\"float\",}");
 });
 
 SpecEnd
