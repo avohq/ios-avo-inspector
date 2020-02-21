@@ -23,8 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (int) getBatchSize;
 + (void) setBatchSize: (int) newBatchSize;
 
-+ (int) getBatchFlustSeconds;
-+ (void) setBatchFlustSeconds: (int) newBatchFlushSeconds;
++ (int) getBatchFlushSeconds;
++ (void) setBatchFlushSeconds: (int) newBatchFlushSeconds;
 
 @end
 

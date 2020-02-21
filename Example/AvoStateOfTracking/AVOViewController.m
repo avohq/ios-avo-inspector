@@ -80,7 +80,6 @@ AvoStateOfTracking * avoSot;
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, self.scrollView.bounds.size.height*3)];
     
     avoSot = [AVOAppDelegate getAvoSot];
-    [AvoStateOfTracking setLogging:YES];
     
     SEGAnalyticsConfiguration * config = [SEGAnalyticsConfiguration configurationWithWriteKey: @"YOUR_WRITEKEY_HERE"];
     config.trackApplicationLifecycleEvents = true;
@@ -172,7 +171,6 @@ AvoStateOfTracking * avoSot;
     [self parseKey:self.param10Key.text value:self.param10Value.text to:testParams];
     
     [avoSot trackSchemaFromEvent:eventName eventParams:(NSDictionary *)testParams];
-
 }
 
 -(void)dismissKeyboard

@@ -47,7 +47,7 @@ SpecBegin(Batching)
             };
             OCMStub([partialMock postAllAvailableEventsAndClearCache:@YES]).andDo(theBlock);
       
-            for (int i = 0; i < 600; i++) {
+            for (int i = 0; i < 5600; i++) {
                 [sut.events addObject:@[[[NSString alloc] initWithFormat:@"%d", i]]];
             }
             
@@ -56,7 +56,7 @@ SpecBegin(Batching)
             [sut enterForeground];
         
             // Then
-            expect([sut.events count]).to.equal(500);
+            expect([sut.events count]).to.equal(1000);
             expect(postBatchCount).to.equal(1);
         });
              
@@ -187,7 +187,7 @@ SpecBegin(Batching)
             expect(postBatchCount).to.equal(startBatchCount);
 
             // When
-            sut.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970] - [AvoStateOfTracking getBatchFlustSeconds];
+            sut.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970] - [AvoStateOfTracking getBatchFlushSeconds];
             [sut handleTrackSchema:@"Test" schema:[NSDictionary new]];
 
             // Then

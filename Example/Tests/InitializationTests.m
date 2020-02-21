@@ -39,11 +39,19 @@ it(@"inititalizes with session tracker", ^{
 });
 
 it(@"debug inititalization sets batch size to 1", ^{
-   [AvoStateOfTracking setBatchSize:30];
+   [AvoStateOfTracking setBatchFlushSeconds:30];
    
    AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDebug: YES];
 
-  expect([AvoStateOfTracking getBatchSize]).to.equal(1);
+  expect([AvoStateOfTracking getBatchFlushSeconds]).to.equal(3);
+});
+
+it(@"debug inititalization sets logs on", ^{
+   [AvoStateOfTracking setLogging:NO];
+   
+   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDebug: YES];
+
+  expect([AvoStateOfTracking isLogging]).to.equal(YES);
 });
 
 it(@"not debug inititalization does not set batch size to 1", ^{

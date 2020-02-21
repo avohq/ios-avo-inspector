@@ -54,11 +54,11 @@ static int batchFlushSTime = 30;
     maxBatchSize = newBatchSize;
 }
 
-+ (int) getBatchFlustSeconds {
++ (int) getBatchFlushSeconds {
     return batchFlushSTime;
 }
 
-+ (void) setBatchFlustSeconds: (int) newBatchFlushSeconds {
++ (void) setBatchFlushSeconds: (int) newBatchFlushSeconds {
     batchFlushSTime = newBatchFlushSeconds;
 }
 
@@ -66,7 +66,8 @@ static int batchFlushSTime = 30;
     self = [super init];
     if (self) {
         if (isDebug) {
-            [AvoStateOfTracking setBatchSize:1];
+            [AvoStateOfTracking setBatchFlushSeconds:3];
+            [AvoStateOfTracking setLogging:YES];
         }
         
         self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];

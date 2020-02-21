@@ -53,15 +53,25 @@
                  object:nil];
 }
 
+- (void)removeExtraElements {
+    if ([self.events count] > 1000) {
+        NSInteger extraElements = [self.events count] - 1000;
+        [self.events removeObjectsInRange:NSMakeRange(0, extraElements)];
+    }
+}
+
 - (void)enterBackground {
     if ([self.events count] == 0) {
         return;
     }
     
-    if ([self.events count] > 500) {
-        NSInteger extraElements = [self.events count] - 500;
-        [self.events removeObjectsInRange:NSMakeRange(0, extraElements)];
-    }
+    [self.lock lock];
+     @try {
+         [self removeExtraElements];
+     }
+     @finally {
+         [self.lock unlock];
+     }
     
     [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:self.events forKey:[AvoBatcher cacheKey]];
 }
@@ -99,6 +109,7 @@
     [self.lock lock];
     @try {
         [self.events addObject:trackSchemaBody];
+        [self removeExtraElements];
     }
     @finally {
         [self.lock unlock];
@@ -111,7 +122,7 @@
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
     NSTimeInterval timeSinceLastFlushAttempt = now - self.batchFlushAttemptTime;
     
-    if (batchSize % [AvoStateOfTracking getBatchSize] == 0 || timeSinceLastFlushAttempt >= [AvoStateOfTracking getBatchFlustSeconds]) {
+    if (batchSize % [AvoStateOfTracking getBatchSize] == 0 || timeSinceLastFlushAttempt >= [AvoStateOfTracking getBatchFlushSeconds]) {
         [self postAllAvailableEventsAndClearCache:NO];
     }
 }
