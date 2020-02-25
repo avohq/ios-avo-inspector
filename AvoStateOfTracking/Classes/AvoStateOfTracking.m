@@ -62,11 +62,11 @@ static int batchFlushSTime = 30;
     batchFlushSTime = newBatchFlushSeconds;
 }
 
--(instancetype) initWithApiKey: (NSString *) apiKey isDebug: (Boolean) isDebug {
+-(instancetype) initWithApiKey: (NSString *) apiKey isDev: (Boolean) isDev {
     self = [super init];
     if (self) {
-        if (isDebug) {
-            [AvoStateOfTracking setBatchFlushSeconds:3];
+        if (isDev) {
+            [AvoStateOfTracking setBatchFlushSeconds:1];
             [AvoStateOfTracking setLogging:YES];
         }
         

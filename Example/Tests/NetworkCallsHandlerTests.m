@@ -59,7 +59,7 @@ describe(@"Handling network calls", ^{
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoList * list = [AvoList new];
-        list.subtypes = [[NSSet alloc] initWithArray:[[NSMutableArray alloc] initWithArray:@[[AvoInt new], [AvoFloat new], [AvoBoolean new], [AvoString new], [AvoNull new], [AvoUnknownType new], [AvoList new]]]];
+        list.subtypes = [[NSMutableSet alloc] initWithArray:[[NSMutableArray alloc] initWithArray:@[[AvoInt new], [AvoFloat new], [AvoBoolean new], [AvoString new], [AvoNull new], [AvoUnknownType new], [AvoList new]]]];
         [schema setObject:list forKey:@"list key"];
         [schema setObject:[AvoInt new] forKey:@"int key"];
         [schema setObject:[AvoFloat new] forKey:@"float key"];
@@ -119,7 +119,7 @@ describe(@"Handling network calls", ^{
         [object.fields setValue:[AvoString new]  forKey:@"key1"];
         [object.fields setValue:[AvoInt new]  forKey:@"key2"];
         AvoList * list = [AvoList new];
-        list.subtypes = [[NSSet alloc] initWithArray:[[NSMutableArray alloc] initWithArray:@[[AvoInt new], [AvoFloat new], [AvoBoolean new], [AvoString new], [AvoNull new], [AvoUnknownType new], [AvoList new]]]];
+        list.subtypes = [[NSMutableSet alloc] initWithArray:[[NSMutableArray alloc] initWithArray:@[[AvoInt new], [AvoFloat new], [AvoBoolean new], [AvoString new], [AvoNull new], [AvoUnknownType new], [AvoList new]]]];
         [object.fields setValue:list forKey:@"key3"];
         [schema setObject:object forKey:@"obj key"];
         AvoObject * nestedObject = [AvoObject new];

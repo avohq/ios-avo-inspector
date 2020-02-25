@@ -23,11 +23,11 @@ pod 'AvoStateOfTracking'
 
 Obj-C
 
-    AvoStateOfTracking *avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDebug: debugFlag];
+    AvoStateOfTracking *avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDev: devFlag];
         
 Swift
 
-    let avoSot = AvoStateOfTracking(apiKey: "apiKey", isDebug: debugFlag)
+    let avoSot = AvoStateOfTracking(apiKey: "apiKey", isDev: devFlag)
     
 # Enabling logs
 

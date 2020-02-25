@@ -15,7 +15,7 @@ AvoStateOfTracking * avoSot;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"A4lTbBQTGVyD1f66213X" isDebug: YES];
+    avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"A4lTbBQTGVyD1f66213X" isDev: YES];
     
     return YES;
 }
