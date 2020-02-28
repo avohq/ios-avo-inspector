@@ -110,7 +110,7 @@ describe(@"Handling network calls", ^{
             }
         }
     });
-         
+
      it(@"AvoNetworkCallsHandler builds proper body for object schema tracking", ^{
         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
      

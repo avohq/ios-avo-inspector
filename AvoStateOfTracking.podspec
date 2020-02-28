@@ -20,7 +20,7 @@ A powerful suite of features that analyze your current state of tracking and gui
   s.author           = { 'Avo (https://www.avo.app)' => 'friends@avo.app' }
   s.source           = { :git => 'https://github.com/avohq/ios-datascope.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'AvoStateOfTracking/Classes/**/*'
   

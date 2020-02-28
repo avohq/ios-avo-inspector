@@ -34,7 +34,7 @@ SpecBegin(Batching)
             [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] removeObjectForKey:[AvoBatcher cacheKey]];
         });
              
-        it(@"Saves up to 500 events on background and restores on foreground", ^{
+        it(@"Saves up to 1000 events on background and restores on foreground", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
             id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 

@@ -82,7 +82,7 @@
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		87E70B6034DD8F288503AB25 /* Pods-AvoStateOfTracking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.release.xcconfig"; sourceTree = "<group>"; };
-		B28235AFC6E48D36D0E38644 /* AvoStateOfTracking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AvoStateOfTracking.podspec; path = ../AvoStateOfTracking.podspec; sourceTree = "<group>"; };
+		B28235AFC6E48D36D0E38644 /* AvoStateOfTracking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AvoStateOfTracking.podspec; path = ../AvoStateOfTracking.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B98C773A43DE3E8F6C478C85 /* Pods-AvoStateOfTracking_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BEB89237300F3787D57D1AAA /* Pods-AvoStateOfTracking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		C40667EBF43F696F5D928212 /* Pods-AvoStateOfTracking_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -570,7 +570,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AvoStateOfTracking/AvoStateOfTracking-Prefix.pch";
 				INFOPLIST_FILE = "AvoStateOfTracking/AvoStateOfTracking-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoStateOfTracking-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -588,7 +588,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AvoStateOfTracking/AvoStateOfTracking-Prefix.pch";
 				INFOPLIST_FILE = "AvoStateOfTracking/AvoStateOfTracking-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoStateOfTracking-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
