@@ -128,6 +128,13 @@
 }
 
 - (void) postAllAvailableEventsAndClearCache: (BOOL)shouldClearCache {
+    if ([self.events count] == 0) {
+        if (shouldClearCache) {
+            [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] removeObjectForKey:[AvoBatcher cacheKey]];
+        }
+        return;
+    }
+    
     self.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970];
     
     NSArray *sendingEvents = [[NSArray alloc] initWithArray:self.events];

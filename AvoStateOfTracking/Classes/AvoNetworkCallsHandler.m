@@ -14,6 +14,7 @@
 @interface AvoNetworkCallsHandler()
 
 @property (readwrite, nonatomic) NSString *apiKey;
+@property (readwrite, nonatomic) Boolean isDev;
 @property (readwrite, nonatomic) NSString *appName;
 @property (readwrite, nonatomic) NSString *appVersion;
 @property (readwrite, nonatomic) NSString *libVersion;
@@ -24,7 +25,7 @@
 
 @implementation AvoNetworkCallsHandler
 
-- (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion {
+- (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion isDev: (Boolean) isDev {
     self = [super init];
     if (self) {
         self.appVersion = appVersion;
@@ -32,6 +33,7 @@
         self.appName = appName;
         self.apiKey = apiKey;
         self.samplingRate = 1.0;
+        self.isDev = isDev;
     }
     return self;
 }
@@ -54,12 +56,12 @@
             if (!error && [nestedSchema isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *results = nestedSchema;
                 
-                [prop setObject:@"object" forKey:@"propertyValue"];
+                [prop setObject:@"object" forKey:@"propertyType"];
                 
                 [prop setObject:[self bodyFromJson:results] forKey:@"children"];
             }
         } else {
-            [prop setObject:value forKey:@"propertyValue"];
+            [prop setObject:value forKey:@"propertyType"];
         }
         [propsSchema addObject:prop];
     }
@@ -85,10 +87,10 @@
         if ([value isKindOfClass:[NSDictionary class]]) {
             NSDictionary *results = value;
             
-            [prop setObject:@"object" forKey:@"propertyValue"];
+            [prop setObject:@"object" forKey:@"propertyType"];
             [prop setObject:[self bodyFromJson:results] forKey:@"children"];
         } else {
-            [prop setObject:value forKey:@"propertyValue"];
+            [prop setObject:value forKey:@"propertyType"];
         }
         [propsSchema addObject:prop];
     }
@@ -111,6 +113,7 @@
     [body setValue:self.appName forKey:@"appName"];
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
+    [body setValue:self.isDev ? @"dev" : @"prod" forKey:@"env"];
     [body setValue:@"ios" forKey:@"libPlatform"];
     [body setValue:[[NSUUID UUID] UUIDString] forKey:@"messageId"];
     [body setValue:[[AvoInstallationId new] getInstallationId] forKey:@"trackingId"];

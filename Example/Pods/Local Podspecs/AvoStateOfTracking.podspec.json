@@ -1,6 +1,6 @@
 {
   "name": "AvoStateOfTracking",
-  "version": "0.1.1",
+  "version": "0.9.1",
   "summary": "Avo Datascope iOS SDK",
   "description": "A powerful suite of features that analyze your current state of tracking and guide you from your current, messy taxonomy to a more consistent and reliable tracking process across your teams, products, and platforms.",
   "homepage": "https://github.com/avohq/ios-datascope",
@@ -13,10 +13,10 @@
   },
   "source": {
     "git": "https://github.com/avohq/ios-datascope.git",
-    "tag": "0.1.1"
+    "tag": "0.9.1"
   },
   "platforms": {
-    "ios": "11.0"
+    "ios": "10.0"
   },
   "source_files": "AvoStateOfTracking/Classes/**/*"
 }

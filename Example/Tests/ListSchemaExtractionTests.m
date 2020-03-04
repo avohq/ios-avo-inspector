@@ -166,14 +166,14 @@ it(@"can extract nullable string int float boolean subtype array", ^{
    
     NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-    NSString * propertyValue = [[extractedSchema objectForKey:@"string array key"] name];
+    NSString * propertyType = [[extractedSchema objectForKey:@"string array key"] name];
    
-    expect(propertyValue).to.startWith(@"list(");
-    expect(propertyValue).to.contain(@"int");
-    expect(propertyValue).to.contain(@"float");
-    expect(propertyValue).to.contain(@"boolean");
-    expect(propertyValue).to.contain(@"string");
-    expect(propertyValue).to.contain(@"null");
+    expect(propertyType).to.startWith(@"list(");
+    expect(propertyType).to.contain(@"int");
+    expect(propertyType).to.contain(@"float");
+    expect(propertyType).to.contain(@"boolean");
+    expect(propertyType).to.contain(@"string");
+    expect(propertyType).to.contain(@"null");
 });
 
 it(@"can extract double subtype array", ^{

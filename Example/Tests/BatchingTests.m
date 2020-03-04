@@ -87,6 +87,16 @@ SpecBegin(Batching)
              // Then
              expect(sut.events).toNot.beNil();
          });
+             
+         it(@"Not calls network if nothing is cached", ^{
+            id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
+            OCMReject([mockNetworksCallsHandler callStateOfTrackingWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]);
+            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
+
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
+            id partialMock = OCMPartialMock(sut);
+            OCMStub([partialMock postAllAvailableEventsAndClearCache:@YES]).andDo(nil);
+         });
                     
         it(@"Registers foreground and backround observers", ^{
             

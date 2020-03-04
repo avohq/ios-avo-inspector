@@ -29,17 +29,18 @@ SpecBegin(NetworkCalls)
 describe(@"Handling network calls", ^{
          
     it(@"AvoNetworkCallsHandler saves values when init", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: YES];
         
         expect(sut.apiKey).to.equal(@"testApiKey");
         expect(sut.appVersion).to.equal(@"testAppVersion");
         expect(sut.libVersion).to.equal(@"testLibVersion");
         expect(sut.appName).to.equal(@"testAppName");
         expect(sut.samplingRate).to.equal(1.0);
+        expect(sut.isDev).to.equal(YES);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for session tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: YES];
 
         NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
         
@@ -52,10 +53,11 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
+        expect([actualSessionStartedBody objectForKey:@"env"]).to.equal(@"dev");
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
-         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: NO];
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoList * list = [AvoList new];
@@ -80,6 +82,7 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
+        expect([actualTrackSchemaBody objectForKey:@"env"]).to.equal(@"prod");
     
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"] count]).to.equal(7);
     
@@ -87,32 +90,32 @@ describe(@"Handling network calls", ^{
             NSString *key = [childProp valueForKey:@"propertyName"];
             
             if ([key isEqual:@"list key"]) {
-                 expect([childProp objectForKey:@"propertyValue"]).to.startWith(@"list(");
-                 expect([childProp objectForKey:@"propertyValue"]).to.contain(@"int");
-                 expect([childProp objectForKey:@"propertyValue"]).to.contain(@"float");
-                 expect([childProp objectForKey:@"propertyValue"]).to.contain(@"boolean");
-                 expect([childProp objectForKey:@"propertyValue"]).to.contain(@"string");
-                 expect([childProp objectForKey:@"propertyValue"]).to.contain(@"null");
-                 expect([childProp objectForKey:@"propertyValue"]).to.contain(@"unknown");
-                 expect([childProp objectForKey:@"propertyValue"]).to.contain(@"list()");
+                 expect([childProp objectForKey:@"propertyType"]).to.startWith(@"list(");
+                 expect([childProp objectForKey:@"propertyType"]).to.contain(@"int");
+                 expect([childProp objectForKey:@"propertyType"]).to.contain(@"float");
+                 expect([childProp objectForKey:@"propertyType"]).to.contain(@"boolean");
+                 expect([childProp objectForKey:@"propertyType"]).to.contain(@"string");
+                 expect([childProp objectForKey:@"propertyType"]).to.contain(@"null");
+                 expect([childProp objectForKey:@"propertyType"]).to.contain(@"unknown");
+                 expect([childProp objectForKey:@"propertyType"]).to.contain(@"list()");
             } else if ( [key isEqual:@"boolean key"]) {
-                 expect([childProp objectForKey:@"propertyValue"]).to.equal(@"boolean");
+                 expect([childProp objectForKey:@"propertyType"]).to.equal(@"boolean");
             } else if ( [key isEqual:@"string key"]) {
-                 expect([childProp objectForKey:@"propertyValue"]).to.startWith(@"string");
+                 expect([childProp objectForKey:@"propertyType"]).to.startWith(@"string");
             } else if ( [key isEqual:@"int key"]) {
-                expect([childProp objectForKey:@"propertyValue"]).to.startWith(@"int");
+                expect([childProp objectForKey:@"propertyType"]).to.startWith(@"int");
             } else if ( [key isEqual:@"unknown type key"]) {
-                expect([childProp objectForKey:@"propertyValue"]).to.startWith(@"unknown");
+                expect([childProp objectForKey:@"propertyType"]).to.startWith(@"unknown");
             } else if ( [key isEqual:@"float key"]) {
-                expect([childProp objectForKey:@"propertyValue"]).to.startWith(@"float");
+                expect([childProp objectForKey:@"propertyType"]).to.startWith(@"float");
             } else if ( [key isEqual:@"null key"]) {
-                expect([childProp objectForKey:@"propertyValue"]).to.startWith(@"null");
+                expect([childProp objectForKey:@"propertyType"]).to.startWith(@"null");
             }
         }
     });
 
      it(@"AvoNetworkCallsHandler builds proper body for object schema tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion"];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: YES];
      
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoObject * object = [AvoObject new];
@@ -133,30 +136,30 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"type"]).to.equal(@"event");
         expect([actualTrackSchemaBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyName"]).to.equal(@"obj key");
-        expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyValue"]).to.equal(@"object");
+        expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyType"]).to.equal(@"object");
     
         NSArray * propertyChildren = [[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"children"];
         for (NSDictionary *childProp in propertyChildren) {
             NSString *key = [childProp valueForKey:@"propertyName"];
             
             if ([key isEqual:@"key1"]) {
-                 expect([childProp objectForKey:@"propertyValue"]).to.equal(@"string");
+                 expect([childProp objectForKey:@"propertyType"]).to.equal(@"string");
             } else if ( [key isEqual:@"key2"]) {
-                 expect([childProp objectForKey:@"propertyValue"]).to.equal(@"int");
+                 expect([childProp objectForKey:@"propertyType"]).to.equal(@"int");
             } else if ( [key isEqual:@"key3"]) {
-                 expect([childProp objectForKey:@"propertyValue"]).to.startWith(@"list(");
+                 expect([childProp objectForKey:@"propertyType"]).to.startWith(@"list(");
             } else if ( [key isEqual:@"key4"]) {
-                expect([childProp objectForKey:@"propertyValue"]).to.equal(@"object");
+                expect([childProp objectForKey:@"propertyType"]).to.equal(@"object");
                 NSArray * nestedPropertyChildren = [childProp valueForKey:@"children"];
                 for (NSDictionary *nestedChildProp in nestedPropertyChildren) {
                     NSString *nestedKey = [nestedChildProp valueForKey:@"propertyName"];
                     
                     if ([nestedKey isEqual:@"nestedKey1"]) {
-                        expect([nestedChildProp objectForKey:@"propertyValue"]).to.equal(@"string");
+                        expect([nestedChildProp objectForKey:@"propertyType"]).to.equal(@"string");
                     } else if ( [nestedKey isEqual:@"nestedKey2"]) {
-                        expect([nestedChildProp objectForKey:@"propertyValue"]).to.equal(@"int");
+                        expect([nestedChildProp objectForKey:@"propertyType"]).to.equal(@"int");
                     } else if ( [nestedKey isEqual:@"nestedKey3"]) {
-                        expect([nestedChildProp objectForKey:@"propertyValue"]).to.startWith(@"list(");
+                        expect([nestedChildProp objectForKey:@"propertyType"]).to.startWith(@"list(");
                     }
                 }
             }

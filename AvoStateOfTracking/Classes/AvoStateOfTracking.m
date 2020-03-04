@@ -74,7 +74,7 @@ static int batchFlushSTime = 30;
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey] intValue];
         
-        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:[@(self.libVersion) stringValue]];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:[@(self.libVersion) stringValue] isDev:isDev];
         self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler withNotificationCenter: [NSNotificationCenter defaultCenter]];
         
         self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
