@@ -21,8 +21,8 @@ pod 'AvoStateOfTracking'
 
 # Avo documentation
 
-Here you can find short hands-on integration guide. 
-For more info about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/state-of-tracking/ios) 
+This is a quick start guide. 
+For more information about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/state-of-tracking/ios).
 
 # Initializing
 
@@ -56,7 +56,7 @@ Read more in the [Avo documentation](https://www.avo.app/docs/datascope/state-of
 ### 1.
 
 This methods gets actual tracking event parameters, extracts schema automatically and sends it to Avo Datascope.
-This is the easiest way to use the library, just call ,this method at the same place you call your analytics tools' track method.
+It is the easiest way to use the library, just call this method at the same place you call your analytics tools' track methods with the same parameters.
 
 Obj-C
 
