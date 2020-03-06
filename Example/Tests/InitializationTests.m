@@ -23,7 +23,7 @@ it(@"inititalizes with lib version", ^{
 
    NSInteger libVersion = sut.libVersion;
 
-   expect(libVersion).to.equal(1);
+   expect(libVersion).to.equal(2);
 });
 
 it(@"inititalizes with app id", ^{

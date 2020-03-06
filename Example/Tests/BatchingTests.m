@@ -66,7 +66,7 @@ SpecBegin(Batching)
 
             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
             id partialMock = OCMPartialMock(sut);
-            OCMStub([partialMock postAllAvailableEventsAndClearCache:@YES]).andDo(nil);
+            OCMStub([partialMock postAllAvailableEventsAndClearCache:YES]).andDo(nil);
         
             // When
             [partialMock enterBackground];
@@ -82,7 +82,7 @@ SpecBegin(Batching)
 
              AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
              id partialMock = OCMPartialMock(sut);
-             OCMStub([partialMock postAllAvailableEventsAndClearCache:@YES]).andDo(nil);
+             OCMStub([partialMock postAllAvailableEventsAndClearCache:YES]).andDo(nil);
             
              // Then
              expect(sut.events).toNot.beNil();
@@ -95,7 +95,7 @@ SpecBegin(Batching)
 
             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
             id partialMock = OCMPartialMock(sut);
-            OCMStub([partialMock postAllAvailableEventsAndClearCache:@YES]).andDo(nil);
+            OCMStub([partialMock postAllAvailableEventsAndClearCache:YES]).andDo(nil);
          });
                     
         it(@"Registers foreground and backround observers", ^{

@@ -42,8 +42,12 @@ Swift
 # Sending event schemas
 
 Whenever you send tracking event call one of the following methods:
+Read more in the [Avo documentation](https://www.avo.app/docs/datascope/state-of-tracking/ios#event-tracking) 
 
 ### 1.
+
+This methods gets actual tracking event parameters, extracts schema automatically and sends it to Avo Datascope.
+This is the easiest way to use the library, just call ,this method at the same place you call your analytics tools' track method.
 
 Obj-C
 
@@ -54,6 +58,8 @@ Swift
     avoSot.trackSchema(fromEvent: "Event Name", eventParams: ["id": "sdf-334fsg-334f", "number": 41])
     
 ### 2.
+
+If you prefer to extract data schema manually you would use this method.
 
 Obj-C
 
@@ -74,6 +80,8 @@ Swift
     let schema = avoSot.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
     
 # Batching control
+
+In order to ensure our SDK doesn't have a large impact on performance or battery life it supports event schemas batching.
 
 Default batch size is 30 and default batch flust timeout is 30 seconds.
 In debug mode default batch size is 1, i.e. every event schema is sent to the server as soon as it is reported.
