@@ -50,7 +50,7 @@
 		0385A7D967CD2A317A48054A /* Pods_AvoStateOfTracking_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		18EDCD8FB8CCED3A1897C0A4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		477A7DB1E300D6CCCB497073 /* Pods_AvoStateOfTracking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6003F58A195388D20070C39A /* AvoStateOfTracking_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvoStateOfTracking_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6003F58A195388D20070C39A /* AvoInspector_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvoInspector_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -82,7 +82,7 @@
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		87E70B6034DD8F288503AB25 /* Pods-AvoStateOfTracking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.release.xcconfig"; sourceTree = "<group>"; };
-		B28235AFC6E48D36D0E38644 /* AvoStateOfTracking.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AvoStateOfTracking.podspec; path = ../AvoStateOfTracking.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		B28235AFC6E48D36D0E38644 /* AvoInspector.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AvoInspector.podspec; path = ../AvoInspector.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B98C773A43DE3E8F6C478C85 /* Pods-AvoStateOfTracking_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BEB89237300F3787D57D1AAA /* Pods-AvoStateOfTracking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		C40667EBF43F696F5D928212 /* Pods-AvoStateOfTracking_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -130,7 +130,7 @@
 		6003F58B195388D20070C39A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6003F58A195388D20070C39A /* AvoStateOfTracking_Example.app */,
+				6003F58A195388D20070C39A /* AvoInspector_Example.app */,
 				6003F5AE195388D20070C39A /* AvoStateOfTracking_Tests.xctest */,
 			);
 			name = Products;
@@ -208,7 +208,7 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				B28235AFC6E48D36D0E38644 /* AvoStateOfTracking.podspec */,
+				B28235AFC6E48D36D0E38644 /* AvoInspector.podspec */,
 				18EDCD8FB8CCED3A1897C0A4 /* README.md */,
 				DC6F3BAF63606FC6F49B5F57 /* LICENSE */,
 			);
@@ -245,7 +245,7 @@
 			);
 			name = AvoStateOfTracking_Example;
 			productName = AvoStateOfTracking;
-			productReference = 6003F58A195388D20070C39A /* AvoStateOfTracking_Example.app */;
+			productReference = 6003F58A195388D20070C39A /* AvoInspector_Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6003F5AD195388D20070C39A /* AvoStateOfTracking_Tests */ = {
@@ -407,12 +407,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Analytics/Analytics.framework",
-				"${BUILT_PRODUCTS_DIR}/AvoStateOfTracking/AvoStateOfTracking.framework",
+				"${BUILT_PRODUCTS_DIR}/AvoInspector/AvoInspector.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Analytics.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AvoStateOfTracking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AvoInspector.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -572,8 +572,8 @@
 				INFOPLIST_FILE = "AvoStateOfTracking/AvoStateOfTracking-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoStateOfTracking-Example";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoInspector-Example";
+				PRODUCT_NAME = AvoInspector_Example;
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -590,8 +590,8 @@
 				INFOPLIST_FILE = "AvoStateOfTracking/AvoStateOfTracking-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoStateOfTracking-Example";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "app.avo.demo.AvoInspector-Example";
+				PRODUCT_NAME = AvoInspector_Example;
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
 			};

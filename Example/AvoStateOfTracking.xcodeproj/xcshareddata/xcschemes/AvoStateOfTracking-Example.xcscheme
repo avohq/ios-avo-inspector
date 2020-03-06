@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6003F589195388D20070C39A"
-               BuildableName = "AvoStateOfTracking_Example.app"
+               BuildableName = "AvoInspector_Example.app"
                BlueprintName = "AvoStateOfTracking_Example"
                ReferencedContainer = "container:AvoStateOfTracking.xcodeproj">
             </BuildableReference>
@@ -31,7 +31,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "AvoStateOfTracking_Example.app"
+            BuildableName = "AvoInspector_Example.app"
             BlueprintName = "AvoStateOfTracking_Example"
             ReferencedContainer = "container:AvoStateOfTracking.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "AvoStateOfTracking_Example.app"
+            BuildableName = "AvoInspector_Example.app"
             BlueprintName = "AvoStateOfTracking_Example"
             ReferencedContainer = "container:AvoStateOfTracking.xcodeproj">
          </BuildableReference>
@@ -81,7 +81,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "AvoStateOfTracking_Example.app"
+            BuildableName = "AvoInspector_Example.app"
             BlueprintName = "AvoStateOfTracking_Example"
             ReferencedContainer = "container:AvoStateOfTracking.xcodeproj">
          </BuildableReference>

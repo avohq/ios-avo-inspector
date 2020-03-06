@@ -6,18 +6,18 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
-#import <AvoStateOfTracking/AvoList.h>
-#import <AvoStateOfTracking/AvoInt.h>
-#import <AvoStateOfTracking/AvoFloat.h>
-#import <AvoStateOfTracking/AvoBoolean.h>
-#import <AvoStateOfTracking/AvoNull.h>
-#import <AvoStateOfTracking/AvoString.h>
+#import <AvoInspector/AvoInspector.h>
+#import <AvoInspector/AvoList.h>
+#import <AvoInspector/AvoInt.h>
+#import <AvoInspector/AvoFloat.h>
+#import <AvoInspector/AvoBoolean.h>
+#import <AvoInspector/AvoNull.h>
+#import <AvoInspector/AvoString.h>
 
 SpecBegin(ListExtraction)
 
 it(@"can extract array", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
@@ -31,7 +31,7 @@ it(@"can extract array", ^{
 });
 
 it(@"can extract single object array", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
@@ -45,7 +45,7 @@ it(@"can extract single object array", ^{
 });
 
 it(@"can extract single object set", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
@@ -59,7 +59,7 @@ it(@"can extract single object set", ^{
 });
 
 it(@"can extract multiple objecta set", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
@@ -73,7 +73,7 @@ it(@"can extract multiple objecta set", ^{
 });
 
 it(@"can extract mutable array", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -89,7 +89,7 @@ it(@"can extract mutable array", ^{
 });
 
 it(@"can extract mutable single object array", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -104,7 +104,7 @@ it(@"can extract mutable single object array", ^{
 });
 
 it(@"can extract string subtype array", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -119,7 +119,7 @@ it(@"can extract string subtype array", ^{
 });
 
 it(@"do not duplicate types in name", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -135,7 +135,7 @@ it(@"do not duplicate types in name", ^{
 });
 
 it(@"can extract nullable string subtype array", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -151,7 +151,7 @@ it(@"can extract nullable string subtype array", ^{
 });
 
 it(@"can extract nullable string int float boolean subtype array", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -177,7 +177,7 @@ it(@"can extract nullable string int float boolean subtype array", ^{
 });
 
 it(@"can extract double subtype array", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    

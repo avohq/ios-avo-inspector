@@ -1,8 +1,8 @@
-# AvoStateOfTracking
+# AvoInspector
 
-[![Version](https://img.shields.io/cocoapods/v/AvoStateOfTracking.svg?style=flat)](https://cocoapods.org/pods/AvoStateOfTracking)
-[![License](https://img.shields.io/cocoapods/l/AvoStateOfTracking.svg?style=flat)](https://cocoapods.org/pods/AvoStateOfTracking)
-[![Platform](https://img.shields.io/cocoapods/p/AvoStateOfTracking.svg?style=flat)](https://cocoapods.org/pods/AvoStateOfTracking)
+[![Version](https://img.shields.io/cocoapods/v/AvoInspector.svg?style=flat)](https://cocoapods.org/pods/AvoInspector)
+[![License](https://img.shields.io/cocoapods/l/AvoInspector.svg?style=flat)](https://cocoapods.org/pods/AvoInspector)
+[![Platform](https://img.shields.io/cocoapods/p/AvoInspector.svg?style=flat)](https://cocoapods.org/pods/AvoInspector)
 
 ## Example
 
@@ -12,17 +12,17 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-AvoStateOfTracking is available through [CocoaPods](https://cocoapods.org). To install
+AvoInspector is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'AvoStateOfTracking'
+pod 'AvoInspector'
 ```
 
 # Avo documentation
 
 This is a quick start guide. 
-For more information about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/state-of-tracking/ios).
+For more information about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/avo-inspector/ios).
 
 # Initializing
 
@@ -30,11 +30,11 @@ Obtain the API key at [Avo.app](https://www.avo.app/welcome)
 
 Obj-C
 
-    AvoStateOfTracking *avoSot = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDev: devFlag];
+    AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: devFlag];
         
 Swift
 
-    let avoSot = AvoStateOfTracking(apiKey: "apiKey", isDev: devFlag)
+    let avoInspector = AvoInspector(apiKey: "apiKey", isDev: devFlag)
     
 # Enabling logs
 
@@ -42,16 +42,16 @@ Logs are enabled by default in the dev mode and disabled in prod mode based on t
 
 Obj-C
 
-    [AvoStateOfTracking setLogging:YES];
+    [AvoInspector setLogging:YES];
         
 Swift
 
-    AvoStateOfTracking.setLogging(true)
+    AvoInspector.setLogging(true)
 
 # Sending event schemas
 
 Whenever you send tracking event call one of the following methods:
-Read more in the [Avo documentation](https://www.avo.app/docs/datascope/state-of-tracking/ios#event-tracking) 
+Read more in the [Avo documentation](https://www.avo.app/docs/datascope/avo-inspector/ios#event-tracking) 
 
 ### 1.
 
@@ -60,11 +60,11 @@ It is the easiest way to use the library, just call this method at the same plac
 
 Obj-C
 
-    [avoSot trackSchemaFromEvent:@"Event Name" eventParams:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
+    [avoInspector trackSchemaFromEvent:@"Event Name" eventParams:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
     
 Swift
     
-    avoSot.trackSchema(fromEvent: "Event Name", eventParams: ["id": "sdf-334fsg-334f", "number": 41])
+    avoInspector.trackSchema(fromEvent: "Event Name", eventParams: ["id": "sdf-334fsg-334f", "number": 41])
     
 ### 2.
 
@@ -97,13 +97,13 @@ In debug mode default batch size is 1, i.e. every event schema is sent to the se
 
 Obj-C
 
-    [AvoStateOfTracking setBatchSize:15];
-    [AvoStateOfTracking setBatchFlustSeconds:10];
+    [AvoInspector setBatchSize:15];
+    [AvoInspector setBatchFlustSeconds:10];
     
 Swift
     
-    AvoStateOfTracking.setBatchSize(15)
-    AvoStateOfTracking.setBatchFlustSeconds(10)
+    AvoInspector.setBatchSize(15)
+    AvoInspector.setBatchFlustSeconds(10)
 
 ## Author
 
@@ -111,4 +111,4 @@ Avo (https://www.avo.app), friends@avo.app
 
 ## License
 
-AvoStateOfTracking is available under the MIT license. See the LICENSE file for more info.
+AvoInspector is available under the MIT license. See the LICENSE file for more info.

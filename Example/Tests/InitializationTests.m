@@ -6,12 +6,12 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
+#import <AvoInspector/AvoInspector.h>
 
 SpecBegin(Init)
 
 it(@"inititalizes with app version", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" isDev: NO];
 
    NSString * appVersion = sut.appVersion;
 
@@ -19,7 +19,7 @@ it(@"inititalizes with app version", ^{
 });
 
 it(@"inititalizes with lib version", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" isDev: NO];
 
    NSInteger libVersion = sut.libVersion;
 
@@ -27,39 +27,39 @@ it(@"inititalizes with lib version", ^{
 });
 
 it(@"inititalizes with app id", ^{
-    AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey: @"apiKey" isDev: NO];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" isDev: NO];
 
    expect(sut.apiKey).to.equal(@"apiKey");
 });
    
 it(@"inititalizes with session tracker", ^{
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
 
   expect(sut.sessionTracker).notTo.beNil();
 });
 
 it(@"debug inititalization sets batch size to 1", ^{
-   [AvoStateOfTracking setBatchFlushSeconds:30];
+   [AvoInspector setBatchFlushSeconds:30];
    
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDev: YES];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: YES];
 
-  expect([AvoStateOfTracking getBatchFlushSeconds]).to.equal(1);
+  expect([AvoInspector getBatchFlushSeconds]).to.equal(1);
 });
 
 it(@"debug inititalization sets logs on", ^{
-   [AvoStateOfTracking setLogging:NO];
+   [AvoInspector setLogging:NO];
    
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDev: YES];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: YES];
 
-  expect([AvoStateOfTracking isLogging]).to.equal(YES);
+  expect([AvoInspector isLogging]).to.equal(YES);
 });
 
 it(@"not debug inititalization does not set batch size to 1", ^{
-   [AvoStateOfTracking setBatchSize:30];
+   [AvoInspector setBatchSize:30];
    
-   AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
 
-  expect([AvoStateOfTracking getBatchSize]).to.equal(30);
+  expect([AvoInspector getBatchSize]).to.equal(30);
 });
 
 SpecEnd

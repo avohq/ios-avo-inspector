@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AvoStateOfTracking/AvoBatcher.h>
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
-#import <AvoStateOfTracking/AvoNetworkCallsHandler.h>
+#import <AvoInspector/AvoBatcher.h>
+#import <AvoInspector/AvoInspector.h>
+#import <AvoInspector/AvoNetworkCallsHandler.h>
 #import <OCMock/OCMock.h>
 
 @interface AvoBatcher ()
@@ -90,7 +90,7 @@ SpecBegin(Batching)
              
          it(@"Not calls network if nothing is cached", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-            OCMReject([mockNetworksCallsHandler callStateOfTrackingWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]);
+            OCMReject([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]);
             id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
@@ -134,7 +134,7 @@ SpecBegin(Batching)
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
               postBatchCount += 1;
             };
-            OCMStub([mockNetworksCallsHandler callStateOfTrackingWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
+            OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
         
             id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
@@ -143,7 +143,7 @@ SpecBegin(Batching)
             int startBatchCount = postBatchCount;
         
             // When
-            for (int i = 0; i < [AvoStateOfTracking getBatchSize] - 1; i++) {
+            for (int i = 0; i < [AvoInspector getBatchSize] - 1; i++) {
                 [sut handleSessionStarted];
             }
         
@@ -157,7 +157,7 @@ SpecBegin(Batching)
             expect(postBatchCount).to.equal(startBatchCount + 1);
         
             // When
-            for (int i = 0; i < [AvoStateOfTracking getBatchSize] - 1; i++) {
+            for (int i = 0; i < [AvoInspector getBatchSize] - 1; i++) {
                 [sut handleTrackSchema:@"Test" schema:[NSDictionary new]];
             }
         
@@ -172,7 +172,7 @@ SpecBegin(Batching)
         });
 
         it(@"Sends batch if time has come", ^{
-            [AvoStateOfTracking setBatchSize:30];
+            [AvoInspector setBatchSize:30];
         
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
@@ -182,7 +182,7 @@ SpecBegin(Batching)
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
               postBatchCount += 1;
             };
-            OCMStub([mockNetworksCallsHandler callStateOfTrackingWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
+            OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
 
             id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
@@ -197,7 +197,7 @@ SpecBegin(Batching)
             expect(postBatchCount).to.equal(startBatchCount);
 
             // When
-            sut.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970] - [AvoStateOfTracking getBatchFlushSeconds];
+            sut.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970] - [AvoInspector getBatchFlushSeconds];
             [sut handleTrackSchema:@"Test" schema:[NSDictionary new]];
 
             // Then
@@ -216,7 +216,7 @@ SpecBegin(Batching)
                 
                 batchBody(nil);
             };
-            OCMStub([mockNetworksCallsHandler callStateOfTrackingWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
+            OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
         
             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
          
@@ -236,7 +236,7 @@ SpecBegin(Batching)
                 
                 batchBody([NSError new]);
             };
-            OCMStub([mockNetworksCallsHandler callStateOfTrackingWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
+            OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
         
             id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
@@ -257,7 +257,7 @@ SpecBegin(Batching)
             sut.batchFlushAttemptTime = 0;
             
             // When
-            for (int i = 0; i < [AvoStateOfTracking getBatchSize]; i++) {
+            for (int i = 0; i < [AvoInspector getBatchSize]; i++) {
                [sut handleSessionStarted];
             }
         

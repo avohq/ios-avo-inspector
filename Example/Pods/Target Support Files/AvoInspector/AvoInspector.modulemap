@@ -1,0 +1,6 @@
+framework module AvoInspector {
+  umbrella header "AvoInspector-umbrella.h"
+
+  export *
+  module * { export * }
+}

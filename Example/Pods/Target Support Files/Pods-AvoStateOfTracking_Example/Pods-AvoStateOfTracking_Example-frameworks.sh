@@ -192,11 +192,11 @@ fi
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Analytics/Analytics.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/AvoStateOfTracking/AvoStateOfTracking.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AvoInspector/AvoInspector.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Analytics/Analytics.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/AvoStateOfTracking/AvoStateOfTracking.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AvoInspector/AvoInspector.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

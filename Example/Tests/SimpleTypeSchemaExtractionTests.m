@@ -8,18 +8,18 @@
 
 // https://github.com/Specta/Specta
 
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
-#import <AvoStateOfTracking/AvoInt.h>
-#import <AvoStateOfTracking/AvoFloat.h>
-#import <AvoStateOfTracking/AvoBoolean.h>
-#import <AvoStateOfTracking/AvoNull.h>
-#import <AvoStateOfTracking/AvoString.h>
+#import <AvoInspector/AvoInspector.h>
+#import <AvoInspector/AvoInt.h>
+#import <AvoInspector/AvoFloat.h>
+#import <AvoInspector/AvoBoolean.h>
+#import <AvoInspector/AvoNull.h>
+#import <AvoInspector/AvoString.h>
 
 SpecBegin(PrimitiveTypeExtraction)
 
 describe(@"testing primitive type extraction", ^{
     it(@"can extract int", ^{
-        AvoStateOfTracking * sut = [AvoStateOfTracking new];
+        AvoInspector * sut = [AvoInspector new];
          
         NSMutableDictionary * testParams = [NSMutableDictionary new];
         
@@ -31,7 +31,7 @@ describe(@"testing primitive type extraction", ^{
     });
          
      it(@"can extract long long", ^{
-         AvoStateOfTracking * sut = [AvoStateOfTracking new];
+         AvoInspector * sut = [AvoInspector new];
           
          NSMutableDictionary * testParams = [NSMutableDictionary new];
          
@@ -45,7 +45,7 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract long", ^{
-          AvoStateOfTracking * sut = [AvoStateOfTracking new];
+          AvoInspector * sut = [AvoInspector new];
            
           NSMutableDictionary * testParams = [NSMutableDictionary new];
           
@@ -59,7 +59,7 @@ describe(@"testing primitive type extraction", ^{
       });
      
      it(@"can extract short", ^{
-             AvoStateOfTracking * sut = [AvoStateOfTracking new];
+             AvoInspector * sut = [AvoInspector new];
               
              NSMutableDictionary * testParams = [NSMutableDictionary new];
              
@@ -73,7 +73,7 @@ describe(@"testing primitive type extraction", ^{
          });
          
      it(@"can extract char", ^{
-         AvoStateOfTracking * sut = [AvoStateOfTracking new];
+         AvoInspector * sut = [AvoInspector new];
           
          NSMutableDictionary * testParams = [NSMutableDictionary new];
          
@@ -87,7 +87,7 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract double", ^{
-        AvoStateOfTracking * sut = [AvoStateOfTracking new];
+        AvoInspector * sut = [AvoInspector new];
           
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
@@ -99,7 +99,7 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract float", ^{
-        AvoStateOfTracking * sut = [AvoStateOfTracking new];
+        AvoInspector * sut = [AvoInspector new];
           
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
@@ -111,7 +111,7 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract boolean", ^{
-        AvoStateOfTracking * sut = [AvoStateOfTracking new];
+        AvoInspector * sut = [AvoInspector new];
           
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
@@ -123,7 +123,7 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract null", ^{
-        AvoStateOfTracking * sut = [AvoStateOfTracking new];
+        AvoInspector * sut = [AvoInspector new];
           
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
@@ -135,7 +135,7 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract constant string", ^{
-        AvoStateOfTracking * sut = [AvoStateOfTracking new];
+        AvoInspector * sut = [AvoInspector new];
           
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          

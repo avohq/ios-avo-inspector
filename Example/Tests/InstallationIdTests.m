@@ -6,7 +6,7 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoInstallationId.h>
+#import <AvoInspector/AvoInstallationId.h>
 
 SpecBegin(InstallationId)
 describe(@"Installation id between restarts", ^{

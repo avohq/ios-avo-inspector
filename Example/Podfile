@@ -3,7 +3,7 @@ use_frameworks!
 platform :ios, '10.0'
 
 target 'AvoStateOfTracking_Example' do
-  pod 'AvoStateOfTracking', :path => '../'
+  pod 'AvoInspector', :path => '../'
   pod 'Analytics', '~> 3.6.0'
 
   target 'AvoStateOfTracking_Tests' do

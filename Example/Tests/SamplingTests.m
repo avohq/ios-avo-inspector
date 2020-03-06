@@ -6,7 +6,7 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoNetworkCallsHandler.h>
+#import <AvoInspector/AvoNetworkCallsHandler.h>
 #import <OCMock/OCMock.h>
 
 @interface AvoNetworkCallsHandler ()
@@ -33,8 +33,8 @@ describe(@"Sampling", ^{
         OCMStub([partialMock sendHttpRequest:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
     
         for (int i = 0; i < 999; i++) {
-            [sut callStateOfTrackingWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
-            [sut callStateOfTrackingWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
+            [sut callInspectorWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
+            [sut callInspectorWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
         }
            
         expect(httpRequestsCount).to.equal(0);
@@ -53,8 +53,8 @@ describe(@"Sampling", ^{
          OCMStub([partialMock sendHttpRequest:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
      
          for (int i = 0; i < 1000; i++) {
-             [sut callStateOfTrackingWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
-             [sut callStateOfTrackingWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
+             [sut callInspectorWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
+             [sut callInspectorWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
          }
             
          expect(httpRequestsCount).to.equal(2000);

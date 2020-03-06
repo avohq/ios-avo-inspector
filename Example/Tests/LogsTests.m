@@ -6,15 +6,15 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
+#import <AvoInspector/AvoInspector.h>
 
 SpecBegin(Logging)
 
 it(@"logs event parameters", ^{
    
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
     
-    [AvoStateOfTracking setLogging:YES];
+    [AvoInspector setLogging:YES];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
      

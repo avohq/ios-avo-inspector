@@ -7,19 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
-#import <AvoStateOfTracking/AvoList.h>
-#import <AvoStateOfTracking/AvoObject.h>
-#import <AvoStateOfTracking/AvoInt.h>
-#import <AvoStateOfTracking/AvoFloat.h>
-#import <AvoStateOfTracking/AvoBoolean.h>
-#import <AvoStateOfTracking/AvoNull.h>
-#import <AvoStateOfTracking/AvoString.h>
+#import <AvoInspector/AvoInspector.h>
+#import <AvoInspector/AvoList.h>
+#import <AvoInspector/AvoObject.h>
+#import <AvoInspector/AvoInt.h>
+#import <AvoInspector/AvoFloat.h>
+#import <AvoInspector/AvoBoolean.h>
+#import <AvoInspector/AvoNull.h>
+#import <AvoInspector/AvoString.h>
 
 SpecBegin(DictionaryExtraction)
 
 it(@"can extract dictionary", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
@@ -33,7 +33,7 @@ it(@"can extract dictionary", ^{
 });
 
 it(@"can extract mutable dictionary", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -49,7 +49,7 @@ it(@"can extract mutable dictionary", ^{
 });
 
 it(@"can extract single entry dictionary", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
     
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
@@ -63,7 +63,7 @@ it(@"can extract single entry dictionary", ^{
 });
 
 it(@"can extract single entry mutable dictionary", ^{
-   AvoStateOfTracking * sut = [AvoStateOfTracking new];
+   AvoInspector * sut = [AvoInspector new];
    
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
@@ -78,7 +78,7 @@ it(@"can extract single entry mutable dictionary", ^{
 });
 
 it(@"can extract nullable string int float boolean list(string) object{field0:string, filed1:int, filed3:list(null)} subtype array", ^{
-    AvoStateOfTracking * sut = [AvoStateOfTracking new];
+    AvoInspector * sut = [AvoInspector new];
    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
    

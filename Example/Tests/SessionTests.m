@@ -6,12 +6,12 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
-#import <AvoStateOfTracking/AvoSessionTracker.h>
-#import <AvoStateOfTracking/AvoBatcher.h>
+#import <AvoInspector/AvoInspector.h>
+#import <AvoInspector/AvoSessionTracker.h>
+#import <AvoInspector/AvoBatcher.h>
 #import <OCMock/OCMock.h>
 
-@interface AvoStateOfTracking ()
+@interface AvoInspector ()
 
 @property (readwrite, nonatomic) AvoSessionTracker * sessionTracker;
 @property (readwrite, nonatomic) AvoBatcher * avoBatcher;
@@ -30,7 +30,7 @@ describe(@"Sessions", ^{
         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
         OCMStub([mockSessionTracker schemaTracked:[OCMArg any]]).andDo(nil);
-        AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"tesApiKey" isDev: NO];
+        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" isDev: NO];
         sut.sessionTracker = mockSessionTracker;
         sut.avoBatcher = mockAvoBatcher;
        
@@ -44,7 +44,7 @@ describe(@"Sessions", ^{
         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
         OCMStub([mockSessionTracker schemaTracked:[OCMArg any]]).andDo(nil);
-        AvoStateOfTracking * sut = [[AvoStateOfTracking alloc] initWithApiKey:@"tesApiKey" isDev: NO];
+        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" isDev: NO];
         sut.sessionTracker = mockSessionTracker;
         sut.avoBatcher = mockAvoBatcher;
        

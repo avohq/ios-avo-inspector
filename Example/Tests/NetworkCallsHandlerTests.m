@@ -6,20 +6,20 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoNetworkCallsHandler.h>
-#import <AvoStateOfTracking/AvoList.h>
-#import <AvoStateOfTracking/AvoObject.h>
-#import <AvoStateOfTracking/AvoInt.h>
-#import <AvoStateOfTracking/AvoFloat.h>
-#import <AvoStateOfTracking/AvoBoolean.h>
-#import <AvoStateOfTracking/AvoNull.h>
-#import <AvoStateOfTracking/AvoString.h>
-#import <AvoStateOfTracking/AvoUnknownType.h>
+#import <AvoInspector/AvoNetworkCallsHandler.h>
+#import <AvoInspector/AvoList.h>
+#import <AvoInspector/AvoObject.h>
+#import <AvoInspector/AvoInt.h>
+#import <AvoInspector/AvoFloat.h>
+#import <AvoInspector/AvoBoolean.h>
+#import <AvoInspector/AvoNull.h>
+#import <AvoInspector/AvoString.h>
+#import <AvoInspector/AvoUnknownType.h>
 #import <OCMock/OCMock.h>
 
 @interface AvoNetworkCallsHandler ()
 
-- (void) callStateOfTrackingWithBatchBody: (NSArray *) body;
+- (void) callInspectorWithBatchBody: (NSArray *) body;
 
 @property (readwrite, nonatomic) double samplingRate;
 

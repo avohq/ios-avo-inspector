@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## AvoStateOfTracking
+## AvoInspector
 
 Copyright (c) 2020 Alexey Verein <tpom6oh@gmail.com>
 

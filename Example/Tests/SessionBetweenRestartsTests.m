@@ -6,8 +6,8 @@
 //  Copyright © 2020 Alexey Verein. All rights reserved.
 //
 
-#import <AvoStateOfTracking/AvoSessionTracker.h>
-#import <AvoStateOfTracking/AvoNetworkCallsHandler.h>
+#import <AvoInspector/AvoSessionTracker.h>
+#import <AvoInspector/AvoNetworkCallsHandler.h>
 #import <OCMock/OCMock.h>
 
 @interface AvoSessionTracker ()

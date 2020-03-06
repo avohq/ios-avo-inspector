@@ -1,6 +1,6 @@
 //
 //  AVOViewController.m
-//  AvoStateOfTracking
+//  AvoInspector
 //
 //  Created by Alexey Verein on 01/28/2020.
 //  Copyright (c) 2020 Alexey Verein. All rights reserved.
@@ -9,11 +9,11 @@
 #import "AVOViewController.h"
 #import "AVOAppDelegate.h"
 
-#import <AvoStateOfTracking/AvoList.h>
-#import <AvoStateOfTracking/AvoInt.h>
-#import <AvoStateOfTracking/AvoNull.h>
-#import <AvoStateOfTracking/AvoString.h>
-#import <AvoStateOfTracking/AvoStateOfTracking.h>
+#import <AvoInspector/AvoList.h>
+#import <AvoInspector/AvoInt.h>
+#import <AvoInspector/AvoNull.h>
+#import <AvoInspector/AvoString.h>
+#import <AvoInspector/AvoInspector.h>
 #import <Analytics/SEGAnalyticsConfiguration.h>
 #import <Analytics/SEGAnalytics.h>
 #import <Analytics/SEGMiddleware.h>
@@ -64,7 +64,7 @@
 
 @implementation AVOViewController
 
-AvoStateOfTracking * avoSot;
+AvoInspector * avoInspector;
 
 - (void)viewDidLoad
 {
@@ -79,7 +79,7 @@ AvoStateOfTracking * avoSot;
     
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, self.scrollView.bounds.size.height*3)];
     
-    avoSot = [AVOAppDelegate getAvoSot];
+    avoInspector = [AVOAppDelegate getAvoSot];
     
     SEGAnalyticsConfiguration * config = [SEGAnalyticsConfiguration configurationWithWriteKey: @"YOUR_WRITEKEY_HERE"];
     config.trackApplicationLifecycleEvents = true;
@@ -90,7 +90,7 @@ AvoStateOfTracking * avoSot;
         SEGPayload * payload = [context payload];
         if ([payload isKindOfClass:[SEGTrackPayload class]]) {
             SEGTrackPayload * trackPayload = (SEGTrackPayload *) payload;
-            [avoSot trackSchemaFromEvent:[trackPayload event] eventParams:[trackPayload properties]];
+            [avoInspector trackSchemaFromEvent:[trackPayload event] eventParams:[trackPayload properties]];
         }
         next(context);
     }];
@@ -170,7 +170,7 @@ AvoStateOfTracking * avoSot;
     [self parseKey:self.param9Key.text value:self.param9Value.text to:testParams];
     [self parseKey:self.param10Key.text value:self.param10Value.text to:testParams];
     
-    [avoSot trackSchemaFromEvent:eventName eventParams:(NSDictionary *)testParams];
+    [avoInspector trackSchemaFromEvent:eventName eventParams:(NSDictionary *)testParams];
 }
 
 -(void)dismissKeyboard
