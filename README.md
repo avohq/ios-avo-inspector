@@ -19,7 +19,14 @@ it, simply add the following line to your Podfile:
 pod 'AvoStateOfTracking'
 ```
 
+# Avo documentation
+
+Here you can find short hands-on integration guide. 
+For more info about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/state-of-tracking/ios) 
+
 # Initializing
+
+Obtain the API key at [Avo.app](https://www.avo.app/welcome) 
 
 Obj-C
 
@@ -30,6 +37,8 @@ Swift
     let avoSot = AvoStateOfTracking(apiKey: "apiKey", isDev: devFlag)
     
 # Enabling logs
+
+Logs are enabled by default in the dev mode and disabled in prod mode based on the init flag.
 
 Obj-C
 
