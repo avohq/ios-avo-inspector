@@ -36,10 +36,10 @@ SpecBegin(Batching)
              
         it(@"Saves up to 1000 events on background and restores on foreground", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
-            
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
+            [sut enterForeground];
+        
             id partialMock = OCMPartialMock(sut);
             __block int postBatchCount = 0;
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
@@ -62,9 +62,8 @@ SpecBegin(Batching)
              
         it(@"Do not write cache if no events are present", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
             id partialMock = OCMPartialMock(sut);
             OCMStub([partialMock postAllAvailableEventsAndClearCache:YES]).andDo(nil);
         
@@ -77,53 +76,25 @@ SpecBegin(Batching)
         });
              
          it(@"Initialize empty array if nothing cached", ^{
-             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-             id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
+            id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
 
-             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
-             id partialMock = OCMPartialMock(sut);
-             OCMStub([partialMock postAllAvailableEventsAndClearCache:YES]).andDo(nil);
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
+            id partialMock = OCMPartialMock(sut);
+            OCMStub([partialMock postAllAvailableEventsAndClearCache:YES]).andDo(nil);
+            [sut enterForeground];
             
-             // Then
-             expect(sut.events).toNot.beNil();
+            // Then
+            expect(sut.events).toNot.beNil();
          });
              
          it(@"Not calls network if nothing is cached", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
             OCMReject([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]);
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
             id partialMock = OCMPartialMock(sut);
             OCMStub([partialMock postAllAvailableEventsAndClearCache:YES]).andDo(nil);
          });
-                    
-        it(@"Registers foreground and backround observers", ^{
-            
-            id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
-        
-            __block int backgroundObserversCount = 0;
-            void (^theBackgroundBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
-              backgroundObserversCount += 1;
-            };
-            OCMStub([mockNotificationCenter addObserver:[OCMArg any] selector:[OCMArg anySelector]
-                                                   name:UIApplicationDidEnterBackgroundNotification object:nil]).andDo(theBackgroundBlock);
-        
-            __block int foregroundObserversCount = 0;
-            void (^theForegroundBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
-              foregroundObserversCount += 1;
-            };
-            OCMStub([mockNotificationCenter addObserver:[OCMArg any] selector:[OCMArg anySelector]
-                                                   name:UIApplicationWillEnterForegroundNotification object:nil]).andDo(theForegroundBlock);
-        
-            // When
-            [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
-        
-            // Then
-            expect(backgroundObserversCount).to.equal(1);
-            expect(foregroundObserversCount).to.equal(1);
-        });
 
         it(@"Sends batch if number of events is x times batch size", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
@@ -135,11 +106,9 @@ SpecBegin(Batching)
               postBatchCount += 1;
             };
             OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
-        
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
-            
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
+            [sut enterForeground];
             int startBatchCount = postBatchCount;
         
             // When
@@ -184,10 +153,8 @@ SpecBegin(Batching)
             };
             OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
 
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
-
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
-            
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
+            [sut enterForeground];
             int startBatchCount = postBatchCount;
 
             // When
@@ -208,7 +175,6 @@ SpecBegin(Batching)
             [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:@[[NSMutableDictionary new]] forKey:[AvoBatcher cacheKey]];
         
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
                 __unsafe_unretained void (^batchBody)(NSError *);
@@ -218,8 +184,9 @@ SpecBegin(Batching)
             };
             OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
         
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
-         
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
+            [sut enterForeground];
+        
             // Then
             NSString *actualValue = [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] valueForKey:[AvoBatcher cacheKey]];
             expect(actualValue).to.beNil();
@@ -237,10 +204,9 @@ SpecBegin(Batching)
                 batchBody([NSError new]);
             };
             OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
-        
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
+            [sut enterForeground];
         
             // Then
             NSString *actualValue = [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] valueForKey:[AvoBatcher cacheKey]];
@@ -251,10 +217,10 @@ SpecBegin(Batching)
         it(@"Sets flush attempt timestamp", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
              OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
-            id mockNotificationCenter = OCMClassMock([NSNotificationCenter class]);
 
-            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler withNotificationCenter:mockNotificationCenter];
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
             sut.batchFlushAttemptTime = 0;
+            [sut enterForeground];
             
             // When
             for (int i = 0; i < [AvoInspector getBatchSize]; i++) {

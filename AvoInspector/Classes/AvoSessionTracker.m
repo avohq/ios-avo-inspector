@@ -30,7 +30,7 @@
     return self;
 }
 
-- (void) schemaTracked: (NSNumber *) atUnixTime {
+- (void) startOrProlongSession: (NSNumber *) atUnixTime {
     
     NSTimeInterval timeSinceLastSession = [atUnixTime doubleValue] - self.lastSessionTimestamp;
     if (timeSinceLastSession > self.sessionLength) {

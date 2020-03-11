@@ -30,6 +30,8 @@
 @property (readwrite, nonatomic) AvoNetworkCallsHandler *networkCallsHandler;
 @property (readwrite, nonatomic) AvoBatcher *avoBatcher;
 
+@property (readwrite, nonatomic) NSNotificationCenter *notificationCenter;
+
 @end
 
 @implementation AvoInspector
@@ -68,20 +70,50 @@ static int batchFlushSTime = 30;
         if (isDev) {
             [AvoInspector setBatchFlushSeconds:1];
             [AvoInspector setLogging:YES];
+        } else {
+           [AvoInspector setBatchFlushSeconds:30];
+            [AvoInspector setLogging:NO];
         }
         
         self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];
         self.appVersion = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
         self.libVersion = [[NSBundle bundleForClass:[self class]] infoDictionary][@"CFBundleShortVersionString"];
         
+        self.notificationCenter = [NSNotificationCenter defaultCenter];
+        
         self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion isDev:isDev];
-        self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler withNotificationCenter: [NSNotificationCenter defaultCenter]];
+        self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler];
         
         self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
         
         self.apiKey = apiKey;
+        
+        [self enterForeground];
+        
+        [self addObservers];
     }
     return self;
+}
+
+- (void) addObservers {
+    [self.notificationCenter addObserver:self
+               selector:@selector(enterBackground)
+                   name:UIApplicationDidEnterBackgroundNotification
+                 object:nil];
+    
+    [self.notificationCenter addObserver:self
+               selector:@selector(enterForeground)
+                   name:UIApplicationWillEnterForegroundNotification
+                 object:nil];
+}
+
+- (void)enterBackground {
+    [self.avoBatcher enterBackground];
+}
+
+- (void)enterForeground {
+    [self.avoBatcher enterForeground];
+    [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
 }
 
 // params are [ String : Any ]
@@ -118,7 +150,7 @@ static int batchFlushSTime = 30;
         NSLog(@"Avo State Of Tracking: Saved event %@ with schema {\n%@}", eventName, schemaString);
     }
     
-    [self.sessionTracker schemaTracked:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+    [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
     
     [self.avoBatcher handleTrackSchema:eventName schema:schema];
 }
@@ -195,6 +227,10 @@ static int batchFlushSTime = 30;
     } else {
         return [AvoUnknownType new];
     }
+}
+
+- (void) dealloc {
+    [self.notificationCenter removeObserver:self];
 }
 
 @end

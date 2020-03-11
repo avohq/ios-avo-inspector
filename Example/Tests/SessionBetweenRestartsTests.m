@@ -31,7 +31,7 @@ describe(@"Sessions between restarts", ^{
             ++sessionStartCallCount;
         });
        
-        [sut schemaTracked:@([[NSDate date] timeIntervalSince1970])];
+        [sut startOrProlongSession:@([[NSDate date] timeIntervalSince1970])];
        
         expect(sessionStartCallCount).equal(0);
     });
@@ -44,7 +44,7 @@ describe(@"Sessions between restarts", ^{
         expect(sut.lastSessionTimestamp).equal(INT_MIN);
     
         double timestamp = [[NSDate date] timeIntervalSince1970];
-        [sut schemaTracked:@(timestamp)];
+        [sut startOrProlongSession:@(timestamp)];
     
         expect([[NSUserDefaults standardUserDefaults] doubleForKey:[AvoSessionTracker cacheKey]]).equal(timestamp);
      });

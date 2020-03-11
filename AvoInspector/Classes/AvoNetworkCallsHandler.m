@@ -135,7 +135,7 @@
     }
     
     if ([AvoInspector isLogging]) {
-        for(NSDictionary *batchItem in batchBody) {
+        for (NSDictionary *batchItem in batchBody) {
             NSString * eventName = [batchItem objectForKey:@"eventName"];
             NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
             

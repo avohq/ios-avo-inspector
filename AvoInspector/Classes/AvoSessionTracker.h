@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(instancetype) initWithBatcher: (AvoBatcher *) avoBatcher;
 
-- (void) schemaTracked: (NSNumber *) atUnixTime;
+- (void) startOrProlongSession: (NSNumber *) atUnixTime;
 
 + (NSString *) cacheKey;
 
