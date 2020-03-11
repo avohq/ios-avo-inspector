@@ -27,24 +27,26 @@ Obtain the API key at [Avo.app](https://www.avo.app/welcome)
 Obj-C
 
 ```objectivec
-    AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: devFlag];
+AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: devFlag];
 ```       
 Swift
 
 ```swift
-    let avoInspector = AvoInspector(apiKey: "apiKey", isDev: devFlag)
+let avoInspector = AvoInspector(apiKey: "apiKey", isDev: devFlag)
 ```
 # Enabling logs
 
 Logs are enabled by default in the dev mode and disabled in prod mode based on the init flag.
 
 Obj-C
+```objectivec
+[AvoInspector setLogging:YES];
+```
 
-    [AvoInspector setLogging:YES];
-        
 Swift
-
-    AvoInspector.setLogging(true)
+```swift
+AvoInspector.setLogging(true)
+```
 
 # Sending event schemas
 
@@ -57,35 +59,39 @@ This methods gets actual tracking event parameters, extracts schema automaticall
 It is the easiest way to use the library, just call this method at the same place you call your analytics tools' track methods with the same parameters.
 
 Obj-C
+```objectivec
+[avoInspector trackSchemaFromEvent:@"Event Name" eventParams:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
+```
 
-    [avoInspector trackSchemaFromEvent:@"Event Name" eventParams:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
-    
 Swift
-    
-    avoInspector.trackSchema(fromEvent: "Event Name", eventParams: ["id": "sdf-334fsg-334f", "number": 41])
-    
+```swift
+avoInspector.trackSchema(fromEvent: "Event Name", eventParams: ["id": "sdf-334fsg-334f", "number": 41])
+```
 ### 2.
 
 If you prefer to extract data schema manually you would use this method.
 
 Obj-C
+```objectivec
+[avoSot trackSchema:@"Event Name" eventSchema:@{@"id": [[AvoString alloc] init], @"number": [[AvoInt alloc] init]}];
+```
 
-    [avoSot trackSchema:@"Event Name" eventSchema:@{@"id": [[AvoString alloc] init], @"number": [[AvoInt alloc] init]}];
-    
 Swift
-
-    avoSot.trackSchema("Event Name", eventSchema: ["id": AvoString(), "number": AvoInt()])
-
+```swift
+avoSot.trackSchema("Event Name", eventSchema: ["id": AvoString(), "number": AvoInt()])
+```
 # Extract event schema manually
 
 Obj-C
+```objectivec
+NSDictionary * schema = [avoSot extractSchema:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
+```
 
-    NSDictionary * schema = [avoSot extractSchema:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
-    
 Swift
-    
-    let schema = avoSot.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
-    
+```swift
+let schema = avoSot.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
+```
+
 # Batching control
 
 In order to ensure our SDK doesn't have a large impact on performance or battery life it supports event schemas batching.
@@ -94,14 +100,16 @@ Default batch size is 30 and default batch flust timeout is 30 seconds.
 In debug mode default batch size is 1, i.e. every event schema is sent to the server as soon as it is reported.
 
 Obj-C
+```objectivec
+[AvoInspector setBatchSize:15];
+[AvoInspector setBatchFlustSeconds:10];
+```
 
-    [AvoInspector setBatchSize:15];
-    [AvoInspector setBatchFlustSeconds:10];
-    
 Swift
-    
-    AvoInspector.setBatchSize(15)
-    AvoInspector.setBatchFlustSeconds(10)
+```swift
+AvoInspector.setBatchSize(15)
+AvoInspector.setBatchFlustSeconds(10)
+```
     
 # Example App
 
