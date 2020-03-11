@@ -4,13 +4,12 @@
 [![License](https://img.shields.io/cocoapods/l/AvoInspector.svg?style=flat)](https://cocoapods.org/pods/AvoInspector)
 [![Platform](https://img.shields.io/cocoapods/p/AvoInspector.svg?style=flat)](https://cocoapods.org/pods/AvoInspector)
 
-## Example
+# Avo documentation
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+This is a quick start guide. 
+For more information about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/avo-inspector/ios).
 
-## Requirements
-
-## Installation
+# Installation
 
 AvoInspector is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
@@ -19,23 +18,22 @@ it, simply add the following line to your Podfile:
 pod 'AvoInspector'
 ```
 
-# Avo documentation
+The latest version can be found in GitHub releases tab.
 
-This is a quick start guide. 
-For more information about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/avo-inspector/ios).
-
-# Initializing
+# Initialization
 
 Obtain the API key at [Avo.app](https://www.avo.app/welcome) 
 
 Obj-C
 
+```objectivec
     AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: devFlag];
-        
+```       
 Swift
 
+```swift
     let avoInspector = AvoInspector(apiKey: "apiKey", isDev: devFlag)
-    
+```
 # Enabling logs
 
 Logs are enabled by default in the dev mode and disabled in prod mode based on the init flag.
@@ -104,6 +102,11 @@ Swift
     
     AvoInspector.setBatchSize(15)
     AvoInspector.setBatchFlustSeconds(10)
+    
+# Example App
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
+
 
 ## Author
 

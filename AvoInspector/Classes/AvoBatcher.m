@@ -18,13 +18,11 @@
 
 @property (readwrite, nonatomic) NSTimeInterval batchFlushAttemptTime;
 
-@property (readwrite, nonatomic) NSNotificationCenter *notificationCenter;
-
 @end
 
 @implementation AvoBatcher
 
-- (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler withNotificationCenter: (NSNotificationCenter *) center {
+- (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler {
     self = [super init];
     if (self) {
         self.lock = [[NSLock alloc] init];
@@ -32,35 +30,18 @@
         self.networkCallsHandler = networkCallsHandler;
         
         self.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970];
-        
-        [self enterForeground];
-        
-        self.notificationCenter = center;
-        [self addObservers];
     }
     return self;
 }
 
-- (void) addObservers {
-    [self.notificationCenter addObserver:self
-               selector:@selector(enterBackground)
-                   name:UIApplicationDidEnterBackgroundNotification
-                 object:nil];
-    
-    [self.notificationCenter addObserver:self
-               selector:@selector(enterForeground)
-                   name:UIApplicationWillEnterForegroundNotification
-                 object:nil];
-}
-
-- (void)removeExtraElements {
+- (void) removeExtraElements {
     if ([self.events count] > 1000) {
         NSInteger extraElements = [self.events count] - 1000;
         [self.events removeObjectsInRange:NSMakeRange(0, extraElements)];
     }
 }
 
-- (void)enterBackground {
+- (void) enterBackground {
     if ([self.events count] == 0) {
         return;
     }
@@ -76,7 +57,7 @@
     [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:self.events forKey:[AvoBatcher cacheKey]];
 }
 
-- (void)enterForeground {
+- (void) enterForeground {
     self.events = [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] objectForKey:[AvoBatcher cacheKey]];
     
     if (self.events == nil) {
@@ -150,10 +131,6 @@
             [weakSelf.events addObjectsFromArray:sendingEvents];
         }
     }];
-}
-
-- (void) dealloc {
-    [self.notificationCenter removeObserver:self];
 }
 
 + (NSString *) suiteKey {

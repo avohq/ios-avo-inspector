@@ -29,28 +29,28 @@ describe(@"Sessions", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
-        OCMStub([mockSessionTracker schemaTracked:[OCMArg any]]).andDo(nil);
+        OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
         AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" isDev: NO];
         sut.sessionTracker = mockSessionTracker;
         sut.avoBatcher = mockAvoBatcher;
        
         [sut trackSchemaFromEvent:@"Event name" eventParams:[NSDictionary new]];
        
-        OCMVerify([mockSessionTracker schemaTracked:[OCMArg any]]);
+        OCMVerify([mockSessionTracker startOrProlongSession:[OCMArg any]]);
     });
 
     it(@"session starts when trackSchema", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
-        OCMStub([mockSessionTracker schemaTracked:[OCMArg any]]).andDo(nil);
+        OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
         AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" isDev: NO];
         sut.sessionTracker = mockSessionTracker;
         sut.avoBatcher = mockAvoBatcher;
        
         [sut trackSchema:@"Event name" eventSchema:[NSDictionary new]];
        
-        OCMVerify([mockSessionTracker schemaTracked:[OCMArg any]]);
+        OCMVerify([mockSessionTracker startOrProlongSession:[OCMArg any]]);
     });
 
     it(@"two calls of schemaTracked track only one session", ^{
@@ -63,8 +63,8 @@ describe(@"Sessions", ^{
             ++sessionStartCallCount;
         });
        
-        [sut schemaTracked:@0];
-        [sut schemaTracked:@1];
+        [sut startOrProlongSession:@0];
+        [sut startOrProlongSession:@1];
        
         expect(sessionStartCallCount).equal(1);
     });
@@ -79,8 +79,8 @@ describe(@"Sessions", ^{
             ++sessionStartCallCount;
         });
        
-        [sut schemaTracked:@0];
-        [sut schemaTracked:@(20 * 60 * 1000 + 1)];
+        [sut startOrProlongSession:@0];
+        [sut startOrProlongSession:@(20 * 60 * 1000 + 1)];
        
         expect(sessionStartCallCount).equal(2);
     });
@@ -95,9 +95,9 @@ describe(@"Sessions", ^{
             ++sessionStartCallCount;
         });
        
-        [sut schemaTracked:@0];
-        [sut schemaTracked:@(5 * 60 - 1)];
-        [sut schemaTracked:@(5 * 60 - 1)];
+        [sut startOrProlongSession:@0];
+        [sut startOrProlongSession:@(5 * 60 - 1)];
+        [sut startOrProlongSession:@(5 * 60 - 1)];
        
         expect(sessionStartCallCount).equal(1);
     });
