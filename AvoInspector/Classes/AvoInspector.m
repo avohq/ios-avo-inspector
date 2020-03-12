@@ -119,7 +119,7 @@ static int batchFlushSTime = 30;
 // params are [ String : Any ]
 -(NSDictionary<NSString *, AvoEventSchemaType *> *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary<NSString *, id> *) params {
     if ([AvoInspector isLogging]) {
-        NSLog(@"Avo State Of Tracking: Supplied event %@ with params %@", eventName, [params description]);
+        NSLog(@"Avo Inspector: Supplied event %@ with params %@", eventName, [params description]);
     }
     
     NSDictionary * schema = [self extractSchema:params];
@@ -147,7 +147,7 @@ static int batchFlushSTime = 30;
             schemaString = [schemaString stringByAppendingString:entry];
         }
         
-        NSLog(@"Avo State Of Tracking: Saved event %@ with schema {\n%@}", eventName, schemaString);
+        NSLog(@"Avo Inspector: Saved event %@ with schema {\n%@}", eventName, schemaString);
     }
     
     [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
