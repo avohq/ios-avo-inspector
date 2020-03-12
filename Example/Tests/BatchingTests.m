@@ -97,9 +97,11 @@ SpecBegin(Batching)
          });
 
         it(@"Sends batch if number of events is x times batch size", ^{
+            [AvoInspector setBatchSize:10];
+            
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
-            OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any]]).andReturn([NSMutableDictionary new]);
+            OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any]]).andReturn(@{@"type": @"test"});
         
             __block int postBatchCount = 0;
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
@@ -145,7 +147,7 @@ SpecBegin(Batching)
         
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
-            OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any]]).andReturn([NSMutableDictionary new]);
+            OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any]]).andReturn(@{@"type": @"test"});
 
             __block int postBatchCount = 0;
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
@@ -194,7 +196,7 @@ SpecBegin(Batching)
         });
 
         it(@"Clears event cache and puts events back to events list if sending fails", ^{
-            [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:@[[NSMutableDictionary new]] forKey:[AvoBatcher cacheKey]];
+            [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:@[@{@"type": @"test"}] forKey:[AvoBatcher cacheKey]];
         
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
@@ -216,7 +218,7 @@ SpecBegin(Batching)
 
         it(@"Sets flush attempt timestamp", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
+             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn(@{@"type": @"test"});
 
             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
             sut.batchFlushAttemptTime = 0;
@@ -234,6 +236,27 @@ SpecBegin(Batching)
             expect(sut.batchFlushAttemptTime).to.beGreaterThan(now - 1);
         });
 
+         it(@"Filters malformed events before sending", ^{
+             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
+             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn(@{@"no-type": @"malformed-test"});
+
+             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
+            
+            __block int postBatchCount = 0;
+            void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
+              postBatchCount += 1;
+            };
+            OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
+        
+             // When
+            [sut.events addObject:@""];
+            for (int i = 0; i < 10 * [AvoInspector getBatchSize]; i++) {
+                [sut handleSessionStarted];
+            }
+         
+             // Then
+             expect(postBatchCount).to.equal(0);
+         });
     });
 
 SpecEnd

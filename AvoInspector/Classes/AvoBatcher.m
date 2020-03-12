@@ -26,7 +26,7 @@
     self = [super init];
     if (self) {
         self.lock = [[NSLock alloc] init];
-        
+        self.events = [NSMutableArray new];
         self.networkCallsHandler = networkCallsHandler;
         
         self.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970];
@@ -109,6 +109,9 @@
 }
 
 - (void) postAllAvailableEventsAndClearCache: (BOOL)shouldClearCache {
+    
+    [self filterEvents];
+    
     if ([self.events count] == 0) {
         if (shouldClearCache) {
             [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] removeObjectForKey:[AvoBatcher cacheKey]];
@@ -131,6 +134,18 @@
             [weakSelf.events addObjectsFromArray:sendingEvents];
         }
     }];
+}
+
+- (void) filterEvents {
+    NSMutableArray *discardedItems = [NSMutableArray array];
+    
+    for (id event in self.events) {
+        if (![event isKindOfClass:[NSDictionary class]] || [event objectForKey:@"type"] == nil) {
+            [discardedItems addObject:event];
+        }
+    }
+    
+    [self.events removeObjectsInArray:discardedItems];
 }
 
 + (NSString *) suiteKey {
