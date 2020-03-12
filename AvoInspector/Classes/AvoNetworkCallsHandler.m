@@ -136,10 +136,19 @@
     
     if ([AvoInspector isLogging]) {
         for (NSDictionary *batchItem in batchBody) {
-            NSString * eventName = [batchItem objectForKey:@"eventName"];
-            NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
+            NSString * type = [batchItem objectForKey:@"type"];
             
-            NSLog(@"Avo State Of Tracking: Sending event %@ with schema {\n%@}\n\n", eventName, [eventProps description]);
+            if ([type  isEqual:@"sessionSarted"]) {
+                NSLog(@"Avo State Of Tracking: Sending session started event");
+            } else if ([type  isEqual:@"event"]) {
+                NSString * eventName = [batchItem objectForKey:@"eventName"];
+                NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
+
+                NSLog(@"Avo State Of Tracking: Sending event %@ with schema {\n%@}\n\n", eventName, [eventProps description]);
+            } else {
+                NSLog(@"Avo State Of Tracking: Error! Unknown event type.");
+            }
+            
         }
     }
     
