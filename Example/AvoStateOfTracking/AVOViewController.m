@@ -18,6 +18,7 @@
 #import <Analytics/SEGAnalytics.h>
 #import <Analytics/SEGMiddleware.h>
 
+#import <IosAnalyticsDebugger/AnalyticsDebugger.h>
 
 @interface AVOViewController ()
 
@@ -60,6 +61,9 @@
 
 - (IBAction)sendEventButton:(id)sender;
 
+- (IBAction)showBarVisualInspector:(id)sender;
+- (IBAction)showBubbleVisualInspector:(id)sender;
+- (IBAction)hideVisualInspector:(id)sender;
 @end
 
 @implementation AVOViewController
@@ -171,6 +175,18 @@ AvoInspector * avoInspector;
     [self parseKey:self.param10Key.text value:self.param10Value.text to:testParams];
     
     [avoInspector trackSchemaFromEvent:eventName eventParams:(NSDictionary *)testParams];
+}
+
+- (IBAction)showBarVisualInspector:(id)sender {
+    [avoInspector showVisualInspector:Bar];
+}
+
+- (IBAction)showBubbleVisualInspector:(id)sender {
+    [avoInspector showVisualInspector:Bubble];
+}
+
+- (IBAction)hideVisualInspector:(id)sender {
+    [avoInspector hideVisualInspector];
 }
 
 -(void)dismissKeyboard

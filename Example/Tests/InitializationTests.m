@@ -10,6 +10,7 @@
 #import <AvoInspector/AvoBatcher.h>
 #import <AvoInspector/AvoSessionTracker.h>
 #import <OCMock/OCMock.h>
+#import <AnalyticsDebugger.h>
 
 @interface AvoSessionTracker ()
 
@@ -22,6 +23,7 @@
 @property (readwrite, nonatomic) NSNotificationCenter *notificationCenter;
 @property (readwrite, nonatomic) AvoBatcher *avoBatcher;
 @property (readwrite, nonatomic) AvoSessionTracker *sessionTracker;
+@property (readwrite, nonatomic) AnalyticsDebugger *debugger;
 
 - (void) addObservers;
 - (void) enterBackground;
@@ -38,7 +40,7 @@
 SpecBegin(Init)
 
 it(@"inititalizes with app version", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
 
    NSString * appVersion = sut.appVersion;
 
@@ -46,21 +48,21 @@ it(@"inititalizes with app version", ^{
 });
 
 it(@"inititalizes with lib version", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
 
    NSString * libVersion = sut.libVersion;
 
-   expect(libVersion).to.equal(@"0.9.4");
+   expect(libVersion).to.equal(@"0.9.5");
 });
 
 it(@"inititalizes with app id", ^{
-    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" isDev: NO];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
 
    expect(sut.apiKey).to.equal(@"apiKey");
 });
    
 it(@"inititalizes with session tracker", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
 
   expect(sut.sessionTracker).notTo.beNil();
 });
@@ -68,7 +70,7 @@ it(@"inititalizes with session tracker", ^{
 it(@"debug inititalization sets batch size to 1", ^{
    [AvoInspector setBatchFlushSeconds:30];
    
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: YES];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 
   expect([AvoInspector getBatchFlushSeconds]).to.equal(1);
 });
@@ -76,17 +78,34 @@ it(@"debug inititalization sets batch size to 1", ^{
 it(@"debug inititalization sets logs on", ^{
    [AvoInspector setLogging:NO];
    
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: YES];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 
   expect([AvoInspector isLogging]).to.equal(YES);
 });
 
-it(@"not debug inititalization does not set batch size to 1", ^{
-   [AvoInspector setBatchSize:30];
+it(@"debug inititalization shows visual inspector", ^{
+   [AvoInspector setLogging:NO];
    
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
+   sut.debugger = OCMClassMock([AnalyticsDebugger class]);
 
-  expect([AvoInspector getBatchSize]).to.equal(30);
+  XCTestExpectation *expectation = [self expectationWithDescription:@"wait"];
+  dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC));
+  dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+    [expectation fulfill];
+  });
+
+  [self waitForExpectationsWithTimeout:2 handler:nil];
+   OCMVerify([sut.debugger showBarDebugger]);
+
+});
+
+it(@"not debug inititalization sets timeout to 30", ^{
+   [AvoInspector setBatchFlushSeconds:1];
+   
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
+
+  expect([AvoInspector getBatchFlushSeconds]).to.equal(30);
 });
 
 it(@"Registers foreground and backround observers", ^{
@@ -108,7 +127,7 @@ it(@"Registers foreground and backround observers", ^{
                                            name:UIApplicationWillEnterForegroundNotification object:nil]).andDo(theForegroundBlock);
     
     // When
-    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
     
     sut.notificationCenter = mockNotificationCenter;
     
@@ -122,7 +141,7 @@ it(@"Registers foreground and backround observers", ^{
 it(@"Calls batcher on foreground", ^{
 
    id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
    sut.avoBatcher = mockAvoBatcher;
    
    // When
@@ -135,7 +154,7 @@ it(@"Calls batcher on foreground", ^{
 it(@"Calls batcher on background", ^{
 
    id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
    sut.avoBatcher = mockAvoBatcher;
    
    // When
@@ -149,7 +168,7 @@ it(@"Calls session tracker on foreground", ^{
    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker cacheKey]];
    id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
    sut.sessionTracker = mockSessionTracker;
    
    // When
@@ -162,7 +181,7 @@ it(@"Calls session tracker on foreground", ^{
 it(@"Saves start session event in the batcher", ^{
    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker cacheKey]];
-    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: NO];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
    
     // When
     sut.sessionTracker.lastSessionTimestamp = 0.0;

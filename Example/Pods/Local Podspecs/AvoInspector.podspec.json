@@ -1,6 +1,6 @@
 {
   "name": "AvoInspector",
-  "version": "0.9.3",
+  "version": "0.9.5",
   "summary": "Avo Inspector iOS SDK",
   "description": "A powerful suite of features that analyze your current state of tracking and guide you from your current, messy taxonomy to a more consistent and reliable tracking process across your teams, products, and platforms.",
   "homepage": "https://github.com/avohq/ios-datascope",
@@ -13,10 +13,15 @@
   },
   "source": {
     "git": "https://github.com/avohq/ios-datascope.git",
-    "tag": "0.9.3"
+    "tag": "0.9.5"
   },
   "platforms": {
     "ios": "10.0"
   },
-  "source_files": "AvoInspector/Classes/**/*"
+  "source_files": "AvoInspector/Classes/**/*",
+  "dependencies": {
+    "IosAnalyticsDebugger": [
+      "~> 1.1.2"
+    ]
+  }
 }

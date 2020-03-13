@@ -5,6 +5,8 @@
 //  Created by Alex Verein on 28.01.2020.
 //
 
+#import <IosAnalyticsDebugger/AnalyticsDebugger.h>
+
 #import "AvoInspector.h"
 #import "AvoEventSchemaType.h"
 #import "AvoList.h"
@@ -31,6 +33,9 @@
 @property (readwrite, nonatomic) AvoBatcher *avoBatcher;
 
 @property (readwrite, nonatomic) NSNotificationCenter *notificationCenter;
+
+@property (readwrite, nonatomic) AvoInspectorEnv env;
+@property (readwrite, nonatomic) AnalyticsDebugger * debugger;
 
 @end
 
@@ -64,14 +69,39 @@ static int batchFlushSTime = 30;
     batchFlushSTime = newBatchFlushSeconds;
 }
 
--(instancetype) initWithApiKey: (NSString *) apiKey isDev: (Boolean) isDev {
+- (void) showVisualInspector: (AvoVisualInspectorType) type {
+    switch (type) {
+        case Bar:
+            [self.debugger showBarDebugger];
+            break;
+        case Bubble:
+            [self.debugger showBubbleDebugger];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void) hideVisualInspector {
+    [self.debugger hideDebugger];
+}
+
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env {
     self = [super init];
     if (self) {
-        if (isDev) {
+        self.env = env;
+        self.debugger = [AnalyticsDebugger new];
+        
+        if (env == AvoInspectorEnvDev) {
             [AvoInspector setBatchFlushSeconds:1];
             [AvoInspector setLogging:YES];
+            
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+              [self.debugger showBarDebugger];
+            });
         } else {
-           [AvoInspector setBatchFlushSeconds:30];
+            [AvoInspector setBatchFlushSeconds:30];
             [AvoInspector setLogging:NO];
         }
         
@@ -81,7 +111,7 @@ static int batchFlushSTime = 30;
         
         self.notificationCenter = [NSNotificationCenter defaultCenter];
         
-        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion isDev:isDev];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion env:(int)self.env];
         self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler];
         
         self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
@@ -153,6 +183,24 @@ static int batchFlushSTime = 30;
     [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
     
     [self.avoBatcher handleTrackSchema:eventName schema:schema];
+    
+    [self showInVisualInspector:eventName schema:schema];
+}
+
+- (void)showInVisualInspector:(NSString *) eventName schema:(NSDictionary<NSString *,AvoEventSchemaType *> * _Nonnull)schema {
+    if (self.debugger != nil && (self.env != AvoInspectorEnvProd || [self.debugger isEnabled])) {
+        NSMutableArray * props = [NSMutableArray new];
+        
+        for(NSString *key in [schema allKeys]) {
+            NSString *value = [[schema objectForKey:key] name];
+            [props addObject:[[DebuggerProp alloc] initWithId:key withName:key withValue:value]];
+        }
+        
+        NSMutableArray * errors = [NSMutableArray new];
+        
+        [self.debugger publishEvent:eventName withTimestamp:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]
+                withProperties:props withErrors:errors];
+    }
 }
 
 -(NSDictionary<NSString *, AvoEventSchemaType *> *) extractSchema:(NSDictionary<NSString *, id> *) eventParams {

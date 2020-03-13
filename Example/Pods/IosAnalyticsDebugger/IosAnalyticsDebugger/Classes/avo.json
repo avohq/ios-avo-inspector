@@ -1,0 +1,23 @@
+{
+  "avo": {
+    "version": 1
+  },
+  "schema": {
+    "id": "fwtXqAc0fCLy7b7oGW40",
+    "name": "Avo"
+  },
+  "branch": {
+    "id": "LowQacyet",
+    "name": "mobile-debugger-started"
+  },
+  "sources": [
+    {
+      "id": "6nSgGof_U",
+      "name": "iOS Mobile Debugger",
+      "path": "DebuggerAnalytics.m",
+      "actionId": "wN77oskJtdl2DSrSThvm",
+      "branchId": "LowQacyet",
+      "updatedAt": "2020-02-24T14:25:59.115Z"
+    }
+  ]
+}

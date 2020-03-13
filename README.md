@@ -27,12 +27,12 @@ Obtain the API key at [Avo.app](https://www.avo.app/welcome)
 Obj-C
 
 ```objectivec
-AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" isDev: devFlag];
+AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" end: AvoInspectorEnvDev];
 ```       
 Swift
 
 ```swift
-let avoInspector = AvoInspector(apiKey: "apiKey", isDev: devFlag)
+let avoInspector = AvoInspector(apiKey: "apiKey", isDev: AvoInspectorEnvDev)
 ```
 # Enabling logs
 

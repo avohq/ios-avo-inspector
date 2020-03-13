@@ -14,7 +14,7 @@
 @interface AvoNetworkCallsHandler()
 
 @property (readwrite, nonatomic) NSString *apiKey;
-@property (readwrite, nonatomic) Boolean isDev;
+@property (readwrite, nonatomic) int env;
 @property (readwrite, nonatomic) NSString *appName;
 @property (readwrite, nonatomic) NSString *appVersion;
 @property (readwrite, nonatomic) NSString *libVersion;
@@ -25,7 +25,7 @@
 
 @implementation AvoNetworkCallsHandler
 
-- (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion isDev: (Boolean) isDev {
+- (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion env: (int) env {
     self = [super init];
     if (self) {
         self.appVersion = appVersion;
@@ -33,7 +33,7 @@
         self.appName = appName;
         self.apiKey = apiKey;
         self.samplingRate = 1.0;
-        self.isDev = isDev;
+        self.env = env;
     }
     return self;
 }
@@ -113,7 +113,7 @@
     [body setValue:self.appName forKey:@"appName"];
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
-    [body setValue:self.isDev ? @"dev" : @"prod" forKey:@"env"];
+    [body setValue:[AvoNetworkCallsHandler formatTypeToString:self.env] forKey:@"env"];
     [body setValue:@"ios" forKey:@"libPlatform"];
     [body setValue:[[NSUUID UUID] UUIDString] forKey:@"messageId"];
     [body setValue:[[AvoInstallationId new] getInstallationId] forKey:@"trackingId"];
@@ -196,6 +196,26 @@
 - (void) writeCallHeader:(NSMutableURLRequest *) request {
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+}
+
++ (NSString*)formatTypeToString:(int) formatType {
+    NSString *result = nil;
+
+    switch(formatType) {
+        case 0:
+            result = @"prod";
+            break;
+        case 1:
+            result = @"dev";
+            break;
+        case 2:
+            result = @"staging";
+            break;
+        default:
+            [NSException raise:NSGenericException format:@"Unexpected FormatType."];
+    }
+
+    return result;
 }
 
 @end
