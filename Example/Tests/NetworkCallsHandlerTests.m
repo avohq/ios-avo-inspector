@@ -54,7 +54,6 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
-        expect([actualSessionStartedBody objectForKey:@"env"]).to.equal(@"dev");
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
@@ -83,7 +82,6 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
-        expect([actualTrackSchemaBody objectForKey:@"env"]).to.equal(@"prod");
     
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"] count]).to.equal(7);
     
