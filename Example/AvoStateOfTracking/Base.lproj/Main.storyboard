@@ -235,9 +235,33 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KWE-Wm-c4O">
+                                <rect key="frame" x="31" y="410" width="65" height="30"/>
+                                <state key="normal" title="Show Bar"/>
+                                <connections>
+                                    <action selector="showBarVisualInspector:" destination="whP-gf-Uak" eventType="touchUpInside" id="Nxx-XR-Y53"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Bc-29-J5N">
+                                <rect key="frame" x="116" y="410" width="90" height="30"/>
+                                <state key="normal" title="Show Bubble"/>
+                                <connections>
+                                    <action selector="showBubbleVisualInspector:" destination="whP-gf-Uak" eventType="touchUpInside" id="1dm-8t-8eW"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qpw-eb-gxg">
+                                <rect key="frame" x="227" y="410" width="104" height="30"/>
+                                <state key="normal" title="Hide Debugger"/>
+                                <connections>
+                                    <action selector="hideVisualInspector:" destination="whP-gf-Uak" eventType="touchUpInside" id="qB0-NP-pN3"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="5Bc-29-J5N" firstAttribute="top" secondItem="xp5-i5-yRb" secondAttribute="bottom" constant="24" id="0Ff-U7-Sn1"/>
                             <constraint firstItem="GQb-Mb-pml" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" constant="38" id="0zK-7e-W5T"/>
+                            <constraint firstItem="qpw-eb-gxg" firstAttribute="top" secondItem="xp5-i5-yRb" secondAttribute="bottom" constant="24" id="1OC-HK-I1X"/>
+                            <constraint firstItem="KWE-Wm-c4O" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="31" id="2ko-dd-x1L"/>
                             <constraint firstItem="RYR-rT-K5a" firstAttribute="top" secondItem="yhI-IV-nsF" secondAttribute="bottom" constant="8.5" id="7BZ-Th-JfO"/>
                             <constraint firstItem="GQb-Mb-pml" firstAttribute="leading" secondItem="kbL-Ml-0Tc" secondAttribute="trailing" constant="22" id="9VK-pI-hpa"/>
                             <constraint firstItem="yhI-IV-nsF" firstAttribute="top" secondItem="kbL-Ml-0Tc" secondAttribute="bottom" constant="34" id="9zD-he-lqa"/>
@@ -247,10 +271,13 @@
                             <constraint firstItem="xp5-i5-yRb" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="8" id="TTO-mz-4o7"/>
                             <constraint firstItem="RYR-rT-K5a" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" id="Xi6-ju-8Ao"/>
                             <constraint firstItem="kbL-Ml-0Tc" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="16" id="YAa-TO-OD7"/>
+                            <constraint firstItem="KWE-Wm-c4O" firstAttribute="top" secondItem="xp5-i5-yRb" secondAttribute="bottom" constant="24" id="ewz-zZ-IAR"/>
                             <constraint firstAttribute="trailing" secondItem="GQb-Mb-pml" secondAttribute="trailing" constant="16" id="kSk-Rp-euW"/>
                             <constraint firstItem="xp5-i5-yRb" firstAttribute="top" secondItem="RYR-rT-K5a" secondAttribute="bottom" constant="8" id="mNy-zv-jck"/>
+                            <constraint firstItem="5Bc-29-J5N" firstAttribute="leading" secondItem="KWE-Wm-c4O" secondAttribute="trailing" constant="20" id="mqF-iI-pOG"/>
                             <constraint firstAttribute="trailing" secondItem="yhI-IV-nsF" secondAttribute="trailing" constant="191" id="r9N-Ny-A69"/>
                             <constraint firstItem="yhI-IV-nsF" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="16" id="sb8-Dz-E68"/>
+                            <constraint firstItem="qpw-eb-gxg" firstAttribute="leading" secondItem="5Bc-29-J5N" secondAttribute="trailing" constant="21" id="ttj-sW-VXT"/>
                         </constraints>
                     </view>
                     <connections>

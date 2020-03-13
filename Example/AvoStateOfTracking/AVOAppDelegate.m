@@ -15,7 +15,7 @@ AvoInspector * avoInspector;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    avoInspector = [[AvoInspector alloc] initWithApiKey:@"A4lTbBQTGVyD1f66213X" isDev: YES];
+    avoInspector = [[AvoInspector alloc] initWithApiKey:@"A4lTbBQTGVyD1f66213X" env: AvoInspectorEnvDev];
     
     return YES;
 }

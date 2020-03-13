@@ -22,6 +22,7 @@
 - (void) callInspectorWithBatchBody: (NSArray *) body;
 
 @property (readwrite, nonatomic) double samplingRate;
+@property (readwrite, nonatomic) int env;
 
 @end
 
@@ -29,18 +30,18 @@ SpecBegin(NetworkCalls)
 describe(@"Handling network calls", ^{
          
     it(@"AvoNetworkCallsHandler saves values when init", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: YES];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env: 1];
         
         expect(sut.apiKey).to.equal(@"testApiKey");
         expect(sut.appVersion).to.equal(@"testAppVersion");
         expect(sut.libVersion).to.equal(@"testLibVersion");
         expect(sut.appName).to.equal(@"testAppName");
         expect(sut.samplingRate).to.equal(1.0);
-        expect(sut.isDev).to.equal(YES);
+        expect(sut.env).to.equal(1);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for session tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: YES];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
 
         NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
         
@@ -57,7 +58,7 @@ describe(@"Handling network calls", ^{
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
-         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: NO];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0];
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoList * list = [AvoList new];
@@ -115,7 +116,7 @@ describe(@"Handling network calls", ^{
     });
 
      it(@"AvoNetworkCallsHandler builds proper body for object schema tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" isDev: YES];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
      
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoObject * object = [AvoObject new];

@@ -30,7 +30,7 @@ describe(@"Sessions", ^{
         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
         OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
-        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" isDev: NO];
+        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvProd];
         sut.sessionTracker = mockSessionTracker;
         sut.avoBatcher = mockAvoBatcher;
        
@@ -44,7 +44,7 @@ describe(@"Sessions", ^{
         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
         OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
-        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" isDev: NO];
+        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvProd];
         sut.sessionTracker = mockSessionTracker;
         sut.avoBatcher = mockAvoBatcher;
        

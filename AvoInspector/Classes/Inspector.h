@@ -10,6 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, AvoVisualInspectorType) {
+    Bar = 0,
+    Bubble = 1
+};
+
 @protocol Inspector <NSObject>
 
 -(NSDictionary<NSString *, AvoEventSchemaType *> *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary<NSString *, id> *) params;
@@ -25,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (int) getBatchFlushSeconds;
 + (void) setBatchFlushSeconds: (int) newBatchFlushSeconds;
+
+- (void) showVisualInspector: (AvoVisualInspectorType) type;
+- (void) hideVisualInspector;
 
 @end
 
