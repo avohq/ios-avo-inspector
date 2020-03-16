@@ -11,6 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, AvoInspectorEnv) {
+    AvoInspectorEnvProd = 0,
+    AvoInspectorEnvDev = 1,
+    AvoInspectorEnvStaging = 2
+};
+
 @interface AvoInspector : NSObject <Inspector>
 
 @property (readonly, nonatomic) AvoSessionTracker * sessionTracker;
@@ -20,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) NSString * apiKey;
 
--(instancetype) initWithApiKey: (NSString *) apiKey isDev: (Boolean) isDev;
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env;
 
 @end
 

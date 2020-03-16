@@ -32,6 +32,8 @@
 
 @property (readwrite, nonatomic) NSNotificationCenter *notificationCenter;
 
+@property (readwrite, nonatomic) AvoInspectorEnv env;
+
 @end
 
 @implementation AvoInspector
@@ -64,14 +66,16 @@ static int batchFlushSTime = 30;
     batchFlushSTime = newBatchFlushSeconds;
 }
 
--(instancetype) initWithApiKey: (NSString *) apiKey isDev: (Boolean) isDev {
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env {
     self = [super init];
     if (self) {
-        if (isDev) {
+        self.env = env;
+        
+        if (env == AvoInspectorEnvDev) {
             [AvoInspector setBatchFlushSeconds:1];
             [AvoInspector setLogging:YES];
         } else {
-           [AvoInspector setBatchFlushSeconds:30];
+            [AvoInspector setBatchFlushSeconds:30];
             [AvoInspector setLogging:NO];
         }
         
@@ -81,7 +85,7 @@ static int batchFlushSTime = 30;
         
         self.notificationCenter = [NSNotificationCenter defaultCenter];
         
-        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion isDev:isDev];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion env:(int)self.env];
         self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler];
         
         self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
