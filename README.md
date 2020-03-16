@@ -32,7 +32,7 @@ AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" end:
 Swift
 
 ```swift
-let avoInspector = AvoInspector(apiKey: "apiKey", isDev: AvoInspectorEnvDev)
+let avoInspector = AvoInspector(apiKey: "apiKey", env: AvoInspectorEnv.dev)
 ```
 # Enabling logs
 
@@ -73,23 +73,51 @@ If you prefer to extract data schema manually you would use this method.
 
 Obj-C
 ```objectivec
-[avoSot trackSchema:@"Event Name" eventSchema:@{@"id": [[AvoString alloc] init], @"number": [[AvoInt alloc] init]}];
+[avoInspector trackSchema:@"Event Name" eventSchema:@{@"id": [[AvoString alloc] init], @"number": [[AvoInt alloc] init]}];
 ```
 
 Swift
 ```swift
-avoSot.trackSchema("Event Name", eventSchema: ["id": AvoString(), "number": AvoInt()])
+avoInspector.trackSchema("Event Name", eventSchema: ["id": AvoString(), "number": AvoInt()])
 ```
-# Extract event schema manually
+# Extracting event schema manually
 
 Obj-C
 ```objectivec
-NSDictionary * schema = [avoSot extractSchema:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
+NSDictionary * schema = [avoInspector extractSchema:@{@"id": @"sdf-334fsg-334f", @"number": @41}];
 ```
 
 Swift
 ```swift
-let schema = avoSot.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
+let schema = avoInspector.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
+```
+
+# Using the visual inspector
+
+Visual inspector is enabled in development environment by default.
+
+## Show
+
+Obj-C
+```objectivec
+[avoInspector showVisualInspector:Bar]; // or Bubble
+```
+
+Swift
+```swift
+avoInspector.show(AvoVisualInspectorType.Bar) // or AvoVisualInspectorType.Bubble
+```
+
+## Hide
+
+Obj-C
+```objectivec
+[avoInspector hideVisualInspector];
+```
+
+Swift
+```swift
+avoInspector.hideVisualInspector()
 ```
 
 # Batching control
