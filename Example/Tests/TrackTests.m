@@ -63,9 +63,25 @@ describe(@"Tracking", ^{
     
         [sut trackSchema:@"Event name" eventSchema:[NSDictionary new]];
 
-        OCMVerify([sut.debugger publishEvent:@"Event name" withTimestamp:[OCMArg any]
-                              withProperties:[OCMArg any] withErrors:[NSMutableArray new]]);
+        OCMVerify([sut.debugger publishEvent:@"Schema: Event name" withTimestamp:[OCMArg any]
+                                    withProperties:[OCMArg any] withErrors:[OCMArg any]]);
     });
+         
+     it(@"Visual inspector invoked when trackSchemaFromEvent in dev", ^{
+         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
+         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
+         OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
+         AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvDev];
+         sut.sessionTracker = mockSessionTracker;
+         sut.avoBatcher = mockAvoBatcher;
+         sut.debugger = OCMClassMock([AnalyticsDebugger class]);
+     
+         [sut trackSchemaFromEvent:@"Event name" eventParams:[NSDictionary new]];
+
+         OCMVerify([sut.debugger publishEvent:@"Event: Event name" withTimestamp:[OCMArg any]
+                                     withProperties:[OCMArg any] withErrors:[OCMArg any]]);
+     });
          
      it(@"Visual inspector not invoked when trackSchema in prod and not visible inspector", ^{
          id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
@@ -77,10 +93,26 @@ describe(@"Tracking", ^{
          sut.avoBatcher = mockAvoBatcher;
          sut.debugger = OCMClassMock([AnalyticsDebugger class]);
 
-         OCMReject([sut.debugger publishEvent:@"Event name" withTimestamp:[OCMArg any]
-                                 withProperties:[OCMArg any] withErrors:[NSMutableArray new]]);
+         OCMReject([sut.debugger publishEvent:[OCMArg any] withTimestamp:[OCMArg any]
+                                 withProperties:[OCMArg any] withErrors:[OCMArg any]]);
     
          [sut trackSchema:@"Event name" eventSchema:[NSDictionary new]];
+     });
+         
+     it(@"Visual inspector not invoked when trackSchemaFromEvent in prod and not visible inspector", ^{
+         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
+         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
+         OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
+         AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvProd];
+         sut.sessionTracker = mockSessionTracker;
+         sut.avoBatcher = mockAvoBatcher;
+         sut.debugger = OCMClassMock([AnalyticsDebugger class]);
+     
+        OCMReject([sut.debugger publishEvent:[OCMArg any] withTimestamp:[OCMArg any]
+                              withProperties:[OCMArg any] withErrors:[OCMArg any]]);
+    
+         [sut trackSchemaFromEvent:@"Event name" eventParams:[NSDictionary new]];
      });
          
      it(@"Visual inspector is invoked when trackSchema in prod and visible inspector", ^{
@@ -96,8 +128,25 @@ describe(@"Tracking", ^{
 
           [sut trackSchema:@"Event name" eventSchema:[NSDictionary new]];
     
-          OCMVerify([sut.debugger publishEvent:@"Event name" withTimestamp:[OCMArg any]
+          OCMVerify([sut.debugger publishEvent:@"Schema: Event name" withTimestamp:[OCMArg any]
                               withProperties:[OCMArg any] withErrors:[NSMutableArray new]]);
       });
+         
+     it(@"Visual inspector is invoked when trackSchemaFromEvent in prod and visible inspector", ^{
+           id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
+           OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+           id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
+           OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
+           AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvProd];
+           sut.sessionTracker = mockSessionTracker;
+           sut.avoBatcher = mockAvoBatcher;
+           sut.debugger = OCMClassMock([AnalyticsDebugger class]);
+           OCMStub([sut.debugger isEnabled]).andReturn(YES);
+
+           [sut trackSchemaFromEvent:@"Event name" eventParams:[NSDictionary new]];
+     
+           OCMVerify([sut.debugger publishEvent:@"Event: Event name" withTimestamp:[OCMArg any]
+                               withProperties:[OCMArg any] withErrors:[NSMutableArray new]]);
+       });
 });
 SpecEnd

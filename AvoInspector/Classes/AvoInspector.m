@@ -193,7 +193,7 @@ static int batchFlushSTime = 30;
     
     [self.avoBatcher handleTrackSchema:eventName schema:schema];
     
-    [self showInVisualInspector:eventName schema:schema];
+    [self showSchemaInVisualInspector:eventName schema:schema];
 }
 
 - (void)showEventInVisualInspector:(NSString *) eventName props:(NSDictionary<NSString *, id> * _Nonnull)eventProps {
@@ -210,7 +210,7 @@ static int batchFlushSTime = 30;
     }
 }
 
-- (void)showInVisualInspector:(NSString *) eventName schema:(NSDictionary<NSString *,AvoEventSchemaType *> * _Nonnull)schema {
+- (void)showSchemaInVisualInspector:(NSString *) eventName schema:(NSDictionary<NSString *,AvoEventSchemaType *> * _Nonnull)schema {
     if (self.debugger != nil && (self.env != AvoInspectorEnvProd || [self.debugger isEnabled])) {
         NSMutableArray * props = [NSMutableArray new];
         

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AvoInspector'
-  s.version          = '0.9.5'
+  s.version          = '1.0.0'
   s.summary          = 'Avo Inspector iOS SDK'
 
   s.description      = <<-DESC
@@ -31,5 +31,5 @@ A powerful suite of features that analyze your current state of tracking and gui
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   
-  s.dependency 'IosAnalyticsDebugger', '~> 1.1.3'
+  s.dependency 'IosAnalyticsDebugger', '~> 1.1.4'
 end
