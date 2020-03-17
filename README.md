@@ -94,7 +94,7 @@ let schema = avoInspector.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
 
 # Using the visual inspector
 
-Visual inspector is enabled in development environment by default.
+Visual inspector is enabled in development and staging environments by default.
 
 ## Show
 
