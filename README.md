@@ -120,6 +120,20 @@ Swift
 avoInspector.hideVisualInspector()
 ```
 
+## Advanced usage
+
+You can get an instance of `AnalyticsDebugger` with the following method. See [GitHub repo](https://github.com/avohq/ios-analytics-debugger)
+
+Obj-C
+```objectivec
+[avoInspector getVisualInspector];
+```
+
+Swift
+```swift
+avoInspector.getVisualInspector()
+```
+
 # Batching control
 
 In order to ensure our SDK doesn't have a large impact on performance or battery life it supports event schemas batching.
