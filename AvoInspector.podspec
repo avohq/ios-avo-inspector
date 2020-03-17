@@ -31,5 +31,5 @@ A powerful suite of features that analyze your current state of tracking and gui
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   
-  s.dependency 'IosAnalyticsDebugger', '~> 1.1.2'
+  s.dependency 'IosAnalyticsDebugger', '~> 1.1.3'
 end

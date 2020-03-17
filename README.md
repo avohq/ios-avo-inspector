@@ -94,7 +94,7 @@ let schema = avoInspector.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
 
 # Using the visual inspector
 
-Visual inspector is enabled in development environment by default.
+Visual inspector is enabled in development and staging environments by default.
 
 ## Show
 
@@ -118,6 +118,20 @@ Obj-C
 Swift
 ```swift
 avoInspector.hideVisualInspector()
+```
+
+## Advanced usage
+
+You can get an instance of `AnalyticsDebugger` with the following method. See [GitHub repo](https://github.com/avohq/ios-analytics-debugger)
+
+Obj-C
+```objectivec
+[avoInspector getVisualInspector];
+```
+
+Swift
+```swift
+avoInspector.getVisualInspector()
 ```
 
 # Batching control
