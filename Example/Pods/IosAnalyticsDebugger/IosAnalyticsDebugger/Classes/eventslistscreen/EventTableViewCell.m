@@ -36,6 +36,7 @@
     UINib *eventSecondatyRowItemNib = [UINib nibWithNibName:@"EventTableViewSecondaryCell" bundle:bundle];
     [self.additionalRows registerNib:eventSecondatyRowItemNib forCellReuseIdentifier:@"EventTableViewSecondaryCell"];
     [self.additionalRows setDataSource:self];
+    self.additionalRows.allowsSelection = false;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -43,13 +44,15 @@
 }
 
 - (void) toggleExpend {
+    BOOL expended = NO;
     if (self.additionalRowsHeight.constant == 0) {
+        expended = YES;
         [self expend];
     } else {
         [self collapse];
     }
     
-    [self.eventsListScreenViewController setExpendedStatus:[self expended] forEvent:self.event];
+    [self.eventsListScreenViewController setExpendedStatus:expended forEvent:self.event];
 }
 
 - (BOOL) expended {
@@ -89,14 +92,18 @@
         [self.eventName setTextColor:[UIColor colorWithRed:0.851 green:0.271 blue:0.325 alpha:1]]; //@"error_color"
         [self.statusIcon setImage:[UIImage imageNamed:@"red_warning" inBundle:selfBundle compatibleWithTraitCollection:nil]];
     } else {
-        [self.eventName setTextColor:[UIColor blackColor]];
+        if (@available(iOS 13.0, *)) {
+            [self.eventName setTextColor:[UIColor labelColor]];
+        } else {
+            [self.eventName setTextColor:[UIColor blackColor]];
+        }
         [self.statusIcon setImage:[UIImage imageNamed:@"tick" inBundle:selfBundle compatibleWithTraitCollection:nil]];
     }
 }
 
 - (void)calculateExpendedAdditionalRowsHeight {
     NSInteger count = [self.event.eventProps count] + [self.event.userProps count];
-    self.additionalRowsExpendedHeight = 32 * count + 8;
+    self.additionalRowsExpendedHeight = 40 * count + 8;
     
     for (DebuggerProp *prop in self.event.eventProps) {
         for (int i = 0; i < [self.event.messages count]; i++) {
@@ -116,6 +123,8 @@
     [self.timestamp setText:[Util timeString:event.timestamp]];
     
     [self calculateExpendedAdditionalRowsHeight];
+    
+    [self.additionalRows reloadData];
     
     if ([self expended]) {
         self.additionalRowsHeight.constant = self.additionalRowsExpendedHeight;
@@ -139,13 +148,21 @@
         [cell populateWithProp:prop];
     }
     
+    BOOL hasError = NO;
+    DebuggerMessage *messageData = nil;
+    
     for (int i = 0; i < [self.event.messages count]; i++) {
-        DebuggerMessage *messageData = [self.event.messages objectAtIndex:i];
+        messageData = [self.event.messages objectAtIndex:i];
         if ([messageData.propertyId isEqualToString:prop.id]) {
-            [cell showError:[self formatErrorMessage:messageData propertyName:prop.name]];
-            
+            hasError = YES;
             break;
         }
+    }
+    
+    if (hasError) {
+        [cell showError:[self formatErrorMessage:messageData propertyName:prop.name]];
+    } else {
+        [cell hideError];
     }
     
     return cell;

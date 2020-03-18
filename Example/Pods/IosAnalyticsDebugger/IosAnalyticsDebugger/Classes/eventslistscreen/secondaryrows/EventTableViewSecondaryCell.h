@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) populateWithProp: (DebuggerProp *) prop;
 - (void) showError: (NSAttributedString *) errorMessage;
+- (void) hideError;
 
 @end
 

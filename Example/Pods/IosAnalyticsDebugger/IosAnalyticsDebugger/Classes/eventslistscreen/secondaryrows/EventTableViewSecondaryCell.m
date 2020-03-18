@@ -39,4 +39,16 @@
     [self.message setAttributedText:errorMessage];
 }
 
+- (void) hideError {
+    if (@available(iOS 13.0, *)) {
+        [self.propName setTextColor:[UIColor labelColor]];
+        [self.propValue setTextColor:[UIColor labelColor]];
+    } else {
+        [self.propName setTextColor:[UIColor blackColor]];
+        [self.propValue setTextColor:[UIColor blackColor]];
+    }
+  
+    [self.message setText:@""];
+}
+
 @end
