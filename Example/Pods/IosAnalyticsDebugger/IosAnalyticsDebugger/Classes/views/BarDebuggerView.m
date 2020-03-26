@@ -48,6 +48,8 @@
     UIView *view = [views objectAtIndex:0];
     view.frame = self.bounds;
     [self addSubview:view];
+    
+    [self setError:NO];
 }
 
 - (void) showEvent:(DebuggerEventItem *)event {
@@ -64,16 +66,17 @@
 }
 
 - (void) setError:(BOOL) hasError {
-    NSBundle *selfBundle = [NSBundle bundleForClass:self.class];
+    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
     if (hasError) {
-        [self.statusIcon setImage:[UIImage imageNamed:@"white_warning" inBundle:selfBundle compatibleWithTraitCollection:nil]];
-        [self.dragHandle setImage:[UIImage imageNamed:@"drag_handle" inBundle:selfBundle compatibleWithTraitCollection:nil]];
+        [self.statusIcon setImage:[UIImage imageNamed:@"white_warning" inBundle:resBundle compatibleWithTraitCollection:nil]];
+        [self.dragHandle setImage:[UIImage imageNamed:@"drag_handle" inBundle:resBundle compatibleWithTraitCollection:nil]];
         [self.background setBackgroundColor:[UIColor colorWithRed:0.851 green:0.271 blue:0.325 alpha:1]]; //@"error_color"
         [self.eventTimeLabel setTextColor:[UIColor colorWithRed:0.867 green:0.867 blue:0.867 alpha:1]]; //@"light_grey_text_color"
         [self.eventNameLabel setTextColor:[UIColor whiteColor]];
     } else {
-        [self.statusIcon setImage:[UIImage imageNamed:@"tick" inBundle:selfBundle compatibleWithTraitCollection:nil]];
-        [self.dragHandle setImage:[UIImage imageNamed:@"drag_handle_grey" inBundle:selfBundle compatibleWithTraitCollection:nil]];
+        [self.statusIcon setImage:[UIImage imageNamed:@"avo_debugger_tick" inBundle:resBundle compatibleWithTraitCollection:nil]];
+        [self.dragHandle setImage:[UIImage imageNamed:@"drag_handle_grey" inBundle:resBundle compatibleWithTraitCollection:nil]];
         [self.background setBackgroundColor:[UIColor whiteColor]];
         [self.eventTimeLabel setTextColor:[UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1]]; // @"grey_text_color"
         [self.eventNameLabel setTextColor:[UIColor blackColor]];

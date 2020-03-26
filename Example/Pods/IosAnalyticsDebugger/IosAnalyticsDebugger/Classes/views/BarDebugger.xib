@@ -38,7 +38,7 @@
                                 <constraint firstAttribute="height" constant="20" id="eSD-00-I0v"/>
                             </constraints>
                         </imageView>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4lZ-3j-8Bf">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avo_debugger_tick" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4lZ-3j-8Bf">
                             <rect key="frame" x="16" y="20" width="16" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="16" id="nLj-Hg-ZUQ"/>
@@ -102,7 +102,7 @@
         </view>
     </objects>
     <resources>
+        <image name="avo_debugger_tick" width="8" height="6"/>
         <image name="drag_handle_grey" width="10" height="10"/>
-        <image name="tick" width="8" height="6"/>
     </resources>
 </document>

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AvoObject : AvoEventSchemaType
 
-@property (nonatomic, nonnull) NSMutableDictionary *fields;
+@property (nonatomic, nonnull) NSMutableDictionary <NSString *, AvoEventSchemaType *> *fields;
 
 @end
 

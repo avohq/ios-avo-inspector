@@ -50,6 +50,8 @@
     view.frame = self.bounds;
     [self addSubview:view];
     [self showEventCount:0];
+    
+    [self setError:NO];
 }
 
 - (void) showEvent:(DebuggerEventItem *)event {
@@ -66,14 +68,15 @@
 }
 
 - (void) setError:(BOOL) hasError {
-    NSBundle *selfBundle = [NSBundle bundleForClass:self.class];
+    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
     if (hasError) {
-        [self.bubble setImage:[UIImage imageNamed:@"avo_bubble_error" inBundle:selfBundle compatibleWithTraitCollection:nil]];
-        [self.counterBackground setImage:[UIImage imageNamed:@"badge_white" inBundle:selfBundle compatibleWithTraitCollection:nil]];
+        [self.bubble setImage:[UIImage imageNamed:@"avo_bubble_error" inBundle:resBundle compatibleWithTraitCollection:nil]];
+        [self.counterBackground setImage:[UIImage imageNamed:@"badge_white" inBundle:resBundle compatibleWithTraitCollection:nil]];
         [self.counter setTextColor:[UIColor colorWithRed:0.851 green:0.271 blue:0.325 alpha:1]]; //:@"error_color"
     } else {
-        [self.bubble setImage:[UIImage imageNamed:@"avo_bubble" inBundle:selfBundle compatibleWithTraitCollection:nil]];
-        [self.counterBackground setImage:[UIImage imageNamed:@"badge_green" inBundle:selfBundle compatibleWithTraitCollection:nil]];
+        [self.bubble setImage:[UIImage imageNamed:@"avo_bubble" inBundle:resBundle compatibleWithTraitCollection:nil]];
+        [self.counterBackground setImage:[UIImage imageNamed:@"badge_green" inBundle:resBundle compatibleWithTraitCollection:nil]];
         [self.counter setTextColor:[UIColor whiteColor]];
     }
 }

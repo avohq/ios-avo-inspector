@@ -141,7 +141,7 @@ NSString * toISO8601UTC(NSDate *date) {
 
 @implementation DebuggerAnalytics
 
-static AVOEnv __ENV__ = -1;
+static DebuggerAnalyticsAVOEnv __ENV__ = -1;
 static BOOL __STRICT__ = YES;
 
 static NSObject * __DEBUGGER__ = nil;
@@ -245,72 +245,52 @@ static NSObject * __DEBUGGER__ = nil;
   NSLog(@"[avo] Event Sent: %@ Event Props: %@ User Props: %@", eventName, eventProperties, userProperties);
 }
 
-NSString * const clientAsString[] = {
-  @"Cloud Functions",
-  @"Web",
-  @"Landing Page",
-  @"Cli",
-  @"Web Debugger",
-  @"Android Debugger",
-  @"Ios Debugger",
-  @"React Native Debugger (ios)",
-  @"React Native Debugger (android)"
-};
+NSString * const clientAsString = @"Ios Debugger";
 
-static AVOEnumClient sysClient = AVOEnumClientNULL;
 static NSString * sysVersion = nil;
 
-+ (void)setSystemPropertiesWithClient:(AVOEnumClient)client
-  version:(nullable NSString *)version
++ (void)setSystemPropertiesWithVersion:(nullable NSString *)version
 {
-  if (((int)client) >= 0 && ((int)client) < 9) {
-    sysClient = client;
-    [self assertClient:sysClient];
-  }
   if (version != nil) {
     sysVersion = version;
     [self assertVersion:sysVersion];
   }
 }
 
-static id<AVOCustomDestination> customNodeJs = nil;
+static id<DebuggerAnalyticsCustomDestination> customNodeJs = nil;
 
-+ (void)initAvoWithEnv:(AVOEnv)env
-  client:(AVOEnumClient)client
++ (void)initAvoWithEnv:(DebuggerAnalyticsAVOEnv)env
   version:(nullable NSString *)version
-  customNodeJsDestination:(nonnull id<AVOCustomDestination>)customNodeJsDestination
+  customNodeJsDestination:(nonnull id<DebuggerAnalyticsCustomDestination>)customNodeJsDestination
   strict:(BOOL)strict
   debugger:(nonnull NSObject *)debugger
 {
   __DEBUGGER__ = debugger;
   
-  [self initAvoWithEnv:env client:client version:version customNodeJsDestination:customNodeJsDestination strict:strict];
+  [self initAvoWithEnv:env version:version customNodeJsDestination:customNodeJsDestination strict:strict];
 }
 
-+ (void)initAvoWithEnv:(AVOEnv)env
-  client:(AVOEnumClient)client
++ (void)initAvoWithEnv:(DebuggerAnalyticsAVOEnv)env
   version:(nullable NSString *)version
-  customNodeJsDestination:(nonnull id<AVOCustomDestination>)customNodeJsDestination
+  customNodeJsDestination:(nonnull id<DebuggerAnalyticsCustomDestination>)customNodeJsDestination
   debugger:(nonnull NSObject *)debugger
 {
   __DEBUGGER__ = debugger;
   BOOL strict = debugger == nil;
   
-  [self initAvoWithEnv:env client:client version:version customNodeJsDestination:customNodeJsDestination strict:strict];
+  [self initAvoWithEnv:env version:version customNodeJsDestination:customNodeJsDestination strict:strict];
 }
 
-+ (void)initAvoWithEnv:(AVOEnv)env
-  client:(AVOEnumClient)client
++ (void)initAvoWithEnv:(DebuggerAnalyticsAVOEnv)env
   version:(nullable NSString *)version
-  customNodeJsDestination:(nonnull id<AVOCustomDestination>)customNodeJsDestination
+  customNodeJsDestination:(nonnull id<DebuggerAnalyticsCustomDestination>)customNodeJsDestination
 {
-  [self initAvoWithEnv:env client:client version:version customNodeJsDestination:customNodeJsDestination strict:YES];
+  [self initAvoWithEnv:env version:version customNodeJsDestination:customNodeJsDestination strict:YES];
 }
 
-+ (void)initAvoWithEnv:(AVOEnv)env
-  client:(AVOEnumClient)client
++ (void)initAvoWithEnv:(DebuggerAnalyticsAVOEnv)env
   version:(nullable NSString *)version
-  customNodeJsDestination:(nonnull id<AVOCustomDestination>)customNodeJsDestination
+  customNodeJsDestination:(nonnull id<DebuggerAnalyticsCustomDestination>)customNodeJsDestination
   strict:(BOOL)strict
 {
   __ENV__ = env;
@@ -324,7 +304,7 @@ static id<AVOCustomDestination> customNodeJs = nil;
   customNodeJs = customNodeJsDestination;
   [customNodeJs make:env];
   
-  [self setSystemPropertiesWithClient:client version:version];
+  [self setSystemPropertiesWithVersion:version];
   if (__ENV__ != AVOEnvProd) {
     // debug console in Avo
     [AvoInvoke invokeMeta:@"init" messages:@[]];
@@ -345,13 +325,6 @@ static id<AVOCustomDestination> customNodeJs = nil;
   return messages;
 }
 
-+ (NSArray *)assertClient:(AVOEnumClient)client
-{
-  NSMutableArray *messages = [[NSMutableArray alloc] init];
-  [messages addObjectsFromArray:[self assertNonNullEnum:@"9e5c4ff5-d5f6-4e82-b061-d5fa02755aae" propertyName:@"Client" value:client]];
-  return messages;
-}
-
 /**
  * Debugger Started: Sent when the web debugger is started.
  * 
@@ -367,7 +340,6 @@ static id<AVOCustomDestination> customNodeJs = nil;
   if (__ENV__ != AVOEnvProd || [self mobileDebuggerEnabled]) {
     NSMutableArray *messages = [[NSMutableArray alloc] init];
     [messages addObjectsFromArray:[self assertSchemaId:schemaId]];
-    [messages addObjectsFromArray:[self assertClient:sysClient]];
     [messages addObjectsFromArray:[self assertVersion:sysVersion]];
     // debug console in Avo
     [AvoInvoke invoke:@"Od3PNKHK1" hash:@"270a4f670f4787243be9eac317c57b95fad54605b471c9314725bd56643e7528" messages:messages];
@@ -376,8 +348,8 @@ static id<AVOCustomDestination> customNodeJs = nil;
       NSArray<NSDictionary *> * eventProps = @[
         @{@"id" : @"zXjbg4Ek9", @"name" : @"Frame Location", @"value" : frameLocation ? [frameLocation description] : @"nil"},
         @{@"id" : @"40958e87-d69a-4d5a-98f8-b36922466787", @"name" : @"Schema Id", @"value" : schemaId ? [schemaId description] : @"nil"}, 
-        @{@"id" : @"9e5c4ff5-d5f6-4e82-b061-d5fa02755aae",@"name" : @"Client",  @"value" : clientAsString[sysClient] ? [clientAsString[sysClient] description] : @"nil"}, 
-        @{@"id" : @"2fad5bf3-7782-49a2-acc2-825daf823095",@"name" : @"Version",  @"value" : sysVersion ? [sysVersion description] : @"nil"}];
+        @{@"id" : @"9e5c4ff5-d5f6-4e82-b061-d5fa02755aae", @"name" : @"Client",  @"value" : clientAsString},
+        @{@"id" : @"2fad5bf3-7782-49a2-acc2-825daf823095", @"name" : @"Version",  @"value" : sysVersion ? [sysVersion description] : @"nil"}];
       NSArray<NSDictionary *> * userProps = @[];
       [self mobileDebuggerPostEvent:@"Debugger Started" withTimestamp:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]] withId:@"Od3PNKHK1" withEventProps:eventProps withUserProps:userProps withMessages:messages];
     }
@@ -403,9 +375,9 @@ static id<AVOCustomDestination> customNodeJs = nil;
     if (schemaId != nil) {
       avoLogEventProperties[@"Schema Id"] = schemaId;
     }
-    if (((int)sysClient) >= 0 && ((int)sysClient) < 9) {
-      avoLogEventProperties[@"Client"] = clientAsString[sysClient];
-    }
+
+    avoLogEventProperties[@"Client"] = clientAsString;
+    
     if (sysVersion != nil) {
       avoLogEventProperties[@"Version"] = sysVersion;
     }
@@ -422,9 +394,9 @@ static id<AVOCustomDestination> customNodeJs = nil;
   if (schemaId != nil) {
     customNodeJsEventProperties[@"Schema Id"] = schemaId;
   }
-  if (((int)sysClient) >= 0 && ((int)sysClient) < 9) {
-    customNodeJsEventProperties[@"Client"] = clientAsString[sysClient];
-  }
+
+  customNodeJsEventProperties[@"Client"] = clientAsString;
+  
   if (sysVersion != nil) {
     customNodeJsEventProperties[@"Version"] = sysVersion;
   }

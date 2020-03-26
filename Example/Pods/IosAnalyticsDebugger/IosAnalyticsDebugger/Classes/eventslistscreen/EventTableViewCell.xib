@@ -20,7 +20,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IgJ-4a-or0" userLabel="Main Row">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="52"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tick" translatesAutoresizingMaskIntoConstraints="NO" id="jtT-if-67T" userLabel="Status Icon">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avo_debugger_tick" translatesAutoresizingMaskIntoConstraints="NO" id="jtT-if-67T" userLabel="Status Icon">
                                 <rect key="frame" x="16" y="18" width="16" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="Rz7-uK-vqR"/>
@@ -33,7 +33,7 @@
                                 <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="highlightedColor" red="0.89440718590000001" green="1" blue="0.89870009169999998" alpha="0.32852632710000002" colorSpace="custom" customColorSpace="sRGB"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="collapse_arrow" translatesAutoresizingMaskIntoConstraints="NO" id="zer-Du-iDT">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avo_debugger_collapse_arrow" translatesAutoresizingMaskIntoConstraints="NO" id="zer-Du-iDT">
                                 <rect key="frame" x="294" y="21" width="10" height="10"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="10" id="YtD-pj-o0a"/>
@@ -92,7 +92,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="collapse_arrow" width="10" height="5.5"/>
-        <image name="tick" width="8" height="6"/>
+        <image name="avo_debugger_collapse_arrow" width="10" height="5.5"/>
+        <image name="avo_debugger_tick" width="8" height="6"/>
     </resources>
 </document>

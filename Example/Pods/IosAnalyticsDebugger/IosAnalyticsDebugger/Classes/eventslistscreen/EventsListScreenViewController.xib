@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EventsListScreenViewController">
             <connections>
+                <outlet property="avoLogoImage" destination="ug0-cr-KSC" id="Wqu-1f-mZG"/>
                 <outlet property="closeButton" destination="6G5-ul-omW" id="Ciy-F9-9cz"/>
+                <outlet property="closeButtonIcon" destination="9s1-MD-aQu" id="HkH-Xi-TTd"/>
                 <outlet property="eventsTableView" destination="x1X-Iu-XFf" id="AZo-cy-n9y"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -27,7 +29,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6G5-ul-omW" userLabel="Top Bar">
                     <rect key="frame" x="0.0" y="44" width="414" height="48"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="close_button" translatesAutoresizingMaskIntoConstraints="NO" id="9s1-MD-aQu">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avo_debugger_close_button" translatesAutoresizingMaskIntoConstraints="NO" id="9s1-MD-aQu">
                             <rect key="frame" x="388" y="19" width="10" height="10"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="BFG-Tv-fK6"/>
@@ -35,7 +37,7 @@
                             </constraints>
                         </imageView>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avo_logo" translatesAutoresizingMaskIntoConstraints="NO" id="ug0-cr-KSC">
-                            <rect key="frame" x="153" y="16" width="108" height="16"/>
+                            <rect key="frame" x="153" y="12" width="108" height="24"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HRV-Hh-hdL" userLabel="botline">
                             <rect key="frame" x="0.0" y="47" width="414" height="1"/>
@@ -54,14 +56,14 @@
                         <constraint firstAttribute="trailing" secondItem="ug0-cr-KSC" secondAttribute="trailing" constant="153" id="c5g-Sr-kRB"/>
                         <constraint firstItem="IKD-QF-tZ2" firstAttribute="trailing" secondItem="HRV-Hh-hdL" secondAttribute="trailing" id="hnV-7T-TwO"/>
                         <constraint firstItem="IKD-QF-tZ2" firstAttribute="bottom" secondItem="HRV-Hh-hdL" secondAttribute="bottom" id="llU-Dc-TDF"/>
-                        <constraint firstItem="ug0-cr-KSC" firstAttribute="top" secondItem="6G5-ul-omW" secondAttribute="top" constant="16" id="nb5-t3-n1A"/>
+                        <constraint firstItem="ug0-cr-KSC" firstAttribute="top" secondItem="6G5-ul-omW" secondAttribute="top" constant="12" id="nb5-t3-n1A"/>
                         <constraint firstAttribute="height" constant="48" id="ny0-0a-Mmn"/>
-                        <constraint firstAttribute="bottom" secondItem="ug0-cr-KSC" secondAttribute="bottom" constant="16" id="tLh-kK-Hzr"/>
+                        <constraint firstAttribute="bottom" secondItem="ug0-cr-KSC" secondAttribute="bottom" constant="12" id="tLh-kK-Hzr"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="IKD-QF-tZ2"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" systemColor="tertiarySystemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="x1X-Iu-XFf" firstAttribute="top" secondItem="6G5-ul-omW" secondAttribute="bottom" id="7aC-MZ-wGE"/>
                 <constraint firstItem="6G5-ul-omW" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="L4I-t2-5mM"/>
@@ -76,7 +78,7 @@
         </view>
     </objects>
     <resources>
+        <image name="avo_debugger_close_button" width="10" height="10"/>
         <image name="avo_logo" width="54" height="18"/>
-        <image name="close_button" width="10" height="10"/>
     </resources>
 </document>

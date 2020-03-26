@@ -40,7 +40,7 @@ NSString *currentSchemaId;
     analyticsDebuggerEvents = [NSMutableArray new];
     
     NSString *version = [[[NSBundle bundleForClass:[AnalyticsDebugger class]] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [DebuggerAnalytics initAvoWithEnv:AVOEnvProd client:AVOEnumClientIosDebugger version:version
+    [DebuggerAnalytics initAvoWithEnv:AVOEnvProd version:version
               customNodeJsDestination:[DebuggerAnalyticsDestination new]];
     
     return self;
@@ -57,8 +57,11 @@ NSString *currentSchemaId;
      
     NSInteger bottomOffset = [Util barBottomOffset];
     debuggerView = [[BarDebuggerView alloc] initWithFrame: CGRectMake(0, screenHeight - 30 - bottomOffset, screenWidth, 30) ];
- 
-    [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
+       dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+           [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+    });
      
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(drugBar:)];
     
@@ -96,7 +99,10 @@ NSString *currentSchemaId;
     
     debuggerView = [[BubbleDebuggerView alloc] initWithFrame: CGRectMake(screenWidth - 40, screenHeight - 40 - bottomOffset, 40, 40) ];
     
-    [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
+       dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+           [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+    });
      
     self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(drugBubble:)];
      
