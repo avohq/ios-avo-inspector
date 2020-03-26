@@ -70,7 +70,9 @@
         [self layoutIfNeeded];
         [self setNeedsUpdateConstraints];
         
-        [self.expendCollapseImage setImage:[UIImage imageNamed:@"collapse_arrow" inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
+        NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+        NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+        [self.expendCollapseImage setImage:[UIImage imageNamed:@"avo_debugger_collapse_arrow" inBundle:resBundle compatibleWithTraitCollection:nil]];
     }
 }
 
@@ -82,22 +84,25 @@
         [self layoutIfNeeded];
         [self setNeedsUpdateConstraints];
         
-        [self.expendCollapseImage setImage:[UIImage imageNamed:@"expend_arrow" inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil]];
+        NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+        NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+        [self.expendCollapseImage setImage:[UIImage imageNamed:@"expend_arrow" inBundle:resBundle compatibleWithTraitCollection:nil]];
     }
 }
 
 - (void) showError:(BOOL) isError {
-    NSBundle *selfBundle = [NSBundle bundleForClass:self.class];
+    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
     if (isError) {
         [self.eventName setTextColor:[UIColor colorWithRed:0.851 green:0.271 blue:0.325 alpha:1]]; //@"error_color"
-        [self.statusIcon setImage:[UIImage imageNamed:@"red_warning" inBundle:selfBundle compatibleWithTraitCollection:nil]];
+        [self.statusIcon setImage:[UIImage imageNamed:@"red_warning" inBundle:resBundle compatibleWithTraitCollection:nil]];
     } else {
         if (@available(iOS 13.0, *)) {
             [self.eventName setTextColor:[UIColor labelColor]];
         } else {
             [self.eventName setTextColor:[UIColor blackColor]];
         }
-        [self.statusIcon setImage:[UIImage imageNamed:@"tick" inBundle:selfBundle compatibleWithTraitCollection:nil]];
+        [self.statusIcon setImage:[UIImage imageNamed:@"avo_debugger_tick" inBundle:resBundle compatibleWithTraitCollection:nil]];
     }
 }
 

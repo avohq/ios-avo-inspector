@@ -14,6 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *closeButton;
 @property (weak, nonatomic) IBOutlet UITableView *eventsTableView;
+@property (weak, nonatomic) IBOutlet UIImageView *closeButtonIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *avoLogoImage;
 
 @property (strong, nonatomic) NSMutableSet *expendedEvents;
 
@@ -41,6 +43,11 @@
     [AnalyticsDebugger setOnNewEventCallback:^(DebuggerEventItem * _Nonnull item) {
         [weakTableView reloadData];
     }];
+    
+    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+    [self.closeButtonIcon setImage:[UIImage imageNamed:@"avo_debugger_close_button" inBundle:resBundle compatibleWithTraitCollection:nil]];
+    [self.avoLogoImage setImage:[UIImage imageNamed:@"avo_logo" inBundle:resBundle compatibleWithTraitCollection:nil]];
 }
 
 - (void) viewDidAppear:(BOOL)animated {

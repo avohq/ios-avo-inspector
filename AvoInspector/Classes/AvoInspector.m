@@ -72,26 +72,20 @@ static int batchFlushSTime = 30;
 }
 
 - (void) showVisualInspector: (AvoVisualInspectorType) type {
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-        switch (type) {
-            case Bar:
-                [self.debugger showBarDebugger];
-                break;
-            case Bubble:
-                [self.debugger showBubbleDebugger];
-                break;
-            default:
-                break;
-        }
-    });
+    switch (type) {
+        case Bar:
+            [self.debugger showBarDebugger];
+            break;
+        case Bubble:
+            [self.debugger showBubbleDebugger];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void) hideVisualInspector {
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-        [self.debugger hideDebugger];
-    });
+    [self.debugger hideDebugger];
 }
 
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env {

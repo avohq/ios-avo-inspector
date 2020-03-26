@@ -28,7 +28,7 @@
     [postDataTask resume];
 }
 
-- (void)make:(AVOEnv)avoEnv {}
+- (void)make:(DebuggerAnalyticsAVOEnv)avoEnv {}
 
 - (void)setUserProperties:(nonnull NSString *)userId withUserProperties:(nonnull NSDictionary *)userProperties {}
 

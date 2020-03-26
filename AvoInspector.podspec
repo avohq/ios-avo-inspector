@@ -23,13 +23,6 @@ A powerful suite of features that analyze your current state of tracking and gui
   s.ios.deployment_target = '10.0'
 
   s.source_files = 'AvoInspector/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'AvoInspector' => ['AvoInspector/Assets/*.png']
-  # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  
-  s.dependency 'IosAnalyticsDebugger', '~> 1.1.6'
+  s.dependency 'IosAnalyticsDebugger', '~> 1.1.8'
 end
