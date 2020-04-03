@@ -44,7 +44,7 @@ it(@"inititalizes with app version", ^{
 
    NSString * appVersion = sut.appVersion;
 
-   expect(appVersion).to.equal(@"1.0.1");
+   expect(appVersion).to.equal(@"1.0.3");
 });
 
 it(@"inititalizes with lib version", ^{
@@ -52,7 +52,7 @@ it(@"inititalizes with lib version", ^{
 
    NSString * libVersion = sut.libVersion;
 
-   expect(libVersion).to.equal(@"0.9.5");
+   expect(libVersion).to.equal(@"1.0.2");
 });
 
 it(@"inititalizes with app id", ^{
@@ -88,7 +88,7 @@ it(@"debug inititalization shows visual inspector", ^{
    
    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
    sut.debugger = OCMClassMock([AnalyticsDebugger class]);
-
+ 
   XCTestExpectation *expectation = [self expectationWithDescription:@"wait"];
   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC));
   dispatch_after(popTime, dispatch_get_main_queue(), ^(void){

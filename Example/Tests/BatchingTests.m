@@ -172,6 +172,17 @@ SpecBegin(Batching)
             // Then
             expect(postBatchCount).to.equal(startBatchCount + 1);
         });
+             
+        it(@"Sets session id on new session", ^{
+            AvoNetworkCallsHandler * networkCallsHandler = [AvoNetworkCallsHandler new];
+            AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:networkCallsHandler];
+        
+            expect(networkCallsHandler.sessionId).to.equal(nil);
+        
+            [sut handleSessionStarted];
+        
+            expect(networkCallsHandler.sessionId).toNot.equal(nil);
+        });
 
         it(@"Clears event cache and events on success upload on foreground", ^{
             [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:@[[NSMutableDictionary new]] forKey:[AvoBatcher cacheKey]];

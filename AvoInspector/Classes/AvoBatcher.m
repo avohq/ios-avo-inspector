@@ -72,6 +72,7 @@
 - (void) handleSessionStarted {
     NSMutableDictionary * sessionStartedBody = [self.networkCallsHandler bodyForSessionStartedCall];
     
+    self.networkCallsHandler.sessionId = [[NSUUID UUID] UUIDString];
     [self saveEvent:sessionStartedBody];
     
     [self checkIfBatchNeedsToBeSent];
