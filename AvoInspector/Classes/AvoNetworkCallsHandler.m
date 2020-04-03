@@ -157,7 +157,7 @@
                                                           options:NSJSONWritingPrettyPrinted
                                                             error:&error];
     
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://api.avo.app/datascope/v0/track"]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://api.avo.app/inspector/v1/track"]];
     [request setHTTPMethod:@"POST"];
 
     [self writeCallHeader:request];
