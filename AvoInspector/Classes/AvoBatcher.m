@@ -72,7 +72,6 @@
 - (void) handleSessionStarted {
     NSMutableDictionary * sessionStartedBody = [self.networkCallsHandler bodyForSessionStartedCall];
     
-    self.networkCallsHandler.sessionId = [[NSUUID UUID] UUIDString];
     [self saveEvent:sessionStartedBody];
     
     [self checkIfBatchNeedsToBeSent];
@@ -104,7 +103,10 @@
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
     NSTimeInterval timeSinceLastFlushAttempt = now - self.batchFlushAttemptTime;
     
-    if (batchSize % [AvoInspector getBatchSize] == 0 || timeSinceLastFlushAttempt >= [AvoInspector getBatchFlushSeconds]) {
+    bool sendBySize = batchSize % [AvoInspector getBatchSize] == 0;
+    bool sendByTime = timeSinceLastFlushAttempt >= [AvoInspector getBatchFlushSeconds];
+    
+    if (sendBySize || sendByTime) {
         [self postAllAvailableEventsAndClearCache:NO];
     }
 }

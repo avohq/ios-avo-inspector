@@ -12,11 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AvoSessionTracker : NSObject
 
+@property (class, nonatomic) NSString *sessionId;
+
 -(instancetype) initWithBatcher: (AvoBatcher *) avoBatcher;
 
 - (void) startOrProlongSession: (NSNumber *) atUnixTime;
 
-+ (NSString *) cacheKey;
++ (NSString *) timestampCacheKey;
++ (NSString *) idCacheKey;
 
 @end
 

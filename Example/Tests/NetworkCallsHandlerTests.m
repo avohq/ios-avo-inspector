@@ -15,6 +15,7 @@
 #import <AvoInspector/AvoNull.h>
 #import <AvoInspector/AvoString.h>
 #import <AvoInspector/AvoUnknownType.h>
+#import <AvoInspector/AvoSessionTracker.h>
 #import <OCMock/OCMock.h>
 
 @interface AvoNetworkCallsHandler ()
@@ -43,7 +44,7 @@ describe(@"Handling network calls", ^{
     it(@"AvoNetworkCallsHandler builds proper body for session tracking", ^{
         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
         sut.samplingRate = 0.1;
-        sut.sessionId = @"testSessionId";
+        AvoSessionTracker.sessionId = @"testSessionId";
     
         NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
         
@@ -57,13 +58,13 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
-        expect([actualSessionStartedBody objectForKey:@"samplingRate"]).to.equal(@"0.1");
+        expect([actualSessionStartedBody objectForKey:@"samplingRate"]).to.equal(@0.1);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0];
         sut.samplingRate = 0.1;
-        sut.sessionId = @"testSessionId";
+        AvoSessionTracker.sessionId = @"testSessionId";
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoList * list = [AvoList new];
@@ -89,7 +90,7 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
-        expect([actualTrackSchemaBody objectForKey:@"samplingRate"]).to.equal(@"0.1");
+        expect([actualTrackSchemaBody objectForKey:@"samplingRate"]).to.equal(@0.1);
     
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"] count]).to.equal(7);
     

@@ -18,11 +18,25 @@
 
 @end
 
+@interface AvoSessionTracker ()
+
+@property (readwrite, nonatomic) AvoBatcher * avoBatcher;
+
+@end
+
+@interface AvoBatcher ()
+
+@property (readwrite, nonatomic) NSMutableArray * events;
+
+- (void) checkIfBatchNeedsToBeSent;
+ 
+@end
+
 SpecBegin(Session)
 describe(@"Sessions", ^{
     
     beforeEach(^{
-        [[NSUserDefaults standardUserDefaults] setDouble:INT_MIN forKey:[AvoSessionTracker cacheKey]];
+        [[NSUserDefaults standardUserDefaults] setDouble:INT_MIN forKey:[AvoSessionTracker timestampCacheKey]];
     });
 
     it(@"session starts when trackSchemaFromEvent", ^{
@@ -51,6 +65,22 @@ describe(@"Sessions", ^{
         [sut trackSchema:@"Event name" eventSchema:[NSDictionary new]];
        
         OCMVerify([mockSessionTracker startOrProlongSession:[OCMArg any]]);
+    });
+
+    it(@"resets session id on new session", ^{
+        AvoNetworkCallsHandler * networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"key" appName:@"name" appVersion:@"app version" libVersion:@"lib version" env:1];
+    
+        AvoBatcher * batcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:networkCallsHandler];
+        [AvoInspector setBatchFlushSeconds:30];
+
+        AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:batcher];
+        AvoSessionTracker.sessionId = @"";
+
+        [sut startOrProlongSession:@0];
+
+        expect(AvoSessionTracker.sessionId).notTo.equal(@"");
+        expect(AvoSessionTracker.sessionId).notTo.beNull();
+        expect(sut.avoBatcher.events[0][@"sessionId"]).to.equal(AvoSessionTracker.sessionId);
     });
 
     it(@"two calls of schemaTracked track only one session", ^{

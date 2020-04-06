@@ -113,8 +113,8 @@
     [body setValue:self.appName forKey:@"appName"];
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
-    [body setValue:[@(self.samplingRate) stringValue] forKey:@"samplingRate"];
-    [body setValue:self.sessionId forKey:@"sessionId"];
+    [body setValue:@(self.samplingRate) forKey:@"samplingRate"];
+    [body setValue:AvoSessionTracker.sessionId forKey:@"sessionId"];
     [body setValue:[AvoNetworkCallsHandler formatTypeToString:self.env] forKey:@"env"];
     [body setValue:@"ios" forKey:@"libPlatform"];
     [body setValue:[[NSUUID UUID] UUIDString] forKey:@"messageId"];

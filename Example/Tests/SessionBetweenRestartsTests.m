@@ -23,7 +23,7 @@ describe(@"Sessions between restarts", ^{
 
     it(@"AvoSessionTracker reads session timestamp from disk when created", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-        [[NSUserDefaults standardUserDefaults] setDouble:[[NSDate date] timeIntervalSince1970] forKey:[AvoSessionTracker cacheKey]];
+        [[NSUserDefaults standardUserDefaults] setDouble:[[NSDate date] timeIntervalSince1970] forKey:[AvoSessionTracker timestampCacheKey]];
         AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
        
         __block int sessionStartCallCount = 0;
@@ -36,9 +36,18 @@ describe(@"Sessions between restarts", ^{
         expect(sessionStartCallCount).equal(0);
     });
          
+     it(@"AvoSessionTracker reads session id from disk when created", ^{
+         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
+         [[NSUserDefaults standardUserDefaults] setValue:@"testSessionId" forKey:[AvoSessionTracker idCacheKey]];
+         AvoSessionTracker.sessionId = @"";
+         AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
+        
+         expect(AvoSessionTracker.sessionId).equal(@"testSessionId");
+     });
+         
      it(@"AvoSessionTracker writes session timestamp to disk when session is updated", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker cacheKey]];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker timestampCacheKey]];
         AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
         
         expect(sut.lastSessionTimestamp).equal(INT_MIN);
@@ -46,7 +55,7 @@ describe(@"Sessions between restarts", ^{
         double timestamp = [[NSDate date] timeIntervalSince1970];
         [sut startOrProlongSession:@(timestamp)];
     
-        expect([[NSUserDefaults standardUserDefaults] doubleForKey:[AvoSessionTracker cacheKey]]).equal(timestamp);
+        expect([[NSUserDefaults standardUserDefaults] doubleForKey:[AvoSessionTracker timestampCacheKey]]).equal(timestamp);
      });
 });
 SpecEnd

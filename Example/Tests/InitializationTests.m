@@ -166,7 +166,7 @@ it(@"Calls batcher on background", ^{
 
 it(@"Calls session tracker on foreground", ^{
    
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker cacheKey]];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker timestampCacheKey]];
    id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
    sut.sessionTracker = mockSessionTracker;
@@ -180,7 +180,7 @@ it(@"Calls session tracker on foreground", ^{
 
 it(@"Saves start session event in the batcher", ^{
    
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker cacheKey]];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:[AvoSessionTracker timestampCacheKey]];
     AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
    
     // When
