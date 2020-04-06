@@ -59,7 +59,7 @@ NSString *currentSchemaId;
     debuggerView = [[BarDebuggerView alloc] initWithFrame: CGRectMake(0, screenHeight - 30 - bottomOffset, screenWidth, 30) ];
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
-       dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
            [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
     });
      
@@ -139,7 +139,10 @@ NSString *currentSchemaId;
         
         UIViewController *rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
         
-        EventsListScreenViewController *eventsListViewController = [[EventsListScreenViewController alloc] initWithNibName:@"EventsListScreenViewController" bundle:[NSBundle bundleForClass:[EventsListScreenViewController class]]];
+        NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+        NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+        
+        EventsListScreenViewController *eventsListViewController = [[EventsListScreenViewController alloc] initWithNibName:@"EventsListScreenViewController" bundle:resBundle];
         [eventsListViewController setModalPresentationStyle:UIModalPresentationFullScreen];
         
         [rootViewController presentViewController:eventsListViewController animated:YES completion:nil];

@@ -42,8 +42,9 @@
 }
 
 -(void)loadViewFromNib {
-    NSBundle *bundle = [NSBundle bundleForClass:self.class];
-    UINib *nib = [UINib nibWithNibName:@"BarDebugger" bundle:bundle];
+    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+    UINib *nib = [UINib nibWithNibName:@"BarDebugger" bundle:resBundle];
     NSArray *views = [nib instantiateWithOwner:self options:nil];
     UIView *view = [views objectAtIndex:0];
     view.frame = self.bounds;

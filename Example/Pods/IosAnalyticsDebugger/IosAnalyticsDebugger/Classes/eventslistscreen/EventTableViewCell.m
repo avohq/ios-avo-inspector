@@ -32,11 +32,14 @@
     
     [self.mainRow addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleExpend)]];
 
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    UINib *eventSecondatyRowItemNib = [UINib nibWithNibName:@"EventTableViewSecondaryCell" bundle:bundle];
+    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+    UINib *eventSecondatyRowItemNib = [UINib nibWithNibName:@"EventTableViewSecondaryCell" bundle:resBundle];
     [self.additionalRows registerNib:eventSecondatyRowItemNib forCellReuseIdentifier:@"EventTableViewSecondaryCell"];
     [self.additionalRows setDataSource:self];
     self.additionalRows.allowsSelection = false;
+
+    [self.expendCollapseImage setImage:[UIImage imageNamed:@"avo_debugger_collapse_arrow" inBundle:resBundle compatibleWithTraitCollection:nil]];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
