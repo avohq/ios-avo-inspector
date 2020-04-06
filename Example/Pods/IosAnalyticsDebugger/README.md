@@ -28,6 +28,8 @@ Obj-C
 Swift
 
     let debugger = AnalyticsDebugger()
+    
+Remeber to keep a reference to the `AnalyticsDebugger` instance somewhere, for example in your app delegate. Otherwise it will become unresponsive to touches.
 
 # Show the debugger
 
@@ -82,17 +84,17 @@ Swift
 
 # Using with Avo
 
+When using Avo generated code you'll be calling the `init` methods. Actual interface of the methods depends on your schema setup, but there will be init methods with `debugger` parameter, where you can pass an instance of `AnalyticsDebugger`.
+
 Obj-C
 
-    [Avo initAvoWithEnv:AVOEnvDev customDestination:[CustomDestination new] debugger:debugger];
-    [Avo appOpened];
+    [Avo initAvoWithEnv:AVOEnvDev ... debugger:debugger];
 
 Swift
 
-    Avo.initAvo(env: AvoEnv.dev, customDestination: CustomDestiation(), debugger: debugger)
-    Avo.appOpened()
+    Avo.initAvo(env: AvoEnv.dev, ..., debugger: debugger)
 
-Then after you call showDebugger in your activity the debugger view will appear with the App Opened event inside.
+After that all events from Avo function calls will be automatically accessable in the debugger UI.
 
 ## Author
 

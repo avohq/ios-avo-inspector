@@ -31,8 +31,9 @@
     self.expendedEvents = [NSMutableSet new];
     [self populateExpended];
     
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    UINib *eventItemNib = [UINib nibWithNibName:@"EventTableViewCell" bundle:bundle];
+    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+    UINib *eventItemNib = [UINib nibWithNibName:@"EventTableViewCell" bundle:resBundle];
       
     [self.eventsTableView registerNib:eventItemNib forCellReuseIdentifier:@"EventTableViewCell"];
     
@@ -44,8 +45,6 @@
         [weakTableView reloadData];
     }];
     
-    NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
-    NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
     [self.closeButtonIcon setImage:[UIImage imageNamed:@"avo_debugger_close_button" inBundle:resBundle compatibleWithTraitCollection:nil]];
     [self.avoLogoImage setImage:[UIImage imageNamed:@"avo_logo" inBundle:resBundle compatibleWithTraitCollection:nil]];
 }
