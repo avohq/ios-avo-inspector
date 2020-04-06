@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *appVersion;
 @property (readonly, nonatomic) NSString *libVersion;
 
-@property (readwrite, nonatomic) NSString *sessionId;
-
 - (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion env: (int) env;
 
 - (void) callInspectorWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(NSError *error))completionHandler;
