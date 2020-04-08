@@ -131,7 +131,7 @@
     
     if (drand48() > self.samplingRate) {
          if ([AvoInspector isLogging]) {
-             NSLog(@"Last event schema dropped due to sampling rate");
+             NSLog(@"Avo Inspector: Last event schema dropped due to sampling rate");
          }
          return;
     }
@@ -140,13 +140,13 @@
         for (NSDictionary *batchItem in batchBody) {
             NSString * type = [batchItem objectForKey:@"type"];
             
-            if ([type  isEqual:@"sessionSarted"]) {
+            if ([type  isEqual:@"sessionStarted"]) {
                 NSLog(@"Avo Inspector: Sending session started event");
             } else if ([type  isEqual:@"event"]) {
                 NSString * eventName = [batchItem objectForKey:@"eventName"];
                 NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
 
-                NSLog(@"Avo Inspector: Sending event %@ with schema {\n%@}\n\n", eventName, [eventProps description]);
+                NSLog(@"Avo Inspector: Sending event %@ with schema {\n%@\n}\n", eventName, [eventProps description]);
             } else {
                 NSLog(@"Avo Inspector: Error! Unknown event type.");
             }

@@ -96,7 +96,24 @@ it(@"can extract nullable string int float boolean list(string) object{field0:st
     NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
     expect([[extractedSchema objectForKey:@"complex object key"] name])
-   .to.equal( @"{\"strKey\":\"string\",\"intKey\":\"int\",\"nullStrKey\":\"null\",\"nestedObjKey\":{\"field0\":\"string\",\"filed1\":\"int\",\"filed3\":\"list(null)\",},\"listKey\":\"list(string)\",\"boolKey\":\"boolean\",\"floatKey\":\"float\",}");
+   .to.equal( @"{\"strKey\":\"string\",\"intKey\":\"int\",\"nullStrKey\":\"null\",\"nestedObjKey\":{\"field0\":\"string\",\"filed1\":\"int\",\"filed3\":\"list(null)\"},\"listKey\":\"list(string)\",\"boolKey\":\"boolean\",\"floatKey\":\"float\"}");
+});
+
+it(@"can extract list with double nested objects", ^{
+    AvoInspector * sut = [AvoInspector new];
+   
+    NSMutableDictionary * testParams = [NSMutableDictionary new];
+   
+    NSMutableArray * arrayWithDoubleNestedObj = [NSMutableArray new];
+    [arrayWithDoubleNestedObj addObject:@{@"int": @10}];
+    [arrayWithDoubleNestedObj addObject:@{@"obj": @{@"nested": @{@"nested int":@1, @"nested bool":@YES}}}];
+   
+    [testParams setObject:arrayWithDoubleNestedObj forKey:@"2nested array"];
+   
+    NSDictionary * extractedSchema = [sut extractSchema:testParams];
+   
+    expect([[extractedSchema objectForKey:@"2nested array"] name])
+   .to.equal( @"list({\"int\":\"int\"}|{\"obj\":{\"nested\":{\"nested int\":\"int\",\"nested bool\":\"boolean\"}}})");
 });
 
 SpecEnd

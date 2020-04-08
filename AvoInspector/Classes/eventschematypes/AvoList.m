@@ -6,6 +6,7 @@
 //
 
 #import "AvoList.h"
+#import "AvoObject.h"
 
 @implementation AvoList
 

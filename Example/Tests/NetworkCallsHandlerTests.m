@@ -182,6 +182,79 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
     });
+         
+    it(@"AvoNetworkCallsHandler builds proper body for list schema tracking", ^{
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
+
+        NSMutableDictionary * schema = [NSMutableDictionary new];
+
+        AvoObject * object = [AvoObject new];
+    
+        [object.fields setValue:[AvoString new]  forKey:@"key1"];
+        [object.fields setValue:[AvoInt new]  forKey:@"key2"];
+        AvoList * list = [AvoList new];
+        list.subtypes = [[NSMutableSet alloc] initWithArray:[[NSMutableArray alloc] initWithArray:@[[AvoInt new], [AvoFloat new], [AvoBoolean new], [AvoString new], [AvoNull new], [AvoUnknownType new], [AvoList new]]]];
+        [object.fields setValue:list forKey:@"key3"];
+      
+        AvoObject * nestedObject = [AvoObject new];
+        [nestedObject.fields setValue:[AvoString new] forKey:@"nestedKey1"];
+        [nestedObject.fields setValue:[AvoInt new] forKey:@"nestedKey2"];
+        [nestedObject.fields setValue:list forKey:@"nestedKey3"];
+        [object.fields setValue:nestedObject forKey:@"key4"];
+    
+        AvoList * mainList = [AvoList new];
+        mainList.subtypes = [NSMutableSet new];
+        [[mainList subtypes] addObject:object];
+        [[mainList subtypes] addObject:[AvoInt new]];
+        [[mainList subtypes] addObject:[AvoString new]];
+        [[mainList subtypes] addObject:[AvoFloat new]];
+        [[mainList subtypes] addObject:[AvoBoolean new]];
+    
+        [schema setObject:mainList forKey:@"list key"];
+
+        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema];
+         
+        expect([actualTrackSchemaBody objectForKey:@"type"]).to.equal(@"event");
+        expect([actualTrackSchemaBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
+        expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyName"]).to.equal(@"list key");
+        expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyType"]).to.equal(@"list(string|float|int|boolean|{\"key3\":\"list(int|string|list()|null|float|boolean|unknown)\",\"key1\":\"string\",\"key4\":{\"nestedKey3\":\"list(int|string|list()|null|float|boolean|unknown)\",\"nestedKey2\":\"int\",\"nestedKey1\":\"string\"},\"key2\":\"int\"})");
+
+     /*   NSArray * propertyChildren = [[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"children"];
+        for (NSDictionary *childProp in propertyChildren) {
+         NSString *key = [childProp valueForKey:@"propertyName"];
+         
+         if ([key isEqual:@"key1"]) {
+              expect([childProp objectForKey:@"propertyType"]).to.equal(@"string");
+         } else if ( [key isEqual:@"key2"]) {
+              expect([childProp objectForKey:@"propertyType"]).to.equal(@"int");
+         } else if ( [key isEqual:@"key3"]) {
+              expect([childProp objectForKey:@"propertyType"]).to.startWith(@"list(");
+         } else if ( [key isEqual:@"key4"]) {
+             expect([childProp objectForKey:@"propertyType"]).to.equal(@"object");
+             NSArray * nestedPropertyChildren = [childProp valueForKey:@"children"];
+             for (NSDictionary *nestedChildProp in nestedPropertyChildren) {
+                 NSString *nestedKey = [nestedChildProp valueForKey:@"propertyName"];
+                 
+                 if ([nestedKey isEqual:@"nestedKey1"]) {
+                     expect([nestedChildProp objectForKey:@"propertyType"]).to.equal(@"string");
+                 } else if ( [nestedKey isEqual:@"nestedKey2"]) {
+                     expect([nestedChildProp objectForKey:@"propertyType"]).to.equal(@"int");
+                 } else if ( [nestedKey isEqual:@"nestedKey3"]) {
+                     expect([nestedChildProp objectForKey:@"propertyType"]).to.startWith(@"list(");
+                 }
+             }
+         }
+        }*/
+
+        expect([actualTrackSchemaBody objectForKey:@"apiKey"]).to.equal(@"testApiKey");
+        expect([actualTrackSchemaBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
+        expect([actualTrackSchemaBody objectForKey:@"libVersion"]).to.equal(@"testLibVersion");
+        expect([actualTrackSchemaBody objectForKey:@"libPlatform"]).to.equal(@"ios");
+        expect([actualTrackSchemaBody objectForKey:@"appName"]).to.equal(@"testAppName");
+        expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
+        expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
+        expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
+    });
 });
 
 SpecEnd

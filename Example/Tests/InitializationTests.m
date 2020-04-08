@@ -52,7 +52,7 @@ it(@"inititalizes with lib version", ^{
 
    NSString * libVersion = sut.libVersion;
 
-   expect(libVersion).to.equal(@"1.0.2");
+   expect(libVersion).to.equal(@"1.1.0");
 });
 
 it(@"inititalizes with app id", ^{
@@ -96,7 +96,7 @@ it(@"debug inititalization shows visual inspector", ^{
   });
 
   [self waitForExpectationsWithTimeout:1 handler:nil];
-   OCMVerify([sut.debugger showBarDebugger]);
+   OCMVerify([sut.debugger showBubbleDebugger]);
 
 });
 

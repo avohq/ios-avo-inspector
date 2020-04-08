@@ -41,7 +41,7 @@
 
 static BOOL logging = NO;
 static int maxBatchSize = 30;
-static int batchFlushSTime = 30;
+static int batchFlushTime = 30;
 
 + (BOOL) isLogging {
     return logging;
@@ -60,11 +60,11 @@ static int batchFlushSTime = 30;
 }
 
 + (int) getBatchFlushSeconds {
-    return batchFlushSTime;
+    return batchFlushTime;
 }
 
 + (void) setBatchFlushSeconds: (int) newBatchFlushSeconds {
-    batchFlushSTime = newBatchFlushSeconds;
+    batchFlushTime = newBatchFlushSeconds;
 }
 
 - (AnalyticsDebugger *) getVisualInspector {
@@ -104,7 +104,7 @@ static int batchFlushSTime = 30;
 
         if (env != AvoInspectorEnvProd) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void) {
-                [self showVisualInspector:Bar];
+                [self showVisualInspector:Bubble];
             });
         }
         
