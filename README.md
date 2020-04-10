@@ -7,7 +7,7 @@
 # Avo documentation
 
 This is a quick start guide. 
-For more information about the Datascope project please read [Avo documentation](https://www.avo.app/docs/datascope/avo-inspector/ios).
+For more information about the Inspector project please read [Avo documentation](https://www.avo.app/docs/inspector/sdk/ios).
 
 # Installation
 
@@ -51,11 +51,11 @@ AvoInspector.setLogging(true)
 # Sending event schemas
 
 Whenever you send tracking event call one of the following methods:
-Read more in the [Avo documentation](https://www.avo.app/docs/datascope/avo-inspector/ios#event-tracking) 
+Read more in the [Avo documentation](https://www.avo.app/docs/inspector/sdk/ios#event-tracking) 
 
 ### 1.
 
-This methods gets actual tracking event parameters, extracts schema automatically and sends it to Avo Datascope.
+This methods get actual tracking event parameters, extract schema automatically and send it to the Avo Inspector backend.
 It is the easiest way to use the library, just call this method at the same place you call your analytics tools' track methods with the same parameters.
 
 Obj-C
@@ -92,9 +92,9 @@ Swift
 let schema = avoInspector.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
 ```
 
-# Using the visual inspector
+# Using the Visual Inspector
 
-Visual inspector is enabled in development and staging environments by default.
+Visual Inspector is enabled in development and staging environments by default.
 
 ## Show
 
@@ -122,7 +122,7 @@ avoInspector.hideVisualInspector()
 
 ## Advanced usage
 
-You can get an instance of `AnalyticsDebugger` with the following method. See [GitHub repo](https://github.com/avohq/ios-analytics-debugger)
+You can get an instance of `AnalyticsDebugger` with the following method. 
 
 Obj-C
 ```objectivec
@@ -134,23 +134,25 @@ Swift
 avoInspector.getVisualInspector()
 ```
 
+See more about `AnalyticsDebugger` in [GitHub repo](https://github.com/avohq/ios-analytics-debugger)
+
 # Batching control
 
 In order to ensure our SDK doesn't have a large impact on performance or battery life it supports event schemas batching.
 
-Default batch size is 30 and default batch flust timeout is 30 seconds.
-In debug mode default batch size is 1, i.e. every event schema is sent to the server as soon as it is reported.
+Default batch size is 30 and default batch flush timeout is 30 seconds.
+In debug mode default batch flush timeout is 1 second, i.e. the SDK batches schemas of events sent withing one second.
 
 Obj-C
 ```objectivec
 [AvoInspector setBatchSize:15];
-[AvoInspector setBatchFlustSeconds:10];
+[AvoInspector setBatchFlushSeconds:10];
 ```
 
 Swift
 ```swift
 AvoInspector.setBatchSize(15)
-AvoInspector.setBatchFlustSeconds(10)
+AvoInspector.setBatchFlushSeconds(10)
 ```
     
 # Example App
