@@ -227,8 +227,6 @@
                                     <constraint firstItem="Htk-6d-I7f" firstAttribute="trailing" secondItem="Igp-MB-ACJ" secondAttribute="trailing" id="zII-Yv-AcJ"/>
                                     <constraint firstItem="m51-sh-OBh" firstAttribute="leading" secondItem="Fka-1K-GSD" secondAttribute="leading" id="zpx-AQ-viy"/>
                                 </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="kYS-Bu-9N7"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="AsZ-hm-izv"/>
                             </scrollView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Test Event" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GQb-Mb-pml">
                                 <rect key="frame" x="133" y="38" width="226" height="34"/>

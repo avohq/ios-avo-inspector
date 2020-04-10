@@ -72,6 +72,10 @@ static int batchFlushTime = 30;
 }
 
 - (void) showVisualInspector: (AvoVisualInspectorType) type {
+    if (self.debugger == nil) {
+        self.debugger = [AnalyticsDebugger new];
+    }
+    
     switch (type) {
         case Bar:
             [self.debugger showBarDebugger];
@@ -85,7 +89,9 @@ static int batchFlushTime = 30;
 }
 
 - (void) hideVisualInspector {
-    [self.debugger hideDebugger];
+    if (self.debugger != nil) {
+        [self.debugger hideDebugger];
+    }
 }
 
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env {
