@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AvoInspector'
-  s.version          = '1.1.0'
+  s.version          = '1.1.1'
   s.summary          = 'Avo Inspector iOS SDK'
 
   s.description      = <<-DESC
