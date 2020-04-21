@@ -27,7 +27,7 @@ Obtain the API key at [Avo.app](https://www.avo.app/welcome)
 Obj-C
 
 ```objectivec
-AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" end: AvoInspectorEnvDev];
+AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 ```       
 Swift
 
