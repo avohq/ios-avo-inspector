@@ -178,19 +178,6 @@ static int batchFlushTime = 30;
         }
     }
     
-    if ([AvoInspector isLogging]) {
-        
-        NSString * schemaString = @"";
-        
-        for(NSString *key in [schema allKeys]) {
-            NSString *value = [[schema objectForKey:key] name];
-            NSString *entry = [NSString stringWithFormat:@"\t\"%@\": \"%@\";\n", key, value];
-            schemaString = [schemaString stringByAppendingString:entry];
-        }
-        
-        NSLog(@"Avo Inspector: Saved event %@ with schema {\n%@}", eventName, schemaString);
-    }
-    
     [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
     
     [self.avoBatcher handleTrackSchema:eventName schema:schema];

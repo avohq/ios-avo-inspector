@@ -112,7 +112,7 @@ AvoInspector * avoInspector;
     if (![key isEqualToString:@""] && ![value isEqualToString:@""]) {
         if ([value isEqualToString:@"nested"]) {
             [testParams setObject:@{@"nested0" : @"some string", @"nested1" : @-1, @"nested2" : @[NSNull.null], @"nested3": @{@"nestedNested0": @"str", @"nestedNested1": @2.3}} forKey:key];
-        } if ([value isEqualToString:@"list"]) {
+        } else if ([value isEqualToString:@"list"]) {
             [testParams setObject:@[@"some string", @-1, @[NSNull.null], @{@"nestedNested0": @"str", @"nestedNested1": @2.3}] forKey:key];
         } else {
             [testParams setObject:[self parseValue:value] forKey:key];

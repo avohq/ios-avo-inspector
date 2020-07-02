@@ -38,7 +38,7 @@
     return self;
 }
 
-- (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary *) schema {
+- (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
     NSMutableArray * propsSchema = [NSMutableArray new];
     
     for(NSString *key in [schema allKeys]) {

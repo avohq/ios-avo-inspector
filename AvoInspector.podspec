@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AvoInspector'
-  s.version          = '1.1.1'
+  s.version          = '1.1.2'
   s.summary          = 'Avo Inspector iOS SDK'
 
   s.description      = <<-DESC
@@ -24,5 +24,5 @@ A powerful suite of features that analyze your current state of tracking and gui
 
   s.source_files = 'AvoInspector/Classes/**/*'
 
-  s.dependency 'IosAnalyticsDebugger', '~> 1.2.0'
+  s.dependency 'IosAnalyticsDebugger', '~> 1.2.1'
 end

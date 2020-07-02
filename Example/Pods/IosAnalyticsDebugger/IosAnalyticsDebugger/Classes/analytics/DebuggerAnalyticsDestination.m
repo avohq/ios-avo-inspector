@@ -47,7 +47,7 @@
     [body setValue:deviceId forKey:@"deviceId"];
     [body setValue:eventName forKey:@"eventName"];
     [body setValue:eventProperties forKey:@"eventProperties"];
-       
+
     NSError *error;
     NSData *bodyData = [NSJSONSerialization dataWithJSONObject:body
                                                           options:NSJSONWritingPrettyPrinted
