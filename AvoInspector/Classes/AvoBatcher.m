@@ -83,6 +83,19 @@
     
     [self saveEvent:trackSchemaBody];
     
+    if ([AvoInspector isLogging]) {
+        
+        NSString * schemaString = @"";
+        
+        for(NSString *key in [schema allKeys]) {
+            NSString *value = [[schema objectForKey:key] name];
+            NSString *entry = [NSString stringWithFormat:@"\t\"%@\": \"%@\";\n", key, value];
+            schemaString = [schemaString stringByAppendingString:entry];
+        }
+        
+        NSLog(@"Avo Inspector: Saved event %@ with schema {\n%@}", eventName, schemaString);
+    }
+    
     [self checkIfBatchNeedsToBeSent];
 }
 

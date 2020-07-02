@@ -51,28 +51,31 @@ NSString *currentSchemaId;
         [self hideDebugger];
     }
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    screenHeight = screenRect.size.height;
-     
-    NSInteger bottomOffset = [Util barBottomOffset];
-    debuggerView = [[BarDebuggerView alloc] initWithFrame: CGRectMake(0, screenHeight - 30 - bottomOffset, screenWidth, 30) ];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        CGFloat screenWidth = screenRect.size.width;
+        screenHeight = screenRect.size.height;
+         
+        NSInteger bottomOffset = [Util barBottomOffset];
+    
+        debuggerView = [[BarDebuggerView alloc] initWithFrame: CGRectMake(0, screenHeight - 30 - bottomOffset, screenWidth, 30) ];
 
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-           [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+               [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+        });
+         
+        self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(drugBar:)];
+        
+        [debuggerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openEventsListScreen)]];
+        [debuggerView addGestureRecognizer:self.panGestureRecognizer];
+        
+        if ([analyticsDebuggerEvents count] > 0) {
+            [debuggerView showEvent:[analyticsDebuggerEvents objectAtIndex:0]];
+        }
+        
+        [DebuggerAnalytics debuggerStartedWithFrameLocation:nil schemaId:currentSchemaId];
     });
-     
-    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(drugBar:)];
-    
-    [debuggerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openEventsListScreen)]];
-    [debuggerView addGestureRecognizer:self.panGestureRecognizer];
-    
-    if ([analyticsDebuggerEvents count] > 0) {
-        [debuggerView showEvent:[analyticsDebuggerEvents objectAtIndex:0]];
-    }
-    
-    [DebuggerAnalytics debuggerStartedWithFrameLocation:nil schemaId:currentSchemaId];
 }
 
 - (void) drugBar:(UIPanGestureRecognizer*)sender {
@@ -92,29 +95,31 @@ NSString *currentSchemaId;
         [self hideDebugger];
     }
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    screenWidth = screenRect.size.width;
-    screenHeight = screenRect.size.height;
-    NSInteger bottomOffset = [Util barBottomOffset];
-    
-    debuggerView = [[BubbleDebuggerView alloc] initWithFrame: CGRectMake(screenWidth - 40, screenHeight - 40 - bottomOffset, 40, 40) ];
-    
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
-       dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-           [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        screenWidth = screenRect.size.width;
+        screenHeight = screenRect.size.height;
+        NSInteger bottomOffset = [Util barBottomOffset];
+        
+        debuggerView = [[BubbleDebuggerView alloc] initWithFrame: CGRectMake(screenWidth - 40, screenHeight - 40 - bottomOffset, 40, 40) ];
+        
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
+           dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+               [[[UIApplication sharedApplication] keyWindow] addSubview:debuggerView];
+        });
+         
+        self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(drugBubble:)];
+         
+        [debuggerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openEventsListScreen)]];
+        [debuggerView addGestureRecognizer:self.panGestureRecognizer];
+        
+        for (int index = (int)[analyticsDebuggerEvents count] - 1; index >= 0; index--) {
+            DebuggerEventItem * event = [analyticsDebuggerEvents objectAtIndex:index];
+            [debuggerView showEvent:event];
+        }
+        
+        [DebuggerAnalytics debuggerStartedWithFrameLocation:nil schemaId:currentSchemaId];
     });
-     
-    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(drugBubble:)];
-     
-    [debuggerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openEventsListScreen)]];
-    [debuggerView addGestureRecognizer:self.panGestureRecognizer];
-    
-    for (int index = (int)[analyticsDebuggerEvents count] - 1; index >= 0; index--) {
-        DebuggerEventItem * event = [analyticsDebuggerEvents objectAtIndex:index];
-        [debuggerView showEvent:event];
-    }
-    
-    [DebuggerAnalytics debuggerStartedWithFrameLocation:nil schemaId:currentSchemaId];
 }
 
 - (void) drugBubble:(UIPanGestureRecognizer*)sender {
@@ -134,30 +139,36 @@ NSString *currentSchemaId;
 }
 
 - (void) openEventsListScreen {
-    if (debuggerView != nil) {
-        [debuggerView onClick];
-        
-        UIViewController *rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-        
-        NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
-        NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
-        
-        EventsListScreenViewController *eventsListViewController = [[EventsListScreenViewController alloc] initWithNibName:@"EventsListScreenViewController" bundle:resBundle];
-        [eventsListViewController setModalPresentationStyle:UIModalPresentationFullScreen];
-        
-        [rootViewController presentViewController:eventsListViewController animated:YES completion:nil];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        if (debuggerView != nil) {
+            [debuggerView onClick];
+            
+            UIViewController *rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+            
+            NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
+            NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
+            
+            EventsListScreenViewController *eventsListViewController = [[EventsListScreenViewController alloc] initWithNibName:@"EventsListScreenViewController" bundle:resBundle];
+            [eventsListViewController setModalPresentationStyle:UIModalPresentationFullScreen];
+            
+            [rootViewController presentViewController:eventsListViewController animated:YES completion:nil];
+        }
+    });
 }
 
 - (void) hideDebugger {
-    if (debuggerView != nil) {
-        [debuggerView removeFromSuperview];
-        debuggerView = nil;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        if (debuggerView != nil) {
+            [debuggerView removeFromSuperview];
+            debuggerView = nil;
+        }
+    });
 }
 
 - (void) setSchemaId:(NSString *)schemaId {
-    currentSchemaId = schemaId;
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        currentSchemaId = schemaId;
+    });
 }
 
 - (void) publishEvent:(NSString *) eventName withTimestamp:(NSNumber *) timestamp withProperties:(NSArray<DebuggerProp *> *) props withErrors:(NSArray<DebuggerPropError *> *) errors {
@@ -225,25 +236,27 @@ NSString *currentSchemaId;
 }
 
 -(void) sendEventToAnalyticsDebugger:(DebuggerEventItem *) event {
-    NSInteger insertIndex = 0;
-    for (int i = 0; i < [analyticsDebuggerEvents count]; i++) {
-        DebuggerEventItem *presentEvent = [analyticsDebuggerEvents objectAtIndex:i];
-        
-        if (presentEvent.timestamp > event.timestamp) {
-            insertIndex += 1;
-        } else {
-            break;
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        NSInteger insertIndex = 0;
+        for (int i = 0; i < [analyticsDebuggerEvents count]; i++) {
+            DebuggerEventItem *presentEvent = [analyticsDebuggerEvents objectAtIndex:i];
+            
+            if (presentEvent.timestamp > event.timestamp) {
+                insertIndex += 1;
+            } else {
+                break;
+            }
         }
-    }
-    [analyticsDebuggerEvents insertObject:event atIndex:insertIndex];
-    
-    if (debuggerView != nil) {
-        [debuggerView showEvent:event];
-    }
-    
-    if (onNewEventCallback != nil) {
-        onNewEventCallback(event);
-    }
+        [analyticsDebuggerEvents insertObject:event atIndex:insertIndex];
+        
+        if (debuggerView != nil) {
+            [debuggerView showEvent:event];
+        }
+        
+        if (onNewEventCallback != nil) {
+            onNewEventCallback(event);
+        }
+    });
 }
 
 - (DebuggerMessage *) createMessageWithError: (DebuggerPropError *) error {

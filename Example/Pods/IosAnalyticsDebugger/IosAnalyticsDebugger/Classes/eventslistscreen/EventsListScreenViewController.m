@@ -42,7 +42,9 @@
      
     UITableView * __weak weakTableView = self.eventsTableView;
     [AnalyticsDebugger setOnNewEventCallback:^(DebuggerEventItem * _Nonnull item) {
-        [weakTableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [weakTableView reloadData];
+        });
     }];
     
     [self.closeButtonIcon setImage:[UIImage imageNamed:@"avo_debugger_close_button" inBundle:resBundle compatibleWithTraitCollection:nil]];
