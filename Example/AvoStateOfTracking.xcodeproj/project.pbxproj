@@ -32,7 +32,6 @@
 		6E6F61CA23FD6F2300B934EE /* BatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6F61C923FD6F2300B934EE /* BatchingTests.m */; };
 		6E771B7623E80E6A002E404C /* LogsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E771B7523E80E6A002E404C /* LogsTests.m */; };
 		6E78F24323FE8B6E0048C69B /* DictionarySchemaExtractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E78F24223FE8B6E0048C69B /* DictionarySchemaExtractionTests.m */; };
-		6E822F1D24B5D1AC009AD774 /* TestEnum.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E822F1C24B5D1AC009AD774 /* TestEnum.m */; };
 		6EA681E523ED6A8600A89C34 /* NetworkCallsHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA681E423ED6A8600A89C34 /* NetworkCallsHandlerTests.m */; };
 		6EA681E723EDA69F00A89C34 /* SamplingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA681E623EDA69F00A89C34 /* SamplingTests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
@@ -84,7 +83,6 @@
 		6E6F61C923FD6F2300B934EE /* BatchingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BatchingTests.m; sourceTree = "<group>"; };
 		6E771B7523E80E6A002E404C /* LogsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogsTests.m; sourceTree = "<group>"; };
 		6E78F24223FE8B6E0048C69B /* DictionarySchemaExtractionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DictionarySchemaExtractionTests.m; sourceTree = "<group>"; };
-		6E822F1C24B5D1AC009AD774 /* TestEnum.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestEnum.m; sourceTree = "<group>"; };
 		6EA681E423ED6A8600A89C34 /* NetworkCallsHandlerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkCallsHandlerTests.m; sourceTree = "<group>"; };
 		6EA681E623EDA69F00A89C34 /* SamplingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SamplingTests.m; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 			isa = PBXGroup;
 			children = (
 				6003F59C195388D20070C39A /* AVOAppDelegate.h */,
-				6E822F1C24B5D1AC009AD774 /* TestEnum.m */,
 				6003F59D195388D20070C39A /* AVOAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* AVOViewController.h */,
@@ -442,7 +439,6 @@
 			files = (
 				6003F59E195388D20070C39A /* AVOAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* AVOViewController.m in Sources */,
-				6E822F1D24B5D1AC009AD774 /* TestEnum.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
