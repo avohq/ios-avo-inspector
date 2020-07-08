@@ -159,6 +159,8 @@ AvoInspector * avoInspector;
     }
 }
 
+enum months {Jan, Feb, Mar, Apr, May, Jun, July, Aug, Sept, Oct, Nov, Dec};
+
 - (IBAction)sendEventButton:(id)sender {
     
     NSString * eventName = self.eventNameInput.text;
