@@ -1,6 +1,6 @@
 PODS:
   - Analytics (3.6.10)
-  - AvoInspector (1.1.2):
+  - AvoInspector (1.1.3):
     - IosAnalyticsDebugger (~> 1.2.1)
   - Expecta (1.0.6)
   - "Expecta+Snapshots (3.1.1)":
@@ -41,7 +41,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Analytics: 63744ad4afa65c3bcdcdb7a94b62515bde5b3900
-  AvoInspector: dc2117bf0ed04e2d01909025c0d248104fe4fd83
+  AvoInspector: d0d7a76c3b533d8e61aed593e56ace334d808778
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   "Expecta+Snapshots": dcff217eef506dabd6dfdc7864ea2da321fafbb8
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a

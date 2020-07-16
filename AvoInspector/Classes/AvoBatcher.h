@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler;
 
 - (void) handleSessionStarted;
-- (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema;
+- (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash;
 
 - (void) enterBackground;
 - (void) enterForeground;

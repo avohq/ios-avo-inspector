@@ -18,23 +18,25 @@
 
 SpecBegin(DictionaryExtraction)
 
+__block AvoInspector * sut;
+
+beforeAll(^{
+    sut = [[AvoInspector alloc] initWithApiKey:@"api key" env:AvoInspectorEnvDev];
+});
+
 it(@"can extract dictionary", ^{
-    AvoInspector * sut = [AvoInspector new];
-    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
    NSDictionary * dict = @{@"field0": @"test", @"field1": @42};
    
    [testParams setObject:dict forKey:@"dict key"];
    
-   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
    expect([[extractedSchema objectForKey:@"dict key"] class]).equal([AvoObject class]);
 });
 
 it(@"can extract mutable dictionary", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableDictionary * mutableDict = [NSMutableDictionary new];
@@ -49,22 +51,18 @@ it(@"can extract mutable dictionary", ^{
 });
 
 it(@"can extract single entry dictionary", ^{
-    AvoInspector * sut = [AvoInspector new];
-    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
-   NSDictionary * dict = @{@"field0": @"test"};
+    NSDictionary * dict = @{@"field0": @"test"};
    
-   [testParams setObject:dict forKey:@"dict key"];
+    [testParams setObject:dict forKey:@"dict key"];
    
-   NSDictionary * extractedSchema = [sut extractSchema:testParams];
+    NSDictionary * extractedSchema = [sut extractSchema:testParams];
    
-   expect([[extractedSchema objectForKey:@"dict key"] class]).equal([AvoObject class]);
+    expect([[extractedSchema objectForKey:@"dict key"] class]).equal([AvoObject class]);
 });
 
 it(@"can extract single entry mutable dictionary", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableDictionary * mutableDict = [NSMutableDictionary new];
@@ -78,8 +76,6 @@ it(@"can extract single entry mutable dictionary", ^{
 });
 
 it(@"can extract nullable string int float boolean list(string) object{field0:string, filed1:int, filed3:list(null)} subtype array", ^{
-    AvoInspector * sut = [AvoInspector new];
-   
     NSMutableDictionary * testParams = [NSMutableDictionary new];
    
     NSMutableDictionary * mutableDict = [NSMutableDictionary new];
@@ -100,8 +96,6 @@ it(@"can extract nullable string int float boolean list(string) object{field0:st
 });
 
 it(@"can extract list with double nested objects", ^{
-    AvoInspector * sut = [AvoInspector new];
-   
     NSMutableDictionary * testParams = [NSMutableDictionary new];
    
     NSMutableArray * arrayWithDoubleNestedObj = [NSMutableArray new];

@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) callInspectorWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(NSError *error))completionHandler;
 
-- (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary *) schema;
+- (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash;
 - (NSMutableDictionary *) bodyForSessionStartedCall;
 
 @end

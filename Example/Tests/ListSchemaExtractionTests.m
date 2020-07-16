@@ -16,9 +16,13 @@
 
 SpecBegin(ListExtraction)
 
+__block AvoInspector * sut;
+
+beforeAll(^{
+    sut = [[AvoInspector alloc] initWithApiKey:@"api key" env:AvoInspectorEnvDev];
+});
+
 it(@"can extract array", ^{
-    AvoInspector * sut = [AvoInspector new];
-    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
     NSArray * array = @[@"test", @42];
@@ -31,8 +35,6 @@ it(@"can extract array", ^{
 });
 
 it(@"can extract single object array", ^{
-    AvoInspector * sut = [AvoInspector new];
-    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
     NSArray * array = @[@"test"];
@@ -45,8 +47,6 @@ it(@"can extract single object array", ^{
 });
 
 it(@"can extract single object set", ^{
-    AvoInspector * sut = [AvoInspector new];
-    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
     NSSet * set = [[NSSet alloc] initWithArray:@[@""]];
@@ -59,8 +59,6 @@ it(@"can extract single object set", ^{
 });
 
 it(@"can extract multiple objecta set", ^{
-    AvoInspector * sut = [AvoInspector new];
-    
     NSMutableDictionary * testParams = [NSMutableDictionary new];
     
     NSSet * set = [[NSSet alloc] initWithObjects:@"1", @42, nil];
@@ -73,8 +71,6 @@ it(@"can extract multiple objecta set", ^{
 });
 
 it(@"can extract mutable array", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableArray * mutableArray = [NSMutableArray new];
@@ -89,8 +85,6 @@ it(@"can extract mutable array", ^{
 });
 
 it(@"can extract mutable single object array", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableArray * mutableArray = [NSMutableArray new];
@@ -104,8 +98,6 @@ it(@"can extract mutable single object array", ^{
 });
 
 it(@"can extract string subtype array", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableArray * mutableArray = [NSMutableArray new];
@@ -119,8 +111,6 @@ it(@"can extract string subtype array", ^{
 });
 
 it(@"do not duplicate types in name", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableArray * mutableArray = [NSMutableArray new];
@@ -135,8 +125,6 @@ it(@"do not duplicate types in name", ^{
 });
 
 it(@"can extract nullable string subtype array", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableArray * mutableArray = [NSMutableArray new];
@@ -151,8 +139,6 @@ it(@"can extract nullable string subtype array", ^{
 });
 
 it(@"can extract nullable string int float boolean subtype array", ^{
-    AvoInspector * sut = [AvoInspector new];
-   
     NSMutableDictionary * testParams = [NSMutableDictionary new];
    
     NSMutableArray * mutableArray = [NSMutableArray new];
@@ -177,8 +163,6 @@ it(@"can extract nullable string int float boolean subtype array", ^{
 });
 
 it(@"can extract double subtype array", ^{
-   AvoInspector * sut = [AvoInspector new];
-   
    NSMutableDictionary * testParams = [NSMutableDictionary new];
    
    NSMutableArray * mutableArray = [NSMutableArray new];

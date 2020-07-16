@@ -17,9 +17,14 @@
 
 SpecBegin(PrimitiveTypeExtraction)
 
+__block AvoInspector * sut;
+
 describe(@"testing primitive type extraction", ^{
+    beforeAll(^{
+        sut = [[AvoInspector alloc] initWithApiKey:@"api key" env:AvoInspectorEnvDev];
+    });
+    
     it(@"can extract int", ^{
-        AvoInspector * sut = [AvoInspector new];
          
         NSMutableDictionary * testParams = [NSMutableDictionary new];
         
@@ -31,8 +36,6 @@ describe(@"testing primitive type extraction", ^{
     });
          
      it(@"can extract long long", ^{
-         AvoInspector * sut = [AvoInspector new];
-          
          NSMutableDictionary * testParams = [NSMutableDictionary new];
          
          long long int longlon = 16;
@@ -45,8 +48,6 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract long", ^{
-          AvoInspector * sut = [AvoInspector new];
-           
           NSMutableDictionary * testParams = [NSMutableDictionary new];
           
           long int lon = 16;
@@ -59,8 +60,6 @@ describe(@"testing primitive type extraction", ^{
       });
      
      it(@"can extract short", ^{
-             AvoInspector * sut = [AvoInspector new];
-              
              NSMutableDictionary * testParams = [NSMutableDictionary new];
              
              short int shor = 16;
@@ -73,8 +72,6 @@ describe(@"testing primitive type extraction", ^{
          });
          
      it(@"can extract char", ^{
-         AvoInspector * sut = [AvoInspector new];
-          
          NSMutableDictionary * testParams = [NSMutableDictionary new];
          
          char ch = 'c';
@@ -87,8 +84,6 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract double", ^{
-        AvoInspector * sut = [AvoInspector new];
-          
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
         [testParams setObject:@1.4 forKey:@"double key"];
@@ -99,8 +94,6 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract float", ^{
-        AvoInspector * sut = [AvoInspector new];
-          
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
         [testParams setObject:@1.4f forKey:@"float key"];
@@ -111,8 +104,6 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract boolean", ^{
-        AvoInspector * sut = [AvoInspector new];
-          
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
         [testParams setObject:@YES forKey:@"boolean key"];
@@ -123,8 +114,6 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract null", ^{
-        AvoInspector * sut = [AvoInspector new];
-          
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
         [testParams setObject:[NSNull null] forKey:@"null key"];
@@ -135,8 +124,6 @@ describe(@"testing primitive type extraction", ^{
      });
          
      it(@"can extract constant string", ^{
-        AvoInspector * sut = [AvoInspector new];
-          
         NSMutableDictionary * testParams = [NSMutableDictionary new];
          
         [testParams setObject:@"String" forKey:@"const string key"];

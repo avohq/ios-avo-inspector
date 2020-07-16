@@ -78,8 +78,8 @@
 }
 
 // schema is [ String : AvoEventSchemaType ]
-- (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
-    NSMutableDictionary * trackSchemaBody = [self.networkCallsHandler bodyForTrackSchemaCall:eventName schema: schema];
+- (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash {
+    NSMutableDictionary * trackSchemaBody = [self.networkCallsHandler bodyForTrackSchemaCall:eventName schema: schema eventId: eventId eventHash: eventHash];
     
     [self saveEvent:trackSchemaBody];
     
@@ -93,7 +93,7 @@
             schemaString = [schemaString stringByAppendingString:entry];
         }
         
-        NSLog(@"Avo Inspector: Saved event %@ with schema {\n%@}", eventName, schemaString);
+        NSLog(@"[avo] Avo Inspector: Saved event %@ with schema {\n%@}", eventName, schemaString);
     }
     
     [self checkIfBatchNeedsToBeSent];

@@ -34,7 +34,7 @@ describe(@"Sampling", ^{
     
         for (int i = 0; i < 999; i++) {
             [sut callInspectorWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
-            [sut callInspectorWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
+            [sut callInspectorWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new] eventId:nil eventHash:nil]] completionHandler:^(NSError * _Nonnull error) {}];
         }
            
         expect(httpRequestsCount).to.equal(0);
@@ -54,7 +54,7 @@ describe(@"Sampling", ^{
      
          for (int i = 0; i < 1000; i++) {
              [sut callInspectorWithBatchBody:@[[sut bodyForSessionStartedCall]] completionHandler:^(NSError * _Nonnull error) {}];
-             [sut callInspectorWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new]]] completionHandler:^(NSError * _Nonnull error) {}];
+             [sut callInspectorWithBatchBody:@[[sut bodyForTrackSchemaCall:@"Schema" schema:[NSDictionary new] eventId:nil eventHash:nil]] completionHandler:^(NSError * _Nonnull error) {}];
          }
             
          expect(httpRequestsCount).to.equal(2000);

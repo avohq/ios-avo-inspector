@@ -59,6 +59,7 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
         expect([actualSessionStartedBody objectForKey:@"samplingRate"]).to.equal(@0.1);
+        expect([actualSessionStartedBody objectForKey:@"function"]).to.beNil();
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
@@ -77,7 +78,7 @@ describe(@"Handling network calls", ^{
         [schema setObject:[AvoNull new] forKey:@"null key"];
         [schema setObject:[AvoUnknownType new] forKey:@"unknown type key"];
     
-        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema];
+        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema  eventId:nil eventHash:nil];
     
         expect([actualTrackSchemaBody objectForKey:@"type"]).to.equal(@"event");
         expect([actualTrackSchemaBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
@@ -91,6 +92,7 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
         expect([actualTrackSchemaBody objectForKey:@"samplingRate"]).to.equal(@0.1);
+        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@NO);
     
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"] count]).to.equal(7);
     
@@ -139,7 +141,7 @@ describe(@"Handling network calls", ^{
         [nestedObject.fields setValue:list forKey:@"nestedKey3"];
         [object.fields setValue:nestedObject forKey:@"key4"];
      
-        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema];
+        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema  eventId:nil eventHash:nil];
             
         expect([actualTrackSchemaBody objectForKey:@"type"]).to.equal(@"event");
         expect([actualTrackSchemaBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
@@ -181,6 +183,7 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
+        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@NO);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for list schema tracking", ^{
@@ -212,24 +215,24 @@ describe(@"Handling network calls", ^{
     
         [schema setObject:mainList forKey:@"list key"];
 
-        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema];
+        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema eventId:nil eventHash:nil];
          
         expect([actualTrackSchemaBody objectForKey:@"type"]).to.equal(@"event");
         expect([actualTrackSchemaBody objectForKey:@"eventName"]).to.equal(@"Test Event Name");
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyName"]).to.equal(@"list key");
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"propertyType"]).to.equal(@"list(string|float|int|boolean|{\"key3\":\"list(int|string|list()|null|float|boolean|unknown)\",\"key1\":\"string\",\"key4\":{\"nestedKey3\":\"list(int|string|list()|null|float|boolean|unknown)\",\"nestedKey2\":\"int\",\"nestedKey1\":\"string\"},\"key2\":\"int\"})");
 
-     /*   NSArray * propertyChildren = [[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"children"];
+        NSArray * propertyChildren = [[actualTrackSchemaBody objectForKey:@"eventProperties"][0] valueForKey:@"children"];
         for (NSDictionary *childProp in propertyChildren) {
-         NSString *key = [childProp valueForKey:@"propertyName"];
-         
-         if ([key isEqual:@"key1"]) {
+            NSString *key = [childProp valueForKey:@"propertyName"];
+
+            if ([key isEqual:@"key1"]) {
               expect([childProp objectForKey:@"propertyType"]).to.equal(@"string");
-         } else if ( [key isEqual:@"key2"]) {
+            } else if ( [key isEqual:@"key2"]) {
               expect([childProp objectForKey:@"propertyType"]).to.equal(@"int");
-         } else if ( [key isEqual:@"key3"]) {
+            } else if ( [key isEqual:@"key3"]) {
               expect([childProp objectForKey:@"propertyType"]).to.startWith(@"list(");
-         } else if ( [key isEqual:@"key4"]) {
+            } else if ( [key isEqual:@"key4"]) {
              expect([childProp objectForKey:@"propertyType"]).to.equal(@"object");
              NSArray * nestedPropertyChildren = [childProp valueForKey:@"children"];
              for (NSDictionary *nestedChildProp in nestedPropertyChildren) {
@@ -243,8 +246,8 @@ describe(@"Handling network calls", ^{
                      expect([nestedChildProp objectForKey:@"propertyType"]).to.startWith(@"list(");
                  }
              }
-         }
-        }*/
+            }
+        }
 
         expect([actualTrackSchemaBody objectForKey:@"apiKey"]).to.equal(@"testApiKey");
         expect([actualTrackSchemaBody objectForKey:@"appVersion"]).to.equal(@"testAppVersion");
@@ -254,6 +257,19 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
+        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@NO);
+    });
+    
+    it(@"AvoNetworkCallsHandler builds proper body for schema tracking from avo function", ^{
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0];
+    
+        NSMutableDictionary * schema = [NSMutableDictionary new];
+    
+        NSMutableDictionary * actualTrackSchemaBody = [sut bodyForTrackSchemaCall:@"Test Event Name" schema:schema  eventId:@"event id" eventHash:@"event hash"];
+    
+        expect([actualTrackSchemaBody objectForKey:@"eventId"]).to.equal(@"event id");
+        expect([actualTrackSchemaBody objectForKey:@"eventHash"]).to.equal(@"event hash");
+        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@YES);
     });
 });
 

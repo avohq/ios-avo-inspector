@@ -38,7 +38,7 @@
     return self;
 }
 
-- (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
+- (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash {
     NSMutableArray * propsSchema = [NSMutableArray new];
     
     for(NSString *key in [schema allKeys]) {
@@ -67,6 +67,14 @@
     }
     
     NSMutableDictionary * baseBody = [self createBaseCallBody];
+    
+    if (eventId != nil) {
+        [baseBody setValue:@YES forKey:@"function"];
+        [baseBody setValue:eventId forKey:@"eventId"];
+        [baseBody setValue:eventHash forKey:@"eventHash"];
+    } else {
+        [baseBody setValue:@NO forKey:@"function"];
+    }
     
     [baseBody setValue:@"event" forKey:@"type"];
     [baseBody setValue:eventName forKey:@"eventName"];
@@ -131,7 +139,7 @@
     
     if (drand48() > self.samplingRate) {
          if ([AvoInspector isLogging]) {
-             NSLog(@"Avo Inspector: Last event schema dropped due to sampling rate");
+             NSLog(@"[avo] Avo Inspector: Last event schema dropped due to sampling rate");
          }
          return;
     }
@@ -141,14 +149,14 @@
             NSString * type = [batchItem objectForKey:@"type"];
             
             if ([type  isEqual:@"sessionStarted"]) {
-                NSLog(@"Avo Inspector: Sending session started event");
+                NSLog(@"[avo] Avo Inspector: Sending session started event");
             } else if ([type  isEqual:@"event"]) {
                 NSString * eventName = [batchItem objectForKey:@"eventName"];
                 NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
 
-                NSLog(@"Avo Inspector: Sending event %@ with schema {\n%@\n}\n", eventName, [eventProps description]);
+                NSLog(@"[avo] Avo Inspector: Sending event %@ with schema {\n%@\n}\n", eventName, [eventProps description]);
             } else {
-                NSLog(@"Avo Inspector: Error! Unknown event type.");
+                NSLog(@"[avo] Avo Inspector: Error! Unknown event type.");
             }
             
         }
@@ -186,7 +194,7 @@
                 weakSelf.samplingRate = [rate doubleValue];
             }
         } else if ([AvoInspector isLogging]) {
-            NSLog(@"Avo Inspector: Failed sending events. Will retry later.");
+            NSLog(@"[avo] Avo Inspector: Failed sending events. Will retry later.");
         }
         
         completionHandler(error);

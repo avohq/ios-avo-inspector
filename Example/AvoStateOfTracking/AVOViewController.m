@@ -8,17 +8,9 @@
 
 #import "AVOViewController.h"
 #import "AVOAppDelegate.h"
-
-#import <AvoInspector/AvoList.h>
-#import <AvoInspector/AvoInt.h>
-#import <AvoInspector/AvoNull.h>
-#import <AvoInspector/AvoString.h>
-#import <AvoInspector/AvoInspector.h>
 #import <Analytics/SEGAnalyticsConfiguration.h>
 #import <Analytics/SEGAnalytics.h>
 #import <Analytics/SEGMiddleware.h>
-
-#import <IosAnalyticsDebugger/AnalyticsDebugger.h>
 
 @interface AVOViewController ()
 
