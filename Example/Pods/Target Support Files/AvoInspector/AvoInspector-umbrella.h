@@ -11,9 +11,11 @@
 #endif
 
 #import "AvoBatcher.h"
+#import "AvoDeduplicator.h"
 #import "AvoInspector.h"
 #import "AvoInstallationId.h"
 #import "AvoNetworkCallsHandler.h"
+#import "AvoSchemaExtractor.h"
 #import "AvoSessionTracker.h"
 #import "AvoUtils.h"
 #import "AvoBoolean.h"

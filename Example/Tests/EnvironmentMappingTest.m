@@ -36,9 +36,9 @@ describe(@"Environemtn mapping", ^{
     
      it(@"Test staging env mappings", ^{
         
-        NSString * prodMap = [AvoNetworkCallsHandler formatTypeToString:(int)AvoInspectorEnvStaging];
+        NSString * stageMap = [AvoNetworkCallsHandler formatTypeToString:(int)AvoInspectorEnvStaging];
          
-        expect(prodMap).to.equal(@"staging");
+        expect(stageMap).to.equal(@"staging");
      });
          
      it(@"AvoNetworkCallsHandler sends prod env", ^{

@@ -41,7 +41,7 @@ describe(@"Sessions", ^{
 
     it(@"session starts when trackSchemaFromEvent", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
         OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
         AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvProd];
@@ -55,7 +55,7 @@ describe(@"Sessions", ^{
 
     it(@"session starts when trackSchema", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andDo(nil);
         id mockSessionTracker = OCMClassMock([AvoSessionTracker class]);
         OCMStub([mockSessionTracker startOrProlongSession:[OCMArg any]]).andDo(nil);
         AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvProd];
@@ -85,7 +85,7 @@ describe(@"Sessions", ^{
 
     it(@"two calls of schemaTracked track only one session", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andDo(nil);
         AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
        
         __block int sessionStartCallCount = 0;
@@ -101,7 +101,7 @@ describe(@"Sessions", ^{
 
     it(@"two calls of schemaTracked with (sessionDelay plus 1) track two session", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andDo(nil);
         AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
        
         __block int sessionStartCallCount = 0;
@@ -117,7 +117,7 @@ describe(@"Sessions", ^{
 
     it(@"two calls of schemaTracked with total timespan more than a session but individual timespans less are threated as one session", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
-        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any]]).andDo(nil);
+        OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andDo(nil);
         AvoSessionTracker * sut = [[AvoSessionTracker alloc] initWithBatcher:mockAvoBatcher];
        
         __block int sessionStartCallCount = 0;

@@ -24,10 +24,13 @@
 @property (readwrite, nonatomic) AvoBatcher *avoBatcher;
 @property (readwrite, nonatomic) AvoSessionTracker *sessionTracker;
 @property (readwrite, nonatomic) AnalyticsDebugger *debugger;
+@property (readwrite, nonatomic) AvoInspectorEnv env;
 
 - (void) addObservers;
 - (void) enterBackground;
 - (void) enterForeground;
+
+-(instancetype) initWithApiKey: (NSString *) apiKey envInt: (NSNumber *) envInt;
 
 @end
 
@@ -53,6 +56,54 @@ it(@"inititalizes with lib version", ^{
    NSString * libVersion = sut.libVersion;
 
    expect(libVersion).to.equal(@"1.1.3");
+});
+
+it(@"inititalizes with dev env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvDev];
+
+    expect(sut.env).to.equal(AvoInspectorEnvDev);
+});
+
+it(@"inititalizes with stage env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvStaging];
+
+    expect(sut.env).to.equal(AvoInspectorEnvStaging);
+});
+
+it(@"inititalizes with prod env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
+
+    expect(sut.env).to.equal(AvoInspectorEnvProd);
+});
+
+it(@"inititalizes with unknown env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: 999];
+
+    expect(sut.env).to.equal(AvoInspectorEnvDev);
+});
+
+it(@"internal inititalization with prod env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: 0];
+
+    expect(sut.env).to.equal(AvoInspectorEnvProd);
+});
+
+it(@"internal inititalization with dev env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @1];
+
+    expect(sut.env).to.equal(AvoInspectorEnvDev);
+});
+
+it(@"internal inititalization with staging env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @2];
+
+    expect(sut.env).to.equal(AvoInspectorEnvStaging);
+});
+
+it(@"internal inititalization with unknown env", ^{
+   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @3];
+
+    expect(sut.env).to.equal(AvoInspectorEnvDev);
 });
 
 it(@"inititalizes with app id", ^{
@@ -84,10 +135,10 @@ it(@"debug inititalization sets logs on", ^{
 });
 
 it(@"debug inititalization shows visual inspector", ^{
-   [AvoInspector setLogging:NO];
+  [AvoInspector setLogging:NO];
    
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
-   sut.debugger = OCMClassMock([AnalyticsDebugger class]);
+  AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
+  sut.debugger = OCMClassMock([AnalyticsDebugger class]);
  
   XCTestExpectation *expectation = [self expectationWithDescription:@"wait"];
   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC));
@@ -96,8 +147,7 @@ it(@"debug inititalization shows visual inspector", ^{
   });
 
   [self waitForExpectationsWithTimeout:1 handler:nil];
-   OCMVerify([sut.debugger showBubbleDebugger]);
-
+  OCMVerify([sut.debugger showBubbleDebugger]);
 });
 
 it(@"not debug inititalization sets timeout to 30", ^{
