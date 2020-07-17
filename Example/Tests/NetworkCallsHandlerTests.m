@@ -59,7 +59,7 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
         expect([actualSessionStartedBody objectForKey:@"samplingRate"]).to.equal(@0.1);
-        expect([actualSessionStartedBody objectForKey:@"function"]).to.beNil();
+        expect([actualSessionStartedBody objectForKey:@"avoFunction"]).to.beNil();
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
@@ -92,7 +92,7 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
         expect([actualTrackSchemaBody objectForKey:@"samplingRate"]).to.equal(@0.1);
-        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@NO);
+        expect([actualTrackSchemaBody objectForKey:@"avoFunction"]).to.equal(@NO);
     
         expect([[actualTrackSchemaBody objectForKey:@"eventProperties"] count]).to.equal(7);
     
@@ -183,7 +183,7 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
-        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@NO);
+        expect([actualTrackSchemaBody objectForKey:@"avoFunction"]).to.equal(@NO);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for list schema tracking", ^{
@@ -257,7 +257,7 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
-        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@NO);
+        expect([actualTrackSchemaBody objectForKey:@"avoFunction"]).to.equal(@NO);
     });
     
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking from avo function", ^{
@@ -269,7 +269,7 @@ describe(@"Handling network calls", ^{
     
         expect([actualTrackSchemaBody objectForKey:@"eventId"]).to.equal(@"event id");
         expect([actualTrackSchemaBody objectForKey:@"eventHash"]).to.equal(@"event hash");
-        expect([actualTrackSchemaBody objectForKey:@"function"]).to.equal(@YES);
+        expect([actualTrackSchemaBody objectForKey:@"avoFunction"]).to.equal(@YES);
     });
 });
 

@@ -111,6 +111,29 @@ describe(@"Deduplication of same events coming from manual tracking and Avo func
         expect(manualTrackAgain).toNot.equal([NSMutableDictionary new]);
     });
     
+    it(@"Inspector deduplicates when event tracked in avo function and then manually", ^{
+        NSMutableDictionary * testParams = [NSMutableDictionary new];
+       
+        NSMutableArray * mutableArray = [NSMutableArray new];
+        [mutableArray addObject:@"Hello world"];
+        [mutableArray addObject:NSNull.null];
+        [mutableArray addObject:@42];
+        [mutableArray addObject:@41.1f];
+        [mutableArray addObject:@YES];
+       
+        [testParams setObject:mutableArray forKey:@"string array key"];
+       
+        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvDev];
+        
+        NSDictionary * avoFunctionTrack = [sut trackSchemaFromEvent:@"Test 0" eventParams:testParams];
+        NSDictionary * manualTrack = [sut avoFunctionTrackSchemaFromEvent:@"Test 0" eventParams:testParams];
+        NSDictionary * avoFunctionTrackAgain = [sut trackSchemaFromEvent:@"Test 0" eventParams:testParams];
+        
+        expect(avoFunctionTrack).toNot.equal([NSMutableDictionary new]);
+        expect(manualTrack).to.equal([NSMutableDictionary new]);
+        expect(avoFunctionTrackAgain).toNot.equal([NSMutableDictionary new]);
+    });
+    
     it(@"Allows to manually track 2 same events", ^{
         NSMutableDictionary * testParams = [NSMutableDictionary new];
        

@@ -69,11 +69,11 @@
     NSMutableDictionary * baseBody = [self createBaseCallBody];
     
     if (eventId != nil) {
-        [baseBody setValue:@YES forKey:@"function"];
+        [baseBody setValue:@YES forKey:@"avoFunction"];
         [baseBody setValue:eventId forKey:@"eventId"];
         [baseBody setValue:eventHash forKey:@"eventHash"];
     } else {
-        [baseBody setValue:@NO forKey:@"function"];
+        [baseBody setValue:@NO forKey:@"avoFunction"];
     }
     
     [baseBody setValue:@"event" forKey:@"type"];
