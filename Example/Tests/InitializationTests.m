@@ -55,7 +55,7 @@ it(@"inititalizes with lib version", ^{
 
    NSString * libVersion = sut.libVersion;
 
-   expect(libVersion).to.equal(@"1.1.3");
+   expect(libVersion).to.equal(@"1.2.0");
 });
 
 it(@"inititalizes with dev env", ^{

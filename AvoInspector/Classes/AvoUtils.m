@@ -13,6 +13,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
     formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
     
     return [formatter stringFromDate:[NSDate date]];
 }
