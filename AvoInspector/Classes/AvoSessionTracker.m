@@ -46,7 +46,7 @@ static NSString * sessionId;
         [[NSUserDefaults standardUserDefaults] setValue:AvoSessionTracker.sessionId forKey:[AvoSessionTracker idCacheKey]];
         [self.avoBatcher handleSessionStarted];
     }
-    
+
     self.lastSessionTimestamp = [atUnixTime doubleValue];
     [[NSUserDefaults standardUserDefaults] setDouble:self.lastSessionTimestamp forKey:[AvoSessionTracker timestampCacheKey]];
 }

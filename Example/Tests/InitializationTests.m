@@ -43,65 +43,67 @@
 SpecBegin(Init)
 
 it(@"inititalizes with app version", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
 
-   NSString * appVersion = sut.appVersion;
+    NSString * appVersion = sut.appVersion;
 
-   expect(appVersion).to.equal(@"1.0.3");
+    expect(appVersion).to.equal(@"1.0.3");
 });
 
 it(@"inititalizes with lib version", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
 
-   NSString * libVersion = sut.libVersion;
+    NSString * libVersion = sut.libVersion;
 
-   expect(libVersion).to.equal(@"1.2.0");
+    NSString * libVersionInPlist = [[NSBundle bundleForClass:[sut class]] infoDictionary][@"CFBundleShortVersionString"];
+    
+    expect(libVersion).to.equal(libVersionInPlist);
 });
 
 it(@"inititalizes with dev env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvDev];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvDev];
 
     expect(sut.env).to.equal(AvoInspectorEnvDev);
 });
 
 it(@"inititalizes with stage env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvStaging];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvStaging];
 
     expect(sut.env).to.equal(AvoInspectorEnvStaging);
 });
 
 it(@"inititalizes with prod env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
 
     expect(sut.env).to.equal(AvoInspectorEnvProd);
 });
 
 it(@"inititalizes with unknown env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: 999];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: 999];
 
     expect(sut.env).to.equal(AvoInspectorEnvDev);
 });
 
 it(@"internal inititalization with prod env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: 0];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: 0];
 
     expect(sut.env).to.equal(AvoInspectorEnvProd);
 });
 
 it(@"internal inititalization with dev env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @1];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @1];
 
     expect(sut.env).to.equal(AvoInspectorEnvDev);
 });
 
 it(@"internal inititalization with staging env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @2];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @2];
 
     expect(sut.env).to.equal(AvoInspectorEnvStaging);
 });
 
 it(@"internal inititalization with unknown env", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @3];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" envInt: @3];
 
     expect(sut.env).to.equal(AvoInspectorEnvDev);
 });
@@ -109,53 +111,53 @@ it(@"internal inititalization with unknown env", ^{
 it(@"inititalizes with app id", ^{
     AvoInspector * sut = [[AvoInspector alloc] initWithApiKey: @"apiKey" env: AvoInspectorEnvProd];
 
-   expect(sut.apiKey).to.equal(@"apiKey");
+    expect(sut.apiKey).to.equal(@"apiKey");
 });
    
 it(@"inititalizes with session tracker", ^{
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
 
-  expect(sut.sessionTracker).notTo.beNil();
+    expect(sut.sessionTracker).notTo.beNil();
 });
 
 it(@"debug inititalization sets batch size to 1", ^{
-   [AvoInspector setBatchFlushSeconds:30];
+    [AvoInspector setBatchFlushSeconds:30];
    
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 
-  expect([AvoInspector getBatchFlushSeconds]).to.equal(1);
+    expect([AvoInspector getBatchFlushSeconds]).to.equal(1);
 });
 
 it(@"debug inititalization sets logs on", ^{
-   [AvoInspector setLogging:NO];
+    [AvoInspector setLogging:NO];
    
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 
-  expect([AvoInspector isLogging]).to.equal(YES);
+    expect([AvoInspector isLogging]).to.equal(YES);
 });
 
 it(@"debug inititalization shows visual inspector", ^{
-  [AvoInspector setLogging:NO];
-   
-  AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
-  sut.debugger = OCMClassMock([AnalyticsDebugger class]);
- 
-  XCTestExpectation *expectation = [self expectationWithDescription:@"wait"];
-  dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC));
-  dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    [expectation fulfill];
-  });
+    [AvoInspector setLogging:NO];
 
-  [self waitForExpectationsWithTimeout:1 handler:nil];
-  OCMVerify([sut.debugger showBubbleDebugger]);
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
+    sut.debugger = OCMClassMock([AnalyticsDebugger class]);
+
+    XCTestExpectation *expectation = [self expectationWithDescription:@"wait"];
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+    [expectation fulfill];
+    });
+
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+    OCMVerify([sut.debugger showBubbleDebugger]);
 });
 
 it(@"not debug inititalization sets timeout to 30", ^{
-   [AvoInspector setBatchFlushSeconds:1];
+    [AvoInspector setBatchFlushSeconds:1];
    
-   AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
 
-  expect([AvoInspector getBatchFlushSeconds]).to.equal(30);
+    expect([AvoInspector getBatchFlushSeconds]).to.equal(30);
 });
 
 it(@"Registers foreground and backround observers", ^{
