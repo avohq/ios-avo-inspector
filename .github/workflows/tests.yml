@@ -1,0 +1,51 @@
+name: iOS Objective-C
+
+on:
+  pull_request:
+    types: [opened, reopened, unlocked, synchronize]
+
+jobs:
+  Tests:
+    runs-on: macos-latest
+
+    env:
+      project-path: ./Example
+      simulator: iOS Simulator,OS=13.4,name=iPhone 11
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_11.4.app
+
+      - name: Set up iOS project environment
+        run: |
+            set -eo pipefail
+
+            echo "::group::Install Bundler"
+            gem install bundler # Bundler provides a consistent environment for Ruby projects by tracking and installing the exact gems and versions that are needed.
+
+            echo "::group::Install Gems"
+            bundle install # To install gems, this script must be executed from the project folder, where "Gemfile" is located. Usually it is root folder of the project.
+        working-directory: ${{ env.project-path }}
+
+      - name: Set up Cocoapods cache
+        uses: actions/cache@v1
+        id: cocoapods-cache
+        with:
+          path: ${{ env.project-path }}/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles(format('{0}/{1}', env.project-path, 'Podfile.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install iOS project dependencies
+        if: steps.cocoapods-cache.outputs.cache-hit != 'true'
+        run: bundle exec pod install
+        working-directory: ${{ env.project-path }}
+
+      - name: Test
+        run: |
+          set -o pipefail
+          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -destination platform='${{ env.simulator }}' clean test | xcpretty
+        working-directory: ${{ env.project-path }}
