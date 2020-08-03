@@ -47,5 +47,5 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking -destination platform='${{ env.simulator }}' clean test | xcpretty
+          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -destination platform='${{ env.simulator }}' clean test | xcpretty
         working-directory: ${{ env.project-path }}
