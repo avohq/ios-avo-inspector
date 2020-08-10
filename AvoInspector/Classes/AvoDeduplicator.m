@@ -70,71 +70,89 @@
 }
 
 - (BOOL) hasSeenEventParams:(NSDictionary<NSString *, id> *) params checkInAvoFunctions:(BOOL) checkInAvoFunctions {
-    __block BOOL result = NO;
+    BOOL hasSeen = NO;
     if (checkInAvoFunctions) {
-        [self.avoFunctionsEventsParams enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
-            if ([params isEqualToDictionary:otherEventParams]) {
-                result = YES;
-                *stop = YES;
-            }
-        }];
+        if ([self lookForEventParams:params in:self.avoFunctionsEventsParams]) {
+            hasSeen = YES;
+        }
     } else {
-        [self.manualEventsParams enumerateKeysAndObjectsUsingBlock: ^(id otherEventName, id otherEventParams, BOOL* stop) {
-          if ([params isEqualToDictionary:otherEventParams]) {
-              result = YES;
-              *stop = YES;
-          }
-        }];
+        if ([self lookForEventParams:params in:self.manualEventsParams]) {
+            hasSeen = YES;
+        }
     }
     
+    return hasSeen;
+}
+
+- (BOOL) lookForEventParams:(NSDictionary<NSString *, id> *) params in:(NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *) eventsStorage {
+    __block BOOL result = NO;
+    [eventsStorage enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
+        if ([params isEqualToDictionary:otherEventParams]) {
+            result = YES;
+            *stop = YES;
+        }
+    }];
     return result;
 }
 
 - (BOOL) hasSameEventAs:(NSString *) eventName eventParams:(NSDictionary<NSString *, id> *) params checkInAvoFunctions:(BOOL) checkInAvoFunctions {
     
-    __block BOOL result = NO;
+    BOOL hasSameEvents = NO;
     if (checkInAvoFunctions) {
-        [self.avoFunctionsEventsParams enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
-            if (otherEventName == eventName && [params isEqualToDictionary:otherEventParams]) {
-                result = YES;
-                *stop = YES;
-            }
-        }];
+        if ([self lookForEventName:eventName withParams:params in:self.avoFunctionsEventsParams]) {
+            hasSameEvents = YES;
+        }
     } else {
-        [self.manualEventsParams enumerateKeysAndObjectsUsingBlock: ^(id otherEventName, id otherEventParams, BOOL* stop) {
-          if (otherEventName == eventName && [params isEqualToDictionary:otherEventParams]) {
-              result = YES;
-              *stop = YES;
-          }
-        }];
+        if ([self lookForEventName:eventName withParams:params in:self.manualEventsParams]) {
+            hasSameEvents = YES;
+        }
     }
     
-    if (result) {
+    if (hasSameEvents) {
         [self.avoFunctionsEventsParams removeObjectForKey:eventName];
         [self.manualEventsParams removeObjectForKey:eventName];
     }
-    
+
+    return hasSameEvents;
+}
+
+- (BOOL) lookForEventName:(NSString *) eventName withParams:(NSDictionary<NSString *, id> *) params in:(NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *) eventsStorage {
+    __block BOOL result = NO;
+    [eventsStorage enumerateKeysAndObjectsUsingBlock: ^(id otherEventName, id otherEventParams, BOOL* stop) {
+        if (otherEventName == eventName && [params isEqualToDictionary:otherEventParams]) {
+            result = YES;
+            *stop = YES;
+        }
+    }];
     return result;
 }
 
 - (BOOL) shouldRegisterSchemaFromManually:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
     [self clearOldEvents];
     
-      __block BOOL result = YES;
+    BOOL shouldRegisterSchema = YES;
 
-      [self.avoFunctionsEventsParams enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
-          NSDictionary * otherSchema = [self.avoSchemaExtractor extractSchema:otherEventParams];
-          if (otherEventName == eventName && [schema isEqualToDictionary:otherSchema]) {
-              result = NO;
-              *stop = YES;
-          }
-      }];
-      
-      if (result) {
-          [self.avoFunctionsEventsParams removeObjectForKey:eventName];
-      }
-      
-      return result;
+    if ([self lookForEventName:eventName withSchema:schema in:self.avoFunctionsEventsParams]) {
+        shouldRegisterSchema = NO;
+    }
+
+    if (!shouldRegisterSchema) {
+      [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+    }
+
+    return shouldRegisterSchema;
+}
+
+- (BOOL) lookForEventName:(NSString *) eventName withSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema in:(NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *) eventsStorage {
+    __block BOOL result = NO;
+    [eventsStorage enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
+        NSDictionary * otherSchema = [self.avoSchemaExtractor extractSchema:otherEventParams];
+        if (otherEventName == eventName && [schema isEqualToDictionary:otherSchema]) {
+            result = YES;
+            *stop = YES;
+        }
+    }];
+    return result;
 }
  
 - (void) clearOldEvents {
