@@ -39,6 +39,16 @@ describe(@"Tracking", ^{
         OCMVerify([mockAvoBatcher handleTrackSchema:@"Event name" schema:[NSDictionary new] eventId:nil eventHash:nil]);
     });
     
+    it(@"Tracking nil event does nothing", ^{
+        AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"tesApiKey" env: AvoInspectorEnvProd];
+       
+        NSString * eventName = nil;
+        
+        NSDictionary * trackedSchema = [sut trackSchemaFromEvent:eventName eventParams:[NSDictionary new]];
+       
+        expect(trackedSchema).equal([NSMutableDictionary new]);
+    });
+    
     it(@"Batcher and visual debugger invoked with proper params and event id and event hash when avoSchemaTrackSchemaFromEvent", ^{
         id mockAvoBatcher = OCMClassMock([AvoBatcher class]);
         OCMStub([mockAvoBatcher handleTrackSchema:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andDo(nil);
@@ -132,7 +142,7 @@ describe(@"Tracking", ^{
          sut.avoBatcher = mockAvoBatcher;
          sut.debugger = OCMClassMock([AnalyticsDebugger class]);
      
-        OCMReject([sut.debugger publishEvent:[OCMArg any] withTimestamp:[OCMArg any]
+         OCMReject([sut.debugger publishEvent:[OCMArg any] withTimestamp:[OCMArg any]
                               withProperties:[OCMArg any] withErrors:[OCMArg any]]);
     
          [sut trackSchemaFromEvent:@"Event name" eventParams:[NSDictionary new]];

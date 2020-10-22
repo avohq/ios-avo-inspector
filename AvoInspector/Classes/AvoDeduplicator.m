@@ -54,6 +54,10 @@
 }
 
 - (BOOL) shouldRegisterEvent:(NSString *) eventName eventParams:(NSDictionary<NSString *, id> *) params fromAvoFunction:(BOOL) fromAvoFunction {
+    if (eventName == nil) {
+        return NO;
+    }
+    
     [self clearOldEvents];
     
     if (fromAvoFunction) {
@@ -128,6 +132,10 @@
 }
 
 - (BOOL) shouldRegisterSchemaFromManually:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
+    if (eventName == nil) {
+        return NO;
+    }
+    
     [self clearOldEvents];
     
     BOOL shouldRegisterSchema = YES;
@@ -164,12 +172,16 @@
         if ([now doubleValue] - [timestamp doubleValue] > secondsToConsiderOld) {
             NSString * eventName = [self.avoFunctionsEvents objectForKey:timestamp];
             [timestampsToRemove addObject:timestamp];
-            [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+            if (eventName != nil) {
+                [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+            }
         }
     }
     
     for (NSNumber * timestamp in timestampsToRemove) {
-        [self.avoFunctionsEvents removeObjectForKey:timestamp];
+        if (timestamp != nil) {
+            [self.avoFunctionsEvents removeObjectForKey:timestamp];
+        }
     }
     
     timestampsToRemove = [NSMutableArray new];
@@ -177,12 +189,16 @@
         if ([now doubleValue] - [timestamp doubleValue] > secondsToConsiderOld) {
             NSString * eventName = [self.manualEvents objectForKey:timestamp];
             [timestampsToRemove addObject:timestamp];
-            [self.manualEventsParams removeObjectForKey:eventName];
+            if (eventName != nil) {
+                [self.manualEventsParams removeObjectForKey:eventName];
+            }
         }
     }
     
     for (NSNumber * timestamp in timestampsToRemove) {
-        [self.manualEvents removeObjectForKey:timestamp];
+        if (timestamp != nil) {
+            [self.manualEvents removeObjectForKey:timestamp];
+        }
     }
 }
 
