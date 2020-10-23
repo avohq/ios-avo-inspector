@@ -14,8 +14,6 @@
 
 @property (readwrite, nonatomic) NSMutableArray * events;
 
-@property (readwrite, nonatomic) NSLock *lock;
-
 @property (readwrite, nonatomic) NSTimeInterval batchFlushAttemptTime;
 
 @end
@@ -25,7 +23,6 @@
 - (instancetype) initWithNetworkCallsHandler: (AvoNetworkCallsHandler *) networkCallsHandler {
     self = [super init];
     if (self) {
-        self.lock = [[NSLock alloc] init];
         self.events = [NSMutableArray new];
         self.networkCallsHandler = networkCallsHandler;
         
@@ -36,8 +33,12 @@
 
 - (void) removeExtraElements {
     if ([self.events count] > 1000) {
-        NSInteger extraElements = [self.events count] - 1000;
-        [self.events removeObjectsInRange:NSMakeRange(0, extraElements)];
+        @synchronized(self) {
+            NSInteger extraElements = [self.events count] - 1000;
+            if (extraElements > 0) {
+                [self.events removeObjectsInRange:NSMakeRange(0, extraElements)];
+            }
+        }
     }
 }
 
@@ -45,25 +46,20 @@
     if ([self.events count] == 0) {
         return;
     }
-    
-    [self.lock lock];
-     @try {
-         [self removeExtraElements];
-     }
-     @finally {
-         [self.lock unlock];
-     }
+
+    [self removeExtraElements];
     
     [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] setValue:self.events forKey:[AvoBatcher cacheKey]];
 }
 
 - (void) enterForeground {
-    self.events = [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] objectForKey:[AvoBatcher cacheKey]];
-    
-    if (self.events == nil) {
-        self.events = [NSMutableArray new];
-    } else {
-        self.events = [[NSMutableArray alloc] initWithArray:self.events];
+    NSArray * memoryEvents = [[[NSUserDefaults alloc] initWithSuiteName:[AvoBatcher suiteKey]] objectForKey:[AvoBatcher cacheKey]];
+    @synchronized(self) {
+        if (memoryEvents == nil) {
+            self.events = [NSMutableArray new];
+        } else {
+            self.events = [[NSMutableArray alloc] initWithArray:memoryEvents];
+        }
     }
     
     [self postAllAvailableEventsAndClearCache:YES];
@@ -100,14 +96,11 @@
 }
 
 - (void)saveEvent:(NSMutableDictionary *)trackSchemaBody {
-    [self.lock lock];
-    @try {
+
+    @synchronized(self) {
         [self.events addObject:trackSchemaBody];
-        [self removeExtraElements];
     }
-    @finally {
-        [self.lock unlock];
-    }
+    [self removeExtraElements];
 }
 
 - (void) checkIfBatchNeedsToBeSent {
@@ -138,7 +131,9 @@
     self.batchFlushAttemptTime = [[NSDate date] timeIntervalSince1970];
     
     NSArray *sendingEvents = [[NSArray alloc] initWithArray:self.events];
-    self.events = [NSMutableArray new];
+    @synchronized(self) {
+        self.events = [NSMutableArray new];
+    }
     
     __weak AvoBatcher *weakSelf = self;
     [self.networkCallsHandler callInspectorWithBatchBody:sendingEvents completionHandler:^(NSError * _Nullable error) {
@@ -147,7 +142,9 @@
         }
 
         if (error != nil) {
-            [weakSelf.events addObjectsFromArray:sendingEvents];
+            @synchronized(weakSelf) {
+                [weakSelf.events addObjectsFromArray:sendingEvents];
+            }
         }
     }];
 }
@@ -161,7 +158,9 @@
         }
     }
     
-    [self.events removeObjectsInArray:discardedItems];
+    @synchronized(self) {
+        [self.events removeObjectsInArray:discardedItems];
+    }
 }
 
 + (NSString *) suiteKey {
