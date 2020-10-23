@@ -103,7 +103,7 @@ static int batchFlushTime = 30;
         } else {
             self.env = env;
         }
-
+        
         self.avoSchemaExtractor = [AvoSchemaExtractor new];
         
         self.debugger = [AnalyticsDebugger new];
@@ -115,7 +115,7 @@ static int batchFlushTime = 30;
             [AvoInspector setBatchFlushSeconds:30];
             [AvoInspector setLogging:NO];
         }
-
+        
         if (env != AvoInspectorEnvProd) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void) {
                 [self showVisualInspector:Bubble];
@@ -146,57 +146,78 @@ static int batchFlushTime = 30;
 
 - (void) addObservers {
     [self.notificationCenter addObserver:self
-               selector:@selector(enterBackground)
-                   name:UIApplicationDidEnterBackgroundNotification
-                 object:nil];
+                                selector:@selector(enterBackground)
+                                    name:UIApplicationDidEnterBackgroundNotification
+                                  object:nil];
     
     [self.notificationCenter addObserver:self
-               selector:@selector(enterForeground)
-                   name:UIApplicationWillEnterForegroundNotification
-                 object:nil];
+                                selector:@selector(enterForeground)
+                                    name:UIApplicationWillEnterForegroundNotification
+                                  object:nil];
 }
 
 - (void)enterBackground {
-    [self.avoBatcher enterBackground];
+    @try {
+        [self.avoBatcher enterBackground];
+    }
+    @catch (NSException *exception) {
+        [self printAvoGenericError:exception];
+    }
 }
 
 - (void)enterForeground {
-    [self.avoBatcher enterForeground];
-    [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+    @try {
+        [self.avoBatcher enterForeground];
+        [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+    }
+    @catch (NSException *exception) {
+        [self printAvoGenericError:exception];
+    }
 }
 
 // internal API
 -(NSDictionary<NSString *, AvoEventSchemaType *> *) avoFunctionTrackSchemaFromEvent:(NSString *) eventName eventParams:(NSMutableDictionary<NSString *, id> *) params {
-    if ([self.avoDeduplicator shouldRegisterEvent:eventName eventParams:params fromAvoFunction:YES]) {
-        NSMutableDictionary * objcParams = [NSMutableDictionary new];
-        
-        [params enumerateKeysAndObjectsUsingBlock:^(id paramName, id paramValue, BOOL* stop) {
-            [objcParams setObject:paramValue forKey:paramName];
-        }];
-        
-        NSString * eventId = [objcParams objectForKey:@"avoFunctionEventId"];
-        [objcParams removeObjectForKey:@"avoFunctionEventId"];
-        NSString * eventHash = [objcParams objectForKey:@"avoFunctionEventHash"];
-        [objcParams removeObjectForKey:@"avoFunctionEventHash"];
-
-        return [self internalTrackSchemaFromEvent:eventName eventParams:objcParams eventId:eventId eventHash:eventHash];
-    } else {
-        if ([AvoInspector isLogging]) {
-            NSLog(@"[avo] Avo Inspector: Deduplicated event %@", eventName);
+    @try {
+        if ([self.avoDeduplicator shouldRegisterEvent:eventName eventParams:params fromAvoFunction:YES]) {
+            NSMutableDictionary * objcParams = [NSMutableDictionary new];
+            
+            [params enumerateKeysAndObjectsUsingBlock:^(id paramName, id paramValue, BOOL* stop) {
+                [objcParams setObject:paramValue forKey:paramName];
+            }];
+            
+            NSString * eventId = [objcParams objectForKey:@"avoFunctionEventId"];
+            [objcParams removeObjectForKey:@"avoFunctionEventId"];
+            NSString * eventHash = [objcParams objectForKey:@"avoFunctionEventHash"];
+            [objcParams removeObjectForKey:@"avoFunctionEventHash"];
+            
+            return [self internalTrackSchemaFromEvent:eventName eventParams:objcParams eventId:eventId eventHash:eventHash];
+        } else {
+            if ([AvoInspector isLogging]) {
+                NSLog(@"[avo] Avo Inspector: Deduplicated event %@", eventName);
+            }
+            return [NSMutableDictionary new];
         }
+    }
+    @catch (NSException *exception) {
+        [self printAvoGenericError:exception];
         return [NSMutableDictionary new];
     }
 }
 
 // params are [ String : Any ]
 -(NSDictionary<NSString *, AvoEventSchemaType *> *) trackSchemaFromEvent:(NSString *) eventName eventParams:(NSDictionary<NSString *, id> *) params {
-    
-    if ([self.avoDeduplicator shouldRegisterEvent:eventName eventParams:params fromAvoFunction:NO]) {
-        return [self internalTrackSchemaFromEvent:eventName eventParams:params eventId:nil eventHash:nil];
-    } else {
-        if ([AvoInspector isLogging]) {
-            NSLog(@"[avo] Avo Inspector: Deduplicated event %@", eventName);
+    @try {
+        if ([self.avoDeduplicator shouldRegisterEvent:eventName eventParams:params fromAvoFunction:NO]) {
+            return [self internalTrackSchemaFromEvent:eventName eventParams:params eventId:nil eventHash:nil];
+        } else {
+            if ([AvoInspector isLogging]) {
+                NSLog(@"[avo] Avo Inspector: Deduplicated event %@", eventName);
+            }
+            return [NSMutableDictionary new];
         }
+    }
+    @catch (NSException *exception) {
+        [self printAvoGenericError:exception];
         return [NSMutableDictionary new];
     }
 }
@@ -226,7 +247,18 @@ static int batchFlushTime = 30;
 
 // schema is [ String : AvoEventSchemaType ]
 -(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
-    [self internalTrackSchema:eventName eventSchema:schema eventId:nil eventHash:nil];
+    @try {
+        if ([self.avoDeduplicator shouldRegisterSchemaFromManually:eventName schema:schema]) {
+            [self internalTrackSchema:eventName eventSchema:schema eventId:nil eventHash:nil];
+        } else {
+            if ([AvoInspector isLogging]) {
+                NSLog(@"[avo] Avo Inspector: Deduplicated schema %@", eventName);
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        [self printAvoGenericError:exception];
+    }
 }
 
 -(void) internalTrackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash {
@@ -237,11 +269,11 @@ static int batchFlushTime = 30;
                 [NSException raise:@"Schema types should be of type AvoEventSchemaType" format:@"Provided %@", [[[schema objectForKey:key] class] description]];
             }
         }
-
+        
         [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-
+        
         [self.avoBatcher handleTrackSchema:eventName schema:schema eventId: eventId eventHash:eventHash];
-
+        
         [self showSchemaInVisualInspector:eventName schema:schema];
     }
     @catch (NSException *exception) {
@@ -259,7 +291,7 @@ static int batchFlushTime = 30;
         }
         
         [self.debugger publishEvent:[NSString stringWithFormat:@"Event: %@", eventName] withTimestamp:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]
-                withProperties:props withErrors:[NSMutableArray new]];
+                     withProperties:props withErrors:[NSMutableArray new]];
     }
 }
 
@@ -273,7 +305,7 @@ static int batchFlushTime = 30;
         }
         
         [self.debugger publishEvent:[NSString stringWithFormat:@"Schema: %@", eventName] withTimestamp:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]
-                withProperties:props withErrors:[NSMutableArray new]];
+                     withProperties:props withErrors:[NSMutableArray new]];
     }
 }
 
@@ -287,6 +319,13 @@ static int batchFlushTime = 30;
 
 - (void) dealloc {
     [self.notificationCenter removeObserver:self];
+}
+
+-(void)printAvoGenericError:(NSException *) exception {
+    NSLog(@"[avo]        ! Avo Inspector Error !");
+    NSLog(@"[avo]        Please report the following error to support@avo.app");
+    NSLog(@"[avo]        CRASH: %@", exception);
+    NSLog(@"[avo]        Stack Trace: %@", [exception callStackSymbols]);
 }
 
 @end

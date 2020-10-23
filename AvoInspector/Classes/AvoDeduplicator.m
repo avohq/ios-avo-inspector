@@ -37,11 +37,13 @@
 
 - (void) clear
 {
-    self.avoFunctionsEvents = [NSMutableDictionary new];
-    self.manualEvents = [NSMutableDictionary new];
-    self.avoFunctionsEventsParams = [NSMutableDictionary new];
-    self.manualEventsParams = [NSMutableDictionary new];
-    self.avoSchemaExtractor = [AvoSchemaExtractor new];
+    @synchronized (self) {
+        self.avoFunctionsEvents = [NSMutableDictionary new];
+        self.manualEvents = [NSMutableDictionary new];
+        self.avoFunctionsEventsParams = [NSMutableDictionary new];
+        self.manualEventsParams = [NSMutableDictionary new];
+        self.avoSchemaExtractor = [AvoSchemaExtractor new];
+    }
 }
 
 + (id) sharedDeduplicator {
@@ -60,12 +62,14 @@
     
     [self clearOldEvents];
     
-    if (fromAvoFunction) {
-        [self.avoFunctionsEvents setObject:eventName forKey:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-        [self.avoFunctionsEventsParams setObject:params forKey:eventName];
-    } else {
-        [self.manualEvents setObject:eventName forKey:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-        [self.manualEventsParams setObject:params forKey:eventName];
+    @synchronized (self) {
+        if (fromAvoFunction) {
+            [self.avoFunctionsEvents setObject:eventName forKey:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+            [self.avoFunctionsEventsParams setObject:params forKey:eventName];
+        } else {
+            [self.manualEvents setObject:eventName forKey:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+            [self.manualEventsParams setObject:params forKey:eventName];
+        }
     }
     
     BOOL checkInAvoFunctions = !fromAvoFunction;
@@ -90,12 +94,14 @@
 
 - (BOOL) lookForEventParams:(NSDictionary<NSString *, id> *) params in:(NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *) eventsStorage {
     __block BOOL result = NO;
-    [eventsStorage enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
-        if ([params isEqualToDictionary:otherEventParams]) {
-            result = YES;
-            *stop = YES;
-        }
-    }];
+    @synchronized (self) {
+        [eventsStorage enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
+            if ([params isEqualToDictionary:otherEventParams]) {
+                result = YES;
+                *stop = YES;
+            }
+        }];
+    }
     return result;
 }
 
@@ -113,21 +119,25 @@
     }
     
     if (hasSameEvents) {
-        [self.avoFunctionsEventsParams removeObjectForKey:eventName];
-        [self.manualEventsParams removeObjectForKey:eventName];
+        @synchronized (self) {
+            [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+            [self.manualEventsParams removeObjectForKey:eventName];
+        }
     }
-
+    
     return hasSameEvents;
 }
 
 - (BOOL) lookForEventName:(NSString *) eventName withParams:(NSDictionary<NSString *, id> *) params in:(NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *) eventsStorage {
     __block BOOL result = NO;
-    [eventsStorage enumerateKeysAndObjectsUsingBlock: ^(id otherEventName, id otherEventParams, BOOL* stop) {
-        if (otherEventName == eventName && [params isEqualToDictionary:otherEventParams]) {
-            result = YES;
-            *stop = YES;
-        }
-    }];
+    @synchronized (self) {
+        [eventsStorage enumerateKeysAndObjectsUsingBlock: ^(id otherEventName, id otherEventParams, BOOL* stop) {
+            if (otherEventName == eventName && [params isEqualToDictionary:otherEventParams]) {
+                result = YES;
+                *stop = YES;
+            }
+        }];
+    }
     return result;
 }
 
@@ -139,65 +149,71 @@
     [self clearOldEvents];
     
     BOOL shouldRegisterSchema = YES;
-
+    
     if ([self lookForEventName:eventName withSchema:schema in:self.avoFunctionsEventsParams]) {
         shouldRegisterSchema = NO;
     }
-
+    
     if (!shouldRegisterSchema) {
-      [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+        @synchronized (self) {
+            [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+        }
     }
-
+    
     return shouldRegisterSchema;
 }
 
 - (BOOL) lookForEventName:(NSString *) eventName withSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema in:(NSMutableDictionary<NSString *, NSDictionary<NSString *, id> *> *) eventsStorage {
     __block BOOL result = NO;
-    [eventsStorage enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
-        NSDictionary * otherSchema = [self.avoSchemaExtractor extractSchema:otherEventParams];
-        if (otherEventName == eventName && [schema isEqualToDictionary:otherSchema]) {
-            result = YES;
-            *stop = YES;
-        }
-    }];
+    @synchronized (self) {
+        [eventsStorage enumerateKeysAndObjectsUsingBlock:^(id otherEventName, id otherEventParams, BOOL* stop) {
+            NSDictionary * otherSchema = [self.avoSchemaExtractor extractSchema:otherEventParams];
+            if (otherEventName == eventName && [schema isEqualToDictionary:otherSchema]) {
+                result = YES;
+                *stop = YES;
+            }
+        }];
+    }
     return result;
 }
- 
+
 - (void) clearOldEvents {
-    NSNumber * now = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
-    double secondsToConsiderOld = 0.3;
-    
-    NSMutableArray * timestampsToRemove = [NSMutableArray new];
-    for (NSNumber * timestamp in [self.avoFunctionsEvents allKeys]) {
-        if ([now doubleValue] - [timestamp doubleValue] > secondsToConsiderOld) {
-            NSString * eventName = [self.avoFunctionsEvents objectForKey:timestamp];
-            [timestampsToRemove addObject:timestamp];
-            if (eventName != nil) {
-                [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+    @synchronized (self) {
+        NSNumber * now = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+        double secondsToConsiderOld = 0.3;
+        
+        NSMutableArray * timestampsToRemove = [NSMutableArray new];
+        for (NSNumber * timestamp in [self.avoFunctionsEvents allKeys]) {
+            if ([now doubleValue] - [timestamp doubleValue] > secondsToConsiderOld) {
+                NSString * eventName = [self.avoFunctionsEvents objectForKey:timestamp];
+                [timestampsToRemove addObject:timestamp];
+                if (eventName != nil) {
+                    [self.avoFunctionsEventsParams removeObjectForKey:eventName];
+                }
             }
         }
-    }
-    
-    for (NSNumber * timestamp in timestampsToRemove) {
-        if (timestamp != nil) {
-            [self.avoFunctionsEvents removeObjectForKey:timestamp];
-        }
-    }
-    
-    timestampsToRemove = [NSMutableArray new];
-    for (NSNumber * timestamp in [self.manualEvents allKeys]) {
-        if ([now doubleValue] - [timestamp doubleValue] > secondsToConsiderOld) {
-            NSString * eventName = [self.manualEvents objectForKey:timestamp];
-            [timestampsToRemove addObject:timestamp];
-            if (eventName != nil) {
-                [self.manualEventsParams removeObjectForKey:eventName];
+        
+        for (NSNumber * timestamp in timestampsToRemove) {
+            if (timestamp != nil) {
+                [self.avoFunctionsEvents removeObjectForKey:timestamp];
             }
         }
-    }
-    
-    for (NSNumber * timestamp in timestampsToRemove) {
-        if (timestamp != nil) {
-            [self.manualEvents removeObjectForKey:timestamp];
+        
+        timestampsToRemove = [NSMutableArray new];
+        for (NSNumber * timestamp in [self.manualEvents allKeys]) {
+            if ([now doubleValue] - [timestamp doubleValue] > secondsToConsiderOld) {
+                NSString * eventName = [self.manualEvents objectForKey:timestamp];
+                [timestampsToRemove addObject:timestamp];
+                if (eventName != nil) {
+                    [self.manualEventsParams removeObjectForKey:eventName];
+                }
+            }
+        }
+        
+        for (NSNumber * timestamp in timestampsToRemove) {
+            if (timestamp != nil) {
+                [self.manualEvents removeObjectForKey:timestamp];
+            }
         }
     }
 }
