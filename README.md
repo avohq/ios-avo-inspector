@@ -7,7 +7,7 @@
 # Avo documentation
 
 This is a quick start guide. 
-For more information about the Inspector project please read [Avo documentation](https://www.avo.app/docs/inspector/sdk/ios).
+For more information about the Inspector project please read [Avo documentation](https://www.avo.app/docs/implementation/inspector/sdk/ios).
 
 # Installation
 
@@ -20,17 +20,27 @@ pod 'AvoInspector'
 
 The latest version can be found in GitHub releases tab.
 
+# Import
+
+Obj-C
+```objectivec
+#import <AvoInspector/AvoInspector.h>
+```
+Swift
+```swift
+import AvoInspector
+```
+
 # Initialization
 
 Obtain the API key at [Avo.app](https://www.avo.app/welcome) 
 
-Obj-C
 
+Obj-C
 ```objectivec
 AvoInspector *avoInspector = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 ```       
 Swift
-
 ```swift
 let avoInspector = AvoInspector(apiKey: "apiKey", env: AvoInspectorEnv.dev)
 ```
