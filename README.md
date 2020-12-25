@@ -58,10 +58,17 @@ Swift
 AvoInspector.setLogging(true)
 ```
 
-# Sending event schemas
+# Integrating with Avo Functions (Avo generated code)
+
+The setup is lightweight and is covered [in this guide](https://www.avo.app/docs/implementation/start-using-inspector-with-avo-functions).
+
+Every event sent with Avo Function after this integration will automatically be sent to the Avo Inspector.
+
+# Sending event schemas for events reported outside of Avo Functions
 
 Whenever you send tracking event call one of the following methods:
-Read more in the [Avo documentation](https://www.avo.app/docs/inspector/sdk/ios#event-tracking) 
+
+Read more in the [Avo documentation](https://www.avo.app/docs/implementation/devs-101#inspecting-events)
 
 ### 1.
 
