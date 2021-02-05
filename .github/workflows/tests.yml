@@ -10,7 +10,7 @@ jobs:
 
     env:
       project-path: ./Example
-      simulator: iOS Simulator,OS=13.4,name=iPhone 11
+      simulator: iOS Simulator,OS=13.4.1,name=iPhone 11
 
     steps:
       - name: Checkout repository
