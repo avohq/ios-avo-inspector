@@ -18,6 +18,7 @@
 @property (readwrite, nonatomic) NSString *appName;
 @property (readwrite, nonatomic) NSString *appVersion;
 @property (readwrite, nonatomic) NSString *libVersion;
+@property (readwrite, nonatomic) NSURLSession *urlSession;
 
 @property (readwrite, nonatomic) double samplingRate;
 
@@ -34,6 +35,7 @@
         self.apiKey = apiKey;
         self.samplingRate = 1.0;
         self.env = env;
+        self.urlSession = [NSURLSession sharedSession];
     }
     return self;
 }
@@ -177,11 +179,8 @@
 }
 
 - (void)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError *error))completionHandler {
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
-    
     __weak AvoNetworkCallsHandler *weakSelf = self;
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *postDataTask = [self.urlSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(error == nil)
         {
             if (error != nil || data == nil) {

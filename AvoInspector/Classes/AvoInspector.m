@@ -319,6 +319,8 @@ static int batchFlushTime = 30;
 
 - (void) dealloc {
     [self.notificationCenter removeObserver:self];
+    [[AnalyticsDebugger events] removeAllObjects];
+    [self hideVisualInspector];
 }
 
 -(void)printAvoGenericError:(NSException *) exception {
