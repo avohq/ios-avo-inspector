@@ -121,11 +121,27 @@ it(@"inititalizes with session tracker", ^{
 });
 
 it(@"debug inititalization sets batch size to 1", ^{
-    [AvoInspector setBatchFlushSeconds:30];
+    [AvoInspector setBatchSize:30];
    
     AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 
-    expect([AvoInspector getBatchFlushSeconds]).to.equal(1);
+    expect([AvoInspector getBatchSize]).to.equal(1);
+});
+
+it(@"prod inititalization sets batch size to 30", ^{
+    [AvoInspector setBatchSize:1];
+    
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
+
+    expect([AvoInspector getBatchSize]).to.equal(30);
+});
+
+it(@"prod inititalization sets batch time to 30s", ^{
+    [AvoInspector setBatchFlushSeconds:1];
+   
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
+
+    expect([AvoInspector getBatchFlushSeconds]).to.equal(30);
 });
 
 it(@"debug inititalization sets logs on", ^{

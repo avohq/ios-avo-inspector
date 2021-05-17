@@ -116,6 +116,7 @@ static int batchFlushTime = 30;
             [AvoInspector setBatchSize:1];
             [AvoInspector setLogging:YES];
         } else {
+            [AvoInspector setBatchSize:30];
             [AvoInspector setBatchFlushSeconds:30];
             [AvoInspector setLogging:NO];
         }
