@@ -52,7 +52,11 @@ static int batchFlushTime = 30;
 }
 
 + (void) setBatchSize: (int) newBatchSize {
-    maxBatchSize = newBatchSize;
+    if (newBatchSize < 1) {
+        maxBatchSize = 1;
+    } else {
+        maxBatchSize = newBatchSize;
+    }
 }
 
 + (int) getBatchFlushSeconds {
@@ -109,9 +113,10 @@ static int batchFlushTime = 30;
         self.debugger = [AnalyticsDebugger new];
         
         if (env == AvoInspectorEnvDev) {
-            [AvoInspector setBatchFlushSeconds:1];
+            [AvoInspector setBatchSize:1];
             [AvoInspector setLogging:YES];
         } else {
+            [AvoInspector setBatchSize:30];
             [AvoInspector setBatchFlushSeconds:30];
             [AvoInspector setLogging:NO];
         }
