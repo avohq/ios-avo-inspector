@@ -150,16 +150,10 @@
 }
 
 - (void) filterEvents {
-    NSMutableArray *discardedItems = [NSMutableArray array];
-    
-    for (id event in self.events) {
-        if (![event isKindOfClass:[NSDictionary class]] || [event objectForKey:@"type"] == nil) {
-            [discardedItems addObject:event];
-        }
-    }
-    
     @synchronized(self) {
-        [self.events removeObjectsInArray:discardedItems];
+        [self.events filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id event, NSDictionary *bindings) {
+            return [event isKindOfClass:[NSDictionary class]] && [event objectForKey:@"type"] != nil;
+        }]];
     }
 }
 

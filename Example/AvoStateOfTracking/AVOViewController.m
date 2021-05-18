@@ -77,6 +77,10 @@ AvoInspector * avoInspector;
     
     avoInspector = [AVOAppDelegate getAvoSot];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void) {
+        [avoInspector showVisualInspector: Bar];
+    });
+    
     SEGAnalyticsConfiguration * config = [SEGAnalyticsConfiguration configurationWithWriteKey: @"YOUR_WRITEKEY_HERE"];
     config.trackApplicationLifecycleEvents = true;
     config.trackDeepLinks = true;
