@@ -129,7 +129,7 @@ static int batchFlushTime = 30;
         
         self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];
         self.appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
-        self.libVersion = @"1.2.4";
+        self.libVersion = @"1.2.5";
         
         self.notificationCenter = [NSNotificationCenter defaultCenter];
         

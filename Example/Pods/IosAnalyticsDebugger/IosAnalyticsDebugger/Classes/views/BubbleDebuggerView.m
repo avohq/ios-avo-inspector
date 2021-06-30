@@ -72,12 +72,57 @@
     NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
     NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
     if (hasError) {
-        [self.bubble setImage:[UIImage imageNamed:@"avo_bubble_error" inBundle:resBundle compatibleWithTraitCollection:nil]];
-        [self.counterBackground setImage:[UIImage imageNamed:@"badge_white" inBundle:resBundle compatibleWithTraitCollection:nil]];
-        [self.counter setTextColor:[UIColor colorWithRed:0.851 green:0.271 blue:0.325 alpha:1]]; //:@"error_color"
+        UIColor * errorColor = [UIColor colorWithRed:0.851 green:0.271 blue:0.325 alpha:1]; //:@"error_color"
+        UIImage * backgroundImage = [UIImage imageNamed:@"avo_bubble_error" inBundle:resBundle compatibleWithTraitCollection:nil];
+        if (backgroundImage != nil) {
+            [self.bubble setImage:backgroundImage];
+        } else {
+            [self.bubble.layer setBorderColor:[[UIColor grayColor] CGColor]];
+            [self.bubble.layer setBackgroundColor:[errorColor CGColor]];
+            [self.bubble.layer setBorderWidth:1.0];
+            [self.bubble.layer setOpacity:0.5];
+            [self.bubble.layer setCornerRadius:self.bubble.bounds.size.width / 2.0f];
+            [self.bubble setClipsToBounds:false];
+            [self.bubble.layer setShadowColor: [[UIColor grayColor] CGColor]];
+            [self.bubble.layer setShadowOpacity: 1];
+            [self.bubble.layer setShadowRadius: 10];
+            [self.bubble.layer setShadowPath:[UIBezierPath bezierPathWithRoundedRect: self.bubble.bounds cornerRadius: 10].CGPath];
+        }
+        
+        UIImage * badgeImage = [UIImage imageNamed:@"badge_white" inBundle:resBundle compatibleWithTraitCollection:nil];
+        if (badgeImage != nil) {
+            [self.counterBackground setImage:[UIImage imageNamed:@"badge_white" inBundle:resBundle compatibleWithTraitCollection:nil]];
+        } else {
+            [self.counterBackground.layer setBackgroundColor:[[UIColor whiteColor] CGColor]];
+            [self.counterBackground.layer setCornerRadius:self.counterBackground.bounds.size.width / 2.0f];
+        }
+        
+        [self.counter setTextColor:errorColor];
     } else {
-        [self.bubble setImage:[UIImage imageNamed:@"avo_bubble" inBundle:resBundle compatibleWithTraitCollection:nil]];
-        [self.counterBackground setImage:[UIImage imageNamed:@"badge_green" inBundle:resBundle compatibleWithTraitCollection:nil]];
+        UIImage * backgroundImage = [UIImage imageNamed:@"avo_bubble" inBundle:resBundle compatibleWithTraitCollection:nil];
+        if (backgroundImage != nil) {
+            [self.bubble setImage:backgroundImage];
+        } else {
+            [self.bubble.layer setBorderColor:[[UIColor colorWithRed:0 green:0 blue:0 alpha:0] CGColor]];
+            [self.bubble.layer setBackgroundColor:[[UIColor whiteColor] CGColor]];
+            [self.bubble.layer setBorderWidth:1.0];
+            [self.bubble.layer setOpacity:0.5];
+            [self.bubble.layer setCornerRadius:self.bubble.bounds.size.width / 2.0f];
+            [self.bubble setClipsToBounds:false];
+            [self.bubble.layer setShadowColor: [[UIColor grayColor] CGColor]];
+            [self.bubble.layer setShadowOpacity: 1];
+            [self.bubble.layer setShadowRadius: 10];
+            [self.bubble.layer setShadowPath:[UIBezierPath bezierPathWithRoundedRect: self.bubble.bounds cornerRadius: 10].CGPath];
+        }
+        
+        UIImage * badgeImage = [UIImage imageNamed:@"badge_green" inBundle:resBundle compatibleWithTraitCollection:nil];
+        if (badgeImage != nil) {
+            [self.counterBackground setImage:badgeImage];
+        } else {
+            [self.counterBackground.layer setBackgroundColor:[[UIColor colorWithRed:0.23 green: 0.73 blue: 0.61 alpha: 1.00] CGColor]];
+            [self.counterBackground.layer setCornerRadius:self.counterBackground.bounds.size.width / 2.0f];
+        }
+        
         [self.counter setTextColor:[UIColor whiteColor]];
     }
 }

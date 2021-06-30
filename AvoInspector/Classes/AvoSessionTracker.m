@@ -58,7 +58,7 @@ static NSString * sessionId;
 
 + (void) setSessionId:(NSString *)newSessionId
 {
-    if(sessionId != newSessionId) {
+    if (sessionId != newSessionId) {
         sessionId = [newSessionId copy];
     }
 }

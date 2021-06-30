@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *eventsTableView;
 @property (weak, nonatomic) IBOutlet UIImageView *closeButtonIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *avoLogoImage;
+@property (weak, nonatomic) IBOutlet UILabel *closeText;
 
 @property (strong, nonatomic) NSMutableSet *expendedEvents;
 
@@ -25,7 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    
     [self.closeButton addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissSelf)]];
     
     self.expendedEvents = [NSMutableSet new];
@@ -34,12 +35,12 @@
     NSURL *bundleURL = [[[NSBundle bundleForClass:self.class] resourceURL] URLByAppendingPathComponent:@"IosAnalyticsDebugger.bundle"];
     NSBundle *resBundle = [NSBundle bundleWithURL:bundleURL];
     UINib *eventItemNib = [UINib nibWithNibName:@"EventTableViewCell" bundle:resBundle];
-      
+    
     [self.eventsTableView registerNib:eventItemNib forCellReuseIdentifier:@"EventTableViewCell"];
     
     [self.eventsTableView setDelegate:self];
     [self.eventsTableView setDataSource:self];
-     
+    
     UITableView * __weak weakTableView = self.eventsTableView;
     [AnalyticsDebugger setOnNewEventCallback:^(DebuggerEventItem * _Nonnull item) {
         dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -47,7 +48,14 @@
         });
     }];
     
-    [self.closeButtonIcon setImage:[UIImage imageNamed:@"avo_debugger_close_button" inBundle:resBundle compatibleWithTraitCollection:nil]];
+    
+    UIImage * closeImage = [UIImage imageNamed:@"avo_debugger_close_button" inBundle:resBundle compatibleWithTraitCollection:nil];
+    if (closeImage != nil) {
+        [self.closeButtonIcon setImage:closeImage];
+        [self.closeText setText:@""];
+    } else {
+        [self.closeText setText:@"x"];
+    }
     [self.avoLogoImage setImage:[UIImage imageNamed:@"avo_logo" inBundle:resBundle compatibleWithTraitCollection:nil]];
 }
 
@@ -87,7 +95,7 @@
     }
     
     [cell showError:[Util eventHaveErrors:cell.event]];
- 
+    
     [self showFullLengthSeparators:cell];
     
     return cell;
