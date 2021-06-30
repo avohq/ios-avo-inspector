@@ -101,7 +101,7 @@ NSString *currentSchemaId;
         screenHeight = screenRect.size.height;
         NSInteger bottomOffset = [Util barBottomOffset];
         
-        debuggerView = [[BubbleDebuggerView alloc] initWithFrame: CGRectMake(screenWidth - 40, screenHeight - 40 - bottomOffset, 40, 40) ];
+        debuggerView = [[BubbleDebuggerView alloc] initWithFrame: CGRectMake(screenWidth - 40, screenHeight - 80 - bottomOffset, 40, 40)];
         
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC));
            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {

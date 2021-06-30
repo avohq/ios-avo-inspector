@@ -24,5 +24,5 @@ A powerful suite of features that analyze your current state of tracking and gui
 
   s.source_files = 'AvoInspector/Classes/**/*'
 
-  s.dependency 'IosAnalyticsDebugger', '~> 1.2.1'
+  s.dependency 'IosAnalyticsDebugger', '~> 1.2.3'
 end
