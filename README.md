@@ -11,6 +11,12 @@ For more information about the Inspector project please read [Avo documentation]
 
 # Installation
 
+### Swift Package Manager
+
+You can include Avo Inspector with SPM from [this repo](https://github.com/avohq/ios-avo-inspector-spm)
+
+### Cocoapods
+
 AvoInspector is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
