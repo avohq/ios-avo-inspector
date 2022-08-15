@@ -20,7 +20,6 @@
 
 @interface AvoNetworkCallsHandler ()
 
-//- (void) callInspectorWithBatchBody: (NSArray *) body;
 - (BOOL)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError *error))completionHandler;
 
 @property (readwrite, nonatomic) double samplingRate;
@@ -44,8 +43,8 @@ describe(@"Handling network calls", ^{
         expect(sut.env).to.equal(1);
     });
     
-    it(@"AvoNetworkCallsHandler calls procided endpoint", ^{
-        NSString * testProxy = @"test.proxy2";
+    it(@"AvoNetworkCallsHandler calls provided endpoint", ^{
+        NSString * testProxy = @"test.proxy";
         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env: 1 endpoint:testProxy];
         id partialMock = OCMPartialMock(sut);
 
