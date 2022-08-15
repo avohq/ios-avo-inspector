@@ -18,10 +18,17 @@
 
 @end
 
+@interface AvoNetworkCallsHandler ()
+
+@property (readwrite, nonatomic) NSString * endpoint;
+
+@end
+
 @interface AvoInspector ()
 
 @property (readwrite, nonatomic) NSNotificationCenter *notificationCenter;
 @property (readwrite, nonatomic) AvoBatcher *avoBatcher;
+@property (readwrite, nonatomic) AvoNetworkCallsHandler *networkCallsHandler;
 @property (readwrite, nonatomic) AvoSessionTracker *sessionTracker;
 @property (readwrite, nonatomic) AnalyticsDebugger *debugger;
 @property (readwrite, nonatomic) AvoInspectorEnv env;
@@ -118,6 +125,12 @@ it(@"inititalizes with session tracker", ^{
     AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
 
     expect(sut.sessionTracker).notTo.beNil();
+});
+
+it(@"inititalizes with proxy endpoint", ^{
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd proxyEndpoint:@"test.proxy"];
+
+    expect(sut.networkCallsHandler.endpoint).to.equal(@"test.proxy");
 });
 
 it(@"debug inititalization sets batch size to 1", ^{

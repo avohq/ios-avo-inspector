@@ -42,7 +42,7 @@ describe(@"Environemtn mapping", ^{
      });
          
      it(@"AvoNetworkCallsHandler sends prod env", ^{
-         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0];
+         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0 endpoint:@"text.proxy"];
 
          NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
          
@@ -50,7 +50,7 @@ describe(@"Environemtn mapping", ^{
      });
          
      it(@"AvoNetworkCallsHandler sends dev env", ^{
-         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
+         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1 endpoint:@"text.proxy"];
 
          NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
          
@@ -58,7 +58,7 @@ describe(@"Environemtn mapping", ^{
      });
      
      it(@"AvoNetworkCallsHandler sends staging env", ^{
-         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:2];
+         AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:2 endpoint:@"text.proxy"];
 
          NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
          

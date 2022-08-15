@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, AvoInspectorEnv) {
 
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env;
 
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env proxyEndpoint: (NSString *) proxyEndpoint;
+
 @end
 
 NS_ASSUME_NONNULL_END
