@@ -198,7 +198,7 @@
                 NSLog(@"[avo] Avo Inspector: Successfully sent events.");
             }
         } else if ([AvoInspector isLogging]) {
-            NSLog(@"[avo] Avo Inspector: Failed sending events.");
+            NSLog(@"[avo] Avo Inspector: Failed sending events. Will retry later.");
         }
         
         completionHandler(error);
