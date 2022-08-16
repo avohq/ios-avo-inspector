@@ -20,10 +20,11 @@
 
 @interface AvoNetworkCallsHandler ()
 
-- (void) callInspectorWithBatchBody: (NSArray *) body;
+- (BOOL)sendHttpRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError *error))completionHandler;
 
 @property (readwrite, nonatomic) double samplingRate;
 @property (readwrite, nonatomic) int env;
+@property (readwrite, nonatomic) NSString *endpoint;
 
 @end
 
@@ -31,18 +32,37 @@ SpecBegin(NetworkCalls)
 describe(@"Handling network calls", ^{
          
     it(@"AvoNetworkCallsHandler saves values when init", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env: 1];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env: 1 endpoint:@"test.proxy"];
         
         expect(sut.apiKey).to.equal(@"testApiKey");
         expect(sut.appVersion).to.equal(@"testAppVersion");
         expect(sut.libVersion).to.equal(@"testLibVersion");
         expect(sut.appName).to.equal(@"testAppName");
         expect(sut.samplingRate).to.equal(1.0);
+        expect(sut.endpoint).to.equal(@"test.proxy");
         expect(sut.env).to.equal(1);
+    });
+    
+    it(@"AvoNetworkCallsHandler calls provided endpoint", ^{
+        NSString * testProxy = @"test.proxy";
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName: @"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env: 1 endpoint:testProxy];
+        id partialMock = OCMPartialMock(sut);
+
+        __block NSString * apiString;
+
+        OCMStub([partialMock sendHttpRequest:[OCMArg checkWithBlock:^BOOL(NSMutableURLRequest * value) {
+            apiString = [value URL].description;
+            return @YES;
+        }] completionHandler:[OCMArg any]]).andDo(nil);
+    
+        [partialMock callInspectorWithBatchBody:[NSMutableArray new] completionHandler:^(NSError * _Nonnull error) {}];
+       
+        OCMVerify(times(1), [partialMock sendHttpRequest:[OCMArg any] completionHandler:[OCMArg any]]);
+        expect(apiString).to.equal(testProxy);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for session tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1 endpoint:@"text.proxy"];
         sut.samplingRate = 0.1;
         AvoSessionTracker.sessionId = @"testSessionId";
     
@@ -55,7 +75,6 @@ describe(@"Handling network calls", ^{
         expect([actualSessionStartedBody objectForKey:@"libPlatform"]).to.equal(@"ios");
         expect([actualSessionStartedBody objectForKey:@"appName"]).to.equal(@"testAppName");
         expect([actualSessionStartedBody objectForKey:@"createdAt"]).toNot.beNil();
-        expect([actualSessionStartedBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualSessionStartedBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
         expect([actualSessionStartedBody objectForKey:@"samplingRate"]).to.equal(@0.1);
@@ -63,7 +82,7 @@ describe(@"Handling network calls", ^{
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0 endpoint:@"text.proxy"];
         sut.samplingRate = 0.1;
         AvoSessionTracker.sessionId = @"testSessionId";
     
@@ -88,7 +107,6 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"libPlatform"]).to.equal(@"ios");
         expect([actualTrackSchemaBody objectForKey:@"appName"]).to.equal(@"testAppName");
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
-        expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"sessionId"]).to.equal(@"testSessionId");
         expect([actualTrackSchemaBody objectForKey:@"samplingRate"]).to.equal(@0.1);
@@ -125,7 +143,7 @@ describe(@"Handling network calls", ^{
     });
 
      it(@"AvoNetworkCallsHandler builds proper body for object schema tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1 endpoint:@"text.proxy"];
      
         NSMutableDictionary * schema = [NSMutableDictionary new];
         AvoObject * object = [AvoObject new];
@@ -181,13 +199,12 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"libPlatform"]).to.equal(@"ios");
         expect([actualTrackSchemaBody objectForKey:@"appName"]).to.equal(@"testAppName");
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
-        expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"avoFunction"]).to.equal(@NO);
     });
          
     it(@"AvoNetworkCallsHandler builds proper body for list schema tracking", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1 endpoint:@"text.proxy"];
 
         NSMutableDictionary * schema = [NSMutableDictionary new];
 
@@ -255,13 +272,12 @@ describe(@"Handling network calls", ^{
         expect([actualTrackSchemaBody objectForKey:@"libPlatform"]).to.equal(@"ios");
         expect([actualTrackSchemaBody objectForKey:@"appName"]).to.equal(@"testAppName");
         expect([actualTrackSchemaBody objectForKey:@"createdAt"]).toNot.beNil();
-        expect([actualTrackSchemaBody objectForKey:@"trackingId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"messageId"]).toNot.beNil();
         expect([actualTrackSchemaBody objectForKey:@"avoFunction"]).to.equal(@NO);
     });
     
     it(@"AvoNetworkCallsHandler builds proper body for schema tracking from avo function", ^{
-        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0];
+        AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0 endpoint:@"text.proxy"];
     
         NSMutableDictionary * schema = [NSMutableDictionary new];
     

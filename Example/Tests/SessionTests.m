@@ -68,7 +68,7 @@ describe(@"Sessions", ^{
     });
 
     it(@"resets session id on new session", ^{
-        AvoNetworkCallsHandler * networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"key" appName:@"name" appVersion:@"app version" libVersion:@"lib version" env:1];
+        AvoNetworkCallsHandler * networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"key" appName:@"name" appVersion:@"app version" libVersion:@"lib version" env:1 endpoint:@"text.proxy"];
     
         AvoBatcher * batcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:networkCallsHandler];
         [AvoInspector setBatchFlushSeconds:30];

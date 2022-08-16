@@ -99,7 +99,7 @@ static int batchFlushTime = 30;
     return self;
 }
 
--(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env {
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env proxyEndpoint: (NSString *) proxyEndpoint {
     self = [super init];
     if (self) {
         if (env != AvoInspectorEnvProd && env != AvoInspectorEnvDev && env != AvoInspectorEnvStaging) {
@@ -133,7 +133,7 @@ static int batchFlushTime = 30;
         
         self.notificationCenter = [NSNotificationCenter defaultCenter];
         
-        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion env:(int)self.env];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion env:(int)self.env endpoint: proxyEndpoint];
         self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler];
         
         self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
@@ -146,6 +146,11 @@ static int batchFlushTime = 30;
         
         [self addObservers];
     }
+    return self;
+}
+
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env {
+    self = [self initWithApiKey:apiKey env:env proxyEndpoint:@"https://api.avo.app/inspector/v1/track"];
     return self;
 }
 
