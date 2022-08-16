@@ -133,6 +133,12 @@ it(@"inititalizes with proxy endpoint", ^{
     expect(sut.networkCallsHandler.endpoint).to.equal(@"test.proxy");
 });
 
+it(@"inititalizes with default endpoint when no proxy provided", ^{
+    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvProd];
+
+    expect(sut.networkCallsHandler.endpoint).to.equal(@"https://api.avo.app/inspector/v1/track");
+});
+
 it(@"debug inititalization sets batch size to 1", ^{
     [AvoInspector setBatchSize:30];
    
