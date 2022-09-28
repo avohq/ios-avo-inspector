@@ -7,7 +7,7 @@
 # Avo documentation
 
 This is a quick start guide. 
-For more information about Inspector project please read [Avo documentation](https://www.avo.app/docs/implementation/inspector/sdk/ios).
+For more information about the Inspector project please read the [Avo documentation](https://www.avo.app/docs/implementation/inspector/sdk/ios).
 
 # Installation
 
