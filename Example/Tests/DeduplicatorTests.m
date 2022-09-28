@@ -28,7 +28,7 @@
 @end
 
 SpecBegin(Deduplicator)
-describe(@"Deduplication of same events coming from manual tracking and Avo functions", ^{
+describe(@"Deduplication of same events coming from manual tracking and Codegen", ^{
     
     beforeEach(^{
         [[AvoDeduplicator sharedDeduplicator] clear];

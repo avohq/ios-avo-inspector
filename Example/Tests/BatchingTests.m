@@ -259,7 +259,7 @@ SpecBegin(Batching)
              expect(postBatchCount).to.equal(0);
          });
         
-        it(@"Parses avo functions event id and hash", ^{
+        it(@"Parses Codegen event id and hash", ^{
              id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
              OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
              OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:@"testEventId" eventHash:@"testEventHash"]).andReturn(@{@"type": @"test"});
