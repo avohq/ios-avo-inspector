@@ -105,7 +105,6 @@
 		42D7675799A84000D708149A446837AE /* AvoBoolean.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C976E7FDA29F2EEA9F19E373CCB6AEA /* AvoBoolean.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4387D4582C255860B46C2C2E6D4EAB6E /* BarDebuggerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64C63D7D0B3FC66E63B8F803F7EDFB4F /* BarDebuggerView.m */; };
 		447BC5F54C514F816B21D5809FBCB607 /* SEGUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB79D39702D83C1848679FDB497887C /* SEGUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		44E8F52DC591B179CB4512746DAA9518 /* AvoInstallationId.h in Headers */ = {isa = PBXBuildFile; fileRef = B0BC09DC72F83E91EEACDE4A5E30B066 /* AvoInstallationId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		44EC2AB76EE99BF64361791E795CB788 /* UIViewController+SEGScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = AE75642C8CAC6517C696B4E6CE8BDC88 /* UIViewController+SEGScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		452FAD7BB658A9DA610606A2E6AEA3AE /* SEGAnalyticsConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D10F625F1451913A872F2F4D18B929 /* SEGAnalyticsConfiguration.m */; };
 		4568C70C3B21F2360BAE5E410ED51F02 /* EventsListScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 836D3DEF2818A83CC828E092F2CFC6FC /* EventsListScreenViewController.xib */; };
@@ -286,7 +285,6 @@
 		C4AC8DE6763339E1F3333936BA49CF6E /* SEGReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D1CFC7F8D0C5634E449C5A984D53479 /* SEGReachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C5B71E5E483D73157473B8D920D68ACF /* OCMObserverRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3201E8274185D99C0724BCD6224199CA /* OCMObserverRecorder.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		C6DCA1B9592068D01A5FCA3A40C4DFCD /* SpectaUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF9DE641C439A0AECD3AB3335E256CF /* SpectaUtility.m */; };
-		C7C2D56ABFEF23AC36DCC90F0AE90689 /* AvoInstallationId.m in Sources */ = {isa = PBXBuildFile; fileRef = 1892867DC231DC9C55ECC8509844D8D3 /* AvoInstallationId.m */; };
 		C7F45B9D2E1E2F272D064F1A1A491D35 /* UIApplication+StrictKeyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = BB299987986FAEB42402E6FE425F4523 /* UIApplication+StrictKeyWindow.m */; };
 		C82E0A96F4276C5F160A177985210C26 /* BarDebuggerView.h in Headers */ = {isa = PBXBuildFile; fileRef = D3752C5163540FEE246826B3C484A65D /* BarDebuggerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C8D5363E37368C0CFE0DA66E1F5DD75D /* Specta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A81766EA5731F43622C96B80CDAF5548 /* Specta.framework */; };
@@ -467,7 +465,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		019FAA8FD83DC64F63808809C34DCF16 /* Pods_AvoStateOfTracking_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AvoStateOfTracking_Tests.framework; path = "Pods-AvoStateOfTracking_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		019FAA8FD83DC64F63808809C34DCF16 /* Pods_AvoStateOfTracking_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01C1D2819E84E628AAEBAF9C998CE4EE /* OCPartialMockObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OCPartialMockObject.m; path = Source/OCMock/OCPartialMockObject.m; sourceTree = "<group>"; };
 		0238E26919B7619373085FE6C40A5ED3 /* EXPUnsupportedObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EXPUnsupportedObject.m; path = Expecta/EXPUnsupportedObject.m; sourceTree = "<group>"; };
 		025F3BB8FA8F479EFE018DE030C07298 /* Specta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Specta.release.xcconfig; sourceTree = "<group>"; };
@@ -486,17 +484,17 @@
 		074E17A32E982F5B37B367D1D013C807 /* IosAnalyticsDebugger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = IosAnalyticsDebugger.debug.xcconfig; sourceTree = "<group>"; };
 		078C48635173A86590F5761F916CA1F2 /* EXPMatchers+postNotification.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+postNotification.m"; path = "Expecta/Matchers/EXPMatchers+postNotification.m"; sourceTree = "<group>"; };
 		08B51BD0C545A310148EB92905CE8FF1 /* Expecta-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Expecta-prefix.pch"; sourceTree = "<group>"; };
-		08F7F0770B4878B9883B87DCD8569CB4 /* Expecta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Expecta.framework; path = Expecta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		08F7F0770B4878B9883B87DCD8569CB4 /* Expecta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Expecta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		09B7E9DF4EE41E17E916908D5BD03F0E /* Expecta-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Expecta-Info.plist"; sourceTree = "<group>"; };
 		0B00E5B7D40875EAF87C24822A1A16EF /* Pods-AvoStateOfTracking_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AvoStateOfTracking_Example-frameworks.sh"; sourceTree = "<group>"; };
-		0C781FF4C976452E11FAAB65E0F34882 /* IosAnalyticsDebugger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = IosAnalyticsDebugger.framework; path = IosAnalyticsDebugger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C781FF4C976452E11FAAB65E0F34882 /* IosAnalyticsDebugger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IosAnalyticsDebugger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D45FF2DEF280B89A44AD1B19065B72E /* EXPMatchers+beKindOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beKindOf.m"; path = "Expecta/Matchers/EXPMatchers+beKindOf.m"; sourceTree = "<group>"; };
 		0D47E6FD1ADF09CD33487CF76E964293 /* AvoObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AvoObject.m; sourceTree = "<group>"; };
 		0E87A43E03B29491FF9E25BA94B95475 /* OCMVerifier.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMVerifier.h; path = Source/OCMock/OCMVerifier.h; sourceTree = "<group>"; };
 		0F06139B492ABEA13B8E949C498AE0E4 /* Analytics-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Analytics-dummy.m"; sourceTree = "<group>"; };
 		0FFD10066F361433F391BACF810F26CD /* SEGTrackPayload.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SEGTrackPayload.h; path = Analytics/Classes/Integrations/SEGTrackPayload.h; sourceTree = "<group>"; };
 		1124D558F2484589353541A22691D428 /* EXPMatchers+beInTheRangeOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beInTheRangeOf.m"; path = "Expecta/Matchers/EXPMatchers+beInTheRangeOf.m"; sourceTree = "<group>"; };
-		11B0383C6B04CAF519A3D2E82E34D559 /* AvoInspector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AvoInspector.framework; path = AvoInspector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		11B0383C6B04CAF519A3D2E82E34D559 /* AvoInspector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AvoInspector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		12CFA9A42C0CD167043959B003B62C58 /* SPTSharedExampleGroups.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPTSharedExampleGroups.h; path = Specta/Specta/SPTSharedExampleGroups.h; sourceTree = "<group>"; };
 		12D4C060934DB3F07EA15A1FC7BDF97B /* EXPMatchers+beGreaterThan.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beGreaterThan.m"; path = "Expecta/Matchers/EXPMatchers+beGreaterThan.m"; sourceTree = "<group>"; };
 		13189A2060AC3C836B7CEFB161AC3849 /* Expecta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Expecta.debug.xcconfig; sourceTree = "<group>"; };
@@ -504,12 +502,11 @@
 		1495EAFE1CADE062F268CAC3632DF33E /* DebuggerAnalyticsDestination.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DebuggerAnalyticsDestination.h; path = IosAnalyticsDebugger/Classes/analytics/DebuggerAnalyticsDestination.h; sourceTree = "<group>"; };
 		154774424AB23F8D8F4AF0960E01EF6F /* SEGStoreKitTracker.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SEGStoreKitTracker.h; path = Analytics/Classes/Internal/SEGStoreKitTracker.h; sourceTree = "<group>"; };
 		1595A7FDE5C335F2D1B26F4C8959883F /* NSValue+Expecta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValue+Expecta.h"; path = "Expecta/NSValue+Expecta.h"; sourceTree = "<group>"; };
-		15B13B063AA97C48C9010C298AECBDDA /* Specta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Specta.framework; path = Specta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		15B13B063AA97C48C9010C298AECBDDA /* Specta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Specta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1605BA0C9C3BC5A79488B8F9B9997EE3 /* SEGStoreKitTracker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SEGStoreKitTracker.m; path = Analytics/Classes/Internal/SEGStoreKitTracker.m; sourceTree = "<group>"; };
 		1638DA6BD82306B53A68D49F76413F27 /* EXPMatchers+match.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+match.m"; path = "Expecta/Matchers/EXPMatchers+match.m"; sourceTree = "<group>"; };
 		173DC23FD1AA76A68CF174F35D009CF7 /* EXPMatchers+beFalsy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+beFalsy.h"; path = "Expecta/Matchers/EXPMatchers+beFalsy.h"; sourceTree = "<group>"; };
-		1807723D7016B0FEAA98755EF9556CDC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		1892867DC231DC9C55ECC8509844D8D3 /* AvoInstallationId.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AvoInstallationId.m; path = AvoInspector/Classes/AvoInstallationId.m; sourceTree = "<group>"; };
+		1807723D7016B0FEAA98755EF9556CDC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		198BED0D58EDB83E0A8DE1923B22836C /* AvoUnknownType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AvoUnknownType.h; sourceTree = "<group>"; };
 		19E0AB89E7B1B3B9A747BEDFBDEFCEB3 /* Pods-AvoStateOfTracking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AvoStateOfTracking_Example.release.xcconfig"; sourceTree = "<group>"; };
 		1A3A290B882378D68A2EB4D34EFD4108 /* NSObject+Expecta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+Expecta.h"; path = "Expecta/NSObject+Expecta.h"; sourceTree = "<group>"; };
@@ -520,7 +517,7 @@
 		1E92F4B1778ECB3D2478BF1DD65535F8 /* OCMNotificationPoster.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMNotificationPoster.h; path = Source/OCMock/OCMNotificationPoster.h; sourceTree = "<group>"; };
 		1EB4962518AF69714AB4C8F79FAB1FBB /* EXPMatchers+beKindOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+beKindOf.h"; path = "Expecta/Matchers/EXPMatchers+beKindOf.h"; sourceTree = "<group>"; };
 		1EB8968995D50D8CA70B81FA042AFBC9 /* Specta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Specta.debug.xcconfig; sourceTree = "<group>"; };
-		20B68C9269B45825E82F4F5ECE0EB27C /* Expecta_Snapshots.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Expecta_Snapshots.framework; path = "Expecta+Snapshots.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		20B68C9269B45825E82F4F5ECE0EB27C /* Expecta_Snapshots.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Expecta_Snapshots.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2234107FEB8DCCE8A044B41B2AA93E8B /* OCMBlockCaller.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMBlockCaller.h; path = Source/OCMock/OCMBlockCaller.h; sourceTree = "<group>"; };
 		23AE63FCE69A91E7743D914213784D2C /* OCMFunctions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMFunctions.h; path = Source/OCMock/OCMFunctions.h; sourceTree = "<group>"; };
 		23EB41B7AFCF53C0DB0E9AD98B2DDC03 /* Pods-AvoStateOfTracking_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AvoStateOfTracking_Example.modulemap"; sourceTree = "<group>"; };
@@ -535,7 +532,7 @@
 		2A303D0EF45D9B06E7119F40489C85D0 /* EXPMatchers+beInstanceOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beInstanceOf.m"; path = "Expecta/Matchers/EXPMatchers+beInstanceOf.m"; sourceTree = "<group>"; };
 		2C6631FF9180B7FC036923C0FB844C54 /* DebuggerPropError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DebuggerPropError.m; path = IosAnalyticsDebugger/Classes/model/DebuggerPropError.m; sourceTree = "<group>"; };
 		2C81A9646728B62DF82416460DCC9BF7 /* XCTestCase+Specta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "XCTestCase+Specta.h"; path = "Specta/Specta/XCTestCase+Specta.h"; sourceTree = "<group>"; };
-		2CE4B6165F426953A26419DF02AF0D93 /* Analytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Analytics.framework; path = Analytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CE4B6165F426953A26419DF02AF0D93 /* Analytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Analytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CEF24C01A98D76541D6FAD4971BCAE3 /* OCMInvocationExpectation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMInvocationExpectation.h; path = Source/OCMock/OCMInvocationExpectation.h; sourceTree = "<group>"; };
 		2D0340EDC1EF51A66BF43D1FEB62357A /* AvoUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AvoUtils.m; path = AvoInspector/Classes/AvoUtils.m; sourceTree = "<group>"; };
 		2E9EB829EA6B1DD9B7422BF100CC2705 /* OCMRealObjectForwarder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OCMRealObjectForwarder.m; path = Source/OCMock/OCMRealObjectForwarder.m; sourceTree = "<group>"; };
@@ -568,7 +565,7 @@
 		3F5A5D57A68EE250798B47C7739B06E7 /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+OCMAdditions.h"; path = "Source/OCMock/NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
 		3FB01767B6A168636E07F0794D430522 /* NSData+SEGGZIP.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSData+SEGGZIP.h"; path = "Analytics/Classes/Internal/NSData+SEGGZIP.h"; sourceTree = "<group>"; };
 		3FEAD59B9872B2B3FA1E0D1555588074 /* OCMBoxedReturnValueProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMBoxedReturnValueProvider.h; path = Source/OCMock/OCMBoxedReturnValueProvider.h; sourceTree = "<group>"; };
-		40A518219D7B25B888EEA71F5CCA8248 /* IosAnalyticsDebugger.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = IosAnalyticsDebugger.bundle; path = "IosAnalyticsDebugger-IosAnalyticsDebugger.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40A518219D7B25B888EEA71F5CCA8248 /* IosAnalyticsDebugger.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IosAnalyticsDebugger.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		4238A9ABE330BAE26AFCDFA025DB1615 /* Pods-AvoStateOfTracking_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AvoStateOfTracking_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		424DA1E344161CD577F480FB19D837F9 /* Pods-AvoStateOfTracking_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AvoStateOfTracking_Example-dummy.m"; sourceTree = "<group>"; };
 		42AEFA366D84604C2C4108C8D87CA8D6 /* EXPMatchers+beTruthy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beTruthy.m"; path = "Expecta/Matchers/EXPMatchers+beTruthy.m"; sourceTree = "<group>"; };
@@ -609,7 +606,7 @@
 		5A1C867B2B56F7267E861523E6BD4D19 /* Expecta+Snapshots-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Expecta+Snapshots-prefix.pch"; sourceTree = "<group>"; };
 		5A7F2C266237ADEA0CDDC1BB43BD36F5 /* Util.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Util.m; path = IosAnalyticsDebugger/Classes/Util.m; sourceTree = "<group>"; };
 		5B700F42587FB486FD8F79B2F047ACE7 /* ExpectaSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ExpectaSupport.h; path = Expecta/ExpectaSupport.h; sourceTree = "<group>"; };
-		5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FBSnapshotTestCase.framework; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C4F31330DFA99D699E4BDC8C3573D73 /* FBSnapshotTestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C976E7FDA29F2EEA9F19E373CCB6AEA /* AvoBoolean.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AvoBoolean.h; sourceTree = "<group>"; };
 		5D186F4894B1C8ECF80A2B2686E21473 /* AvoSchemaExtractor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AvoSchemaExtractor.h; path = AvoInspector/Classes/AvoSchemaExtractor.h; sourceTree = "<group>"; };
 		5DF0E1B8012BD762822BA7EB24906203 /* Specta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Specta.h; path = Specta/Specta/Specta.h; sourceTree = "<group>"; };
@@ -667,7 +664,7 @@
 		7EE3BDBB62D667E5721363D155C8AED8 /* EXPMatchers+contain.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+contain.h"; path = "Expecta/Matchers/EXPMatchers+contain.h"; sourceTree = "<group>"; };
 		7F18CB6E7D8DA9380BE40EF39F630425 /* OCProtocolMockObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCProtocolMockObject.h; path = Source/OCMock/OCProtocolMockObject.h; sourceTree = "<group>"; };
 		7F33AE7B8C42A72253065A4AF6DB2DE8 /* EXPFloatTuple.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EXPFloatTuple.m; path = Expecta/EXPFloatTuple.m; sourceTree = "<group>"; };
-		7FBA624E3591402D8829D786F51223E9 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		7FBA624E3591402D8829D786F51223E9 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		80F8757759C0AB3E63FFEC4337AC3623 /* OCObserverMockObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCObserverMockObject.h; path = Source/OCMock/OCObserverMockObject.h; sourceTree = "<group>"; };
 		8184BD21FC84545F40FDDA822B761984 /* EXPMatchers+beGreaterThanOrEqualTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+beGreaterThanOrEqualTo.h"; path = "Expecta/Matchers/EXPMatchers+beGreaterThanOrEqualTo.h"; sourceTree = "<group>"; };
 		818516FC9A6B7093B834B4EF85472125 /* AvoInspector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AvoInspector.release.xcconfig; sourceTree = "<group>"; };
@@ -699,13 +696,13 @@
 		942702C49B17D185C6999164F5B48CCE /* EXPMatchers+beginWith.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beginWith.m"; path = "Expecta/Matchers/EXPMatchers+beginWith.m"; sourceTree = "<group>"; };
 		94A354950A40B0936B19DE72F00FF3A2 /* Expecta+Snapshots-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Expecta+Snapshots-dummy.m"; sourceTree = "<group>"; };
 		94BB8B81E948D1D5423B840FBB7D4568 /* IosAnalyticsDebugger-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "IosAnalyticsDebugger-prefix.pch"; sourceTree = "<group>"; };
-		95EC507E4CFAB5583FD5B56793A5B17D /* Pods_AvoStateOfTracking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AvoStateOfTracking_Example.framework; path = "Pods-AvoStateOfTracking_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		95EC507E4CFAB5583FD5B56793A5B17D /* Pods_AvoStateOfTracking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		970455F39B82DFD60EB459FD482C7AF0 /* FBSnapshotTestController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestController.m; path = FBSnapshotTestCase/FBSnapshotTestController.m; sourceTree = "<group>"; };
 		9836CAEAC2588467E66D23A07869B5A7 /* SEGAnalyticsUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SEGAnalyticsUtils.h; path = Analytics/Classes/Internal/SEGAnalyticsUtils.h; sourceTree = "<group>"; };
 		996F0FE03CC15F509E9FC25F7F323798 /* AvoNetworkCallsHandler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AvoNetworkCallsHandler.m; path = AvoInspector/Classes/AvoNetworkCallsHandler.m; sourceTree = "<group>"; };
 		9B787D017F6A07CFBFBBFE927D3C64E5 /* OCMInvocationMatcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OCMInvocationMatcher.m; path = Source/OCMock/OCMInvocationMatcher.m; sourceTree = "<group>"; };
 		9D927BBABFA409E6ED406A4E15B44435 /* SPTCallSite.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPTCallSite.m; path = Specta/Specta/SPTCallSite.m; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9EF13969FD7C9B521DF32DFBF37D4185 /* SEGAliasPayload.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SEGAliasPayload.h; path = Analytics/Classes/Integrations/SEGAliasPayload.h; sourceTree = "<group>"; };
 		9F5291A853BCAA2C58050452EB714A64 /* OCMInvocationMatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMInvocationMatcher.h; path = Source/OCMock/OCMInvocationMatcher.h; sourceTree = "<group>"; };
 		9F856674AB7D1105FA1A33197D190F67 /* Specta-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Specta-dummy.m"; sourceTree = "<group>"; };
@@ -726,7 +723,7 @@
 		AAB9A534D2BB6FB25C2FBCD6E059C8A1 /* OCMBlockArgCaller.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMBlockArgCaller.h; path = Source/OCMock/OCMBlockArgCaller.h; sourceTree = "<group>"; };
 		AB02771675DE3F2181C57DFAE6B0B33F /* EXPMatchers+postNotification.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+postNotification.h"; path = "Expecta/Matchers/EXPMatchers+postNotification.h"; sourceTree = "<group>"; };
 		AB286D6FCE3DDC03792C7F17CA882EEF /* OCMObjectReturnValueProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMObjectReturnValueProvider.h; path = Source/OCMock/OCMObjectReturnValueProvider.h; sourceTree = "<group>"; };
-		AB7F75988A9D6D7106C74806BC57BC8E /* AvoInspector.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = AvoInspector.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AB7F75988A9D6D7106C74806BC57BC8E /* AvoInspector.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = AvoInspector.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		AB9DEC6A2ACE0B57AF918B8D2F730C9E /* EXPMatchers+beInTheRangeOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+beInTheRangeOf.h"; path = "Expecta/Matchers/EXPMatchers+beInTheRangeOf.h"; sourceTree = "<group>"; };
 		ABA1E4EA47280C2E32B91FEAAF573CF1 /* Pods-AvoStateOfTracking_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AvoStateOfTracking_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		ABFDE588781085F651AF354DFEB78EB3 /* AvoInspector.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AvoInspector.debug.xcconfig; sourceTree = "<group>"; };
@@ -737,7 +734,6 @@
 		AE75642C8CAC6517C696B4E6CE8BDC88 /* UIViewController+SEGScreen.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIViewController+SEGScreen.h"; path = "Analytics/Classes/Internal/UIViewController+SEGScreen.h"; sourceTree = "<group>"; };
 		AF52ECEB732DBC23B8CCC957AB2E2146 /* EXPMatchers+equal.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+equal.m"; path = "Expecta/Matchers/EXPMatchers+equal.m"; sourceTree = "<group>"; };
 		B0AE789EA06A2448402E2CB0999C2147 /* Analytics-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Analytics-Info.plist"; sourceTree = "<group>"; };
-		B0BC09DC72F83E91EEACDE4A5E30B066 /* AvoInstallationId.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AvoInstallationId.h; path = AvoInspector/Classes/AvoInstallationId.h; sourceTree = "<group>"; };
 		B154E04133219E59369B59448ED04A9B /* SEGSegmentIntegration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SEGSegmentIntegration.m; path = Analytics/Classes/Internal/SEGSegmentIntegration.m; sourceTree = "<group>"; };
 		B3BCE77F4EE4FD235F7F66CF36AB44EF /* SEGPayload.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SEGPayload.m; path = Analytics/Classes/Integrations/SEGPayload.m; sourceTree = "<group>"; };
 		B47D6BD1B8673E571A02A2586D867D45 /* NSValue+OCMAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValue+OCMAdditions.h"; path = "Source/OCMock/NSValue+OCMAdditions.h"; sourceTree = "<group>"; };
@@ -854,7 +850,7 @@
 		F17A1627463318600A3FF6D0686962CB /* SpectaTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SpectaTypes.h; path = Specta/Specta/SpectaTypes.h; sourceTree = "<group>"; };
 		F2639854CD7DFC2664EEE625AC93DC21 /* DebuggerMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DebuggerMessage.h; path = IosAnalyticsDebugger/Classes/model/DebuggerMessage.h; sourceTree = "<group>"; };
 		F30AEE4FD776BE7A2BF3FF0BA0B491F4 /* AvoNetworkCallsHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AvoNetworkCallsHandler.h; path = AvoInspector/Classes/AvoNetworkCallsHandler.h; sourceTree = "<group>"; };
-		F30C125DB91902F63DC73AEF0B0E6111 /* OCMock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = OCMock.framework; path = OCMock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F30C125DB91902F63DC73AEF0B0E6111 /* OCMock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OCMock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3E64B1B2546B99570960B21F70198CD /* OCMRecorder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OCMRecorder.m; path = Source/OCMock/OCMRecorder.m; sourceTree = "<group>"; };
 		F464493419925923F74FF9B6F390D972 /* OCMLocation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OCMLocation.h; path = Source/OCMock/OCMLocation.h; sourceTree = "<group>"; };
 		F7B680E5BDC0398648E47D8BD6A0B781 /* EXPMatchers+respondTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+respondTo.m"; path = "Expecta/Matchers/EXPMatchers+respondTo.m"; sourceTree = "<group>"; };
@@ -1040,7 +1036,6 @@
 				83B4D58A9FA73A0A378D913E9EDFCE00 /* Resources */,
 				88C226A1CB46E0A3D3973AE0E996076C /* Support Files */,
 			);
-			name = IosAnalyticsDebugger;
 			path = IosAnalyticsDebugger;
 			sourceTree = "<group>";
 		};
@@ -1111,7 +1106,6 @@
 				7CD6B560F26173FAF686FEA7CE9BE036 /* XCTestCase+Specta.m */,
 				964A612A88A79150ED3B7042314B62C8 /* Support Files */,
 			);
-			name = Specta;
 			path = Specta;
 			sourceTree = "<group>";
 		};
@@ -1133,8 +1127,6 @@
 				74A30F6A3F03BEEC9BBFC2FF0A580709 /* AvoDeduplicator.m */,
 				3AD0982A1A1E9CEC129250E03247ECA6 /* AvoInspector.h */,
 				5F4CEFE20903B4D8D68A9553D6F2976D /* AvoInspector.m */,
-				B0BC09DC72F83E91EEACDE4A5E30B066 /* AvoInstallationId.h */,
-				1892867DC231DC9C55ECC8509844D8D3 /* AvoInstallationId.m */,
 				F30AEE4FD776BE7A2BF3FF0BA0B491F4 /* AvoNetworkCallsHandler.h */,
 				996F0FE03CC15F509E9FC25F7F323798 /* AvoNetworkCallsHandler.m */,
 				5D186F4894B1C8ECF80A2B2686E21473 /* AvoSchemaExtractor.h */,
@@ -1179,7 +1171,6 @@
 				31F3BAE5FDF72534968F5C741FC066AC /* EXPMatchers+FBSnapshotTest.m */,
 				DF2089CD19022E80C4DD418E62804714 /* Support Files */,
 			);
-			name = "Expecta+Snapshots";
 			path = "Expecta+Snapshots";
 			sourceTree = "<group>";
 		};
@@ -1292,7 +1283,6 @@
 				1A8A01F0F29DDD1D148BC5CAD1F19457 /* OCProtocolMockObject.m */,
 				55EE103CE01E772EBDB987D1358FE505 /* Support Files */,
 			);
-			name = OCMock;
 			path = OCMock;
 			sourceTree = "<group>";
 		};
@@ -1329,7 +1319,6 @@
 				DB7D817872436FFFDA3260B4220266C3 /* Support Files */,
 				321C7674B0FCF9C16498119402375570 /* SwiftSupport */,
 			);
-			name = FBSnapshotTestCase;
 			path = FBSnapshotTestCase;
 			sourceTree = "<group>";
 		};
@@ -1411,7 +1400,6 @@
 				74B2DE464036B4DBF6D2B2579934AA20 /* NSValue+Expecta.m */,
 				ECAE714C49F2F614A66E01EA5756A63C /* Support Files */,
 			);
-			name = Expecta;
 			path = Expecta;
 			sourceTree = "<group>";
 		};
@@ -1515,7 +1503,6 @@
 				6D12F81D842CEC3A85C89A94C52425B6 /* UIViewController+SEGScreen.m */,
 				00403E18D91729E075F0CDB36C679C4E /* Support Files */,
 			);
-			name = Analytics;
 			path = Analytics;
 			sourceTree = "<group>";
 		};
@@ -1870,7 +1857,6 @@
 				2B05FAD1BFC112D93EE59179145B616B /* AvoFloat.h in Headers */,
 				E2E39489857A762E18CCF706BF993F55 /* AvoInspector-umbrella.h in Headers */,
 				E21632D3D431A9D7DF335C2616A23C1D /* AvoInspector.h in Headers */,
-				44E8F52DC591B179CB4512746DAA9518 /* AvoInstallationId.h in Headers */,
 				64C0FE0E67A27606DAE9A52DF8742E06 /* AvoInt.h in Headers */,
 				4EA96781FFFC64388DE7ADE4AC25A5FB /* AvoList.h in Headers */,
 				2F2882DEB1DB32A5065BAB16289B75AF /* AvoNetworkCallsHandler.h in Headers */,
@@ -2241,7 +2227,6 @@
 				2B5CA64B6B0F1A24E6F7EDB01C706C44 /* AvoFloat.m in Sources */,
 				901304292CFDE5D4B0B1481DEB060845 /* AvoInspector-dummy.m in Sources */,
 				39B8079A21493FBEFD9D0E8C47B29C07 /* AvoInspector.m in Sources */,
-				C7C2D56ABFEF23AC36DCC90F0AE90689 /* AvoInstallationId.m in Sources */,
 				1F1D5AEA894BE0BB4120B6D7E11BA88E /* AvoInt.m in Sources */,
 				C8F956191CEA4AB42209D73851168ACA /* AvoList.m in Sources */,
 				E885ACDA07D6B08E1B0526B5E26A9DFB /* AvoNetworkCallsHandler.m in Sources */,
@@ -2885,8 +2870,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};

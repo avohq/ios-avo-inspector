@@ -24,7 +24,6 @@
 		6E1A24CD23E9A667008F5724 /* InitializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24CC23E9A667008F5724 /* InitializationTests.m */; };
 		6E1A24CF23EA9FB2008F5724 /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24CE23EA9FB2008F5724 /* SessionTests.m */; };
 		6E1A24D523EAFE2B008F5724 /* SessionBetweenRestartsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24D423EAFE2B008F5724 /* SessionBetweenRestartsTests.m */; };
-		6E1A24DB23EC4A2A008F5724 /* InstallationIdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A24DA23EC4A2A008F5724 /* InstallationIdTests.m */; };
 		6E4B4F93241C1ECA00D69313 /* VisualDebuggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B4F92241C1ECA00D69313 /* VisualDebuggerTests.m */; };
 		6E4B4F95241C263000D69313 /* TrackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B4F94241C263000D69313 /* TrackTests.m */; };
 		6E4B4F97241C2A9B00D69313 /* EnvironmentMappingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B4F96241C2A9B00D69313 /* EnvironmentMappingTest.m */; };
@@ -76,7 +75,6 @@
 		6E1A24CC23E9A667008F5724 /* InitializationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InitializationTests.m; sourceTree = "<group>"; };
 		6E1A24CE23EA9FB2008F5724 /* SessionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
 		6E1A24D423EAFE2B008F5724 /* SessionBetweenRestartsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SessionBetweenRestartsTests.m; sourceTree = "<group>"; };
-		6E1A24DA23EC4A2A008F5724 /* InstallationIdTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstallationIdTests.m; sourceTree = "<group>"; };
 		6E4B4F92241C1ECA00D69313 /* VisualDebuggerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VisualDebuggerTests.m; sourceTree = "<group>"; };
 		6E4B4F94241C263000D69313 /* TrackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackTests.m; sourceTree = "<group>"; };
 		6E4B4F96241C2A9B00D69313 /* EnvironmentMappingTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnvironmentMappingTest.m; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				6E1A24CC23E9A667008F5724 /* InitializationTests.m */,
 				6E1A24CE23EA9FB2008F5724 /* SessionTests.m */,
 				6E1A24D423EAFE2B008F5724 /* SessionBetweenRestartsTests.m */,
-				6E1A24DA23EC4A2A008F5724 /* InstallationIdTests.m */,
 				6EA681E423ED6A8600A89C34 /* NetworkCallsHandlerTests.m */,
 				6EA681E623EDA69F00A89C34 /* SamplingTests.m */,
 				6E6F61C923FD6F2300B934EE /* BatchingTests.m */,
@@ -462,7 +459,6 @@
 				6E1A24CF23EA9FB2008F5724 /* SessionTests.m in Sources */,
 				6E65550423E5B3F700F271C8 /* ListSchemaExtractionTests.m in Sources */,
 				6E1A24CD23E9A667008F5724 /* InitializationTests.m in Sources */,
-				6E1A24DB23EC4A2A008F5724 /* InstallationIdTests.m in Sources */,
 				6E1A24D523EAFE2B008F5724 /* SessionBetweenRestartsTests.m in Sources */,
 				6EA681E523ED6A8600A89C34 /* NetworkCallsHandlerTests.m in Sources */,
 			);
