@@ -10,7 +10,6 @@
 #import <AvoInspector/AvoBatcher.h>
 #import <AvoInspector/AvoSessionTracker.h>
 #import <OCMock/OCMock.h>
-#import <AnalyticsDebugger.h>
 
 @interface AvoSessionTracker ()
 
@@ -30,7 +29,6 @@
 @property (readwrite, nonatomic) AvoBatcher *avoBatcher;
 @property (readwrite, nonatomic) AvoNetworkCallsHandler *networkCallsHandler;
 @property (readwrite, nonatomic) AvoSessionTracker *sessionTracker;
-@property (readwrite, nonatomic) AnalyticsDebugger *debugger;
 @property (readwrite, nonatomic) AvoInspectorEnv env;
 
 - (void) addObservers;
@@ -169,22 +167,6 @@ it(@"debug inititalization sets logs on", ^{
     AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
 
     expect([AvoInspector isLogging]).to.equal(YES);
-});
-
-it(@"debug inititalization shows visual inspector", ^{
-    [AvoInspector setLogging:NO];
-
-    AvoInspector * sut = [[AvoInspector alloc] initWithApiKey:@"apiKey" env: AvoInspectorEnvDev];
-    sut.debugger = OCMClassMock([AnalyticsDebugger class]);
-
-    XCTestExpectation *expectation = [self expectationWithDescription:@"wait"];
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    [expectation fulfill];
-    });
-
-    [self waitForExpectationsWithTimeout:1 handler:nil];
-    OCMVerify([sut.debugger showBubbleDebugger]);
 });
 
 it(@"not debug inititalization sets timeout to 30", ^{

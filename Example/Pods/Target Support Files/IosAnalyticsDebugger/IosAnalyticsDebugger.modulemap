@@ -1,6 +1,0 @@
-framework module IosAnalyticsDebugger {
-  umbrella header "IosAnalyticsDebugger-umbrella.h"
-
-  export *
-  module * { export * }
-}

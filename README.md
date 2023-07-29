@@ -115,50 +115,6 @@ Swift
 let schema = avoInspector.extractSchema(["id": "sdf-334fsg-334f", "number": 41])
 ```
 
-# Using the Visual Inspector
-
-Visual Inspector is enabled in development and staging environments by default.
-
-## Show
-
-Obj-C
-```objectivec
-[avoInspector showVisualInspector:Bar]; // or Bubble
-```
-
-Swift
-```swift
-avoInspector.show(AvoVisualInspectorType.Bar) // or AvoVisualInspectorType.Bubble
-```
-
-## Hide
-
-Obj-C
-```objectivec
-[avoInspector hideVisualInspector];
-```
-
-Swift
-```swift
-avoInspector.hideVisualInspector()
-```
-
-## Advanced usage
-
-You can get an instance of `AnalyticsDebugger` with the following method. 
-
-Obj-C
-```objectivec
-[avoInspector getVisualInspector];
-```
-
-Swift
-```swift
-avoInspector.getVisualInspector()
-```
-
-See more about `AnalyticsDebugger` in [GitHub repo](https://github.com/avohq/ios-analytics-debugger)
-
 # Batching control
 
 In order to ensure our SDK doesn't have a large impact on performance or battery life it supports event schemas batching.

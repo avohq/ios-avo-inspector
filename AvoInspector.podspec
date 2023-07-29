@@ -8,11 +8,11 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AvoInspector'
-  s.version          = '1.3.0'
+  s.version          = '2.0.0'
   s.summary          = 'Avo Inspector iOS SDK'
 
   s.description      = <<-DESC
-A powerful suite of features that analyze your current state of tracking and guide you from your current, messy taxonomy to a more consistent and reliable tracking process across your teams, products, and platforms.
+A powerful suite of features that analyze your current state of tracking and guide you to a more consistent and reliable tracking process across your teams, products, and platforms.
                        DESC
 
   s.homepage         = 'https://github.com/avohq/ios-datascope'
@@ -24,5 +24,4 @@ A powerful suite of features that analyze your current state of tracking and gui
 
   s.source_files = 'AvoInspector/Classes/**/*'
 
-  s.dependency 'IosAnalyticsDebugger', '~> 1.2.3'
 end
