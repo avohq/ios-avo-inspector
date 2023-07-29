@@ -53,9 +53,6 @@
 
 - (IBAction)sendEventButton:(id)sender;
 
-- (IBAction)showBarVisualInspector:(id)sender;
-- (IBAction)showBubbleVisualInspector:(id)sender;
-- (IBAction)hideVisualInspector:(id)sender;
 @end
 
 @implementation AVOViewController
