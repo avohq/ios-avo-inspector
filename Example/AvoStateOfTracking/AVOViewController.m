@@ -53,9 +53,6 @@
 
 - (IBAction)sendEventButton:(id)sender;
 
-- (IBAction)showBarVisualInspector:(id)sender;
-- (IBAction)showBubbleVisualInspector:(id)sender;
-- (IBAction)hideVisualInspector:(id)sender;
 @end
 
 @implementation AVOViewController
@@ -78,7 +75,6 @@ AvoInspector * avoInspector;
     avoInspector = [AVOAppDelegate getAvoSot];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void) {
-        [avoInspector showVisualInspector: Bar];
     });
     
     SEGAnalyticsConfiguration * config = [SEGAnalyticsConfiguration configurationWithWriteKey: @"YOUR_WRITEKEY_HERE"];
@@ -177,18 +173,6 @@ AvoInspector * avoInspector;
     [self parseKey:self.param10Key.text value:self.param10Value.text to:testParams];
     
     [avoInspector trackSchemaFromEvent:eventName eventParams:(NSDictionary *)testParams];
-}
-
-- (IBAction)showBarVisualInspector:(id)sender {
-    [avoInspector showVisualInspector:Bar];
-}
-
-- (IBAction)showBubbleVisualInspector:(id)sender {
-    [avoInspector showVisualInspector:Bubble];
-}
-
-- (IBAction)hideVisualInspector:(id)sender {
-    [avoInspector hideVisualInspector];
 }
 
 -(void)dismissKeyboard

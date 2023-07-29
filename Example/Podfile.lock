@@ -1,7 +1,6 @@
 PODS:
   - Analytics (3.6.10)
-  - AvoInspector (1.2.5):
-    - IosAnalyticsDebugger (~> 1.2.3)
+  - AvoInspector (2.0.0)
   - Expecta (1.0.6)
   - "Expecta+Snapshots (3.1.1)":
     - Expecta (~> 1.0)
@@ -12,7 +11,6 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - IosAnalyticsDebugger (1.2.3)
   - OCMock (3.6)
   - Specta (1.0.7)
 
@@ -31,7 +29,6 @@ SPEC REPOS:
     - Expecta
     - "Expecta+Snapshots"
     - FBSnapshotTestCase
-    - IosAnalyticsDebugger
     - OCMock
     - Specta
 
@@ -41,14 +38,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Analytics: 63744ad4afa65c3bcdcdb7a94b62515bde5b3900
-  AvoInspector: 86582fa5c2d4543d7f5cf9390fc5272cd943d1ea
+  AvoInspector: 9a9891ea3881aa38edd6ce76f2bbc56228b061ae
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   "Expecta+Snapshots": dcff217eef506dabd6dfdc7864ea2da321fafbb8
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  IosAnalyticsDebugger: 9d4854b61b845c5c5f66fba99a8b3edace1386d0
   OCMock: 5ea90566be239f179ba766fd9fbae5885040b992
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
 
 PODFILE CHECKSUM: 9c550a6ef5f690e80f60a3386a8da5a0a81bb919
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.12.1
