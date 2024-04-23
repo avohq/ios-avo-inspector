@@ -15,13 +15,14 @@ Pod::Spec.new do |s|
 A powerful suite of features that analyze your current state of tracking and guide you to a more consistent and reliable tracking process across your teams, products, and platforms.
                        DESC
 
-  s.homepage         = 'https://github.com/avohq/ios-datascope'
+  s.homepage         = 'https://github.com/avohq/ios-avo-inspector'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Avo (https://www.avo.app)' => 'friends@avo.app' }
-  s.source           = { :git => 'https://github.com/avohq/ios-datascope.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/avohq/ios-avo-inspector.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '10.0'
 
   s.source_files = 'AvoInspector/Classes/**/*'
+  s.resource_bundles = {"AvoInspector" => ["AvoInspector/PrivacyInfo.xcprivacy"]}
 
 end
