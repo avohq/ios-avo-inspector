@@ -44,25 +44,25 @@ describe(@"Environemtn mapping", ^{
      it(@"AvoNetworkCallsHandler sends prod env", ^{
          AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:0 endpoint:@"text.proxy"];
 
-         NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
-         
-         expect([actualSessionStartedBody objectForKey:@"env"]).to.equal(@"prod");
+         NSMutableDictionary * actualBody = [sut bodyForTrackSchemaCall:@"TestEvent" schema:[NSDictionary new] eventId:nil eventHash:nil];
+
+         expect([actualBody objectForKey:@"env"]).to.equal(@"prod");
      });
-         
+
      it(@"AvoNetworkCallsHandler sends dev env", ^{
          AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:1 endpoint:@"text.proxy"];
 
-         NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
-         
-         expect([actualSessionStartedBody objectForKey:@"env"]).to.equal(@"dev");
+         NSMutableDictionary * actualBody = [sut bodyForTrackSchemaCall:@"TestEvent" schema:[NSDictionary new] eventId:nil eventHash:nil];
+
+         expect([actualBody objectForKey:@"env"]).to.equal(@"dev");
      });
-     
+
      it(@"AvoNetworkCallsHandler sends staging env", ^{
          AvoNetworkCallsHandler * sut = [[AvoNetworkCallsHandler alloc] initWithApiKey:@"testApiKey" appName:@"testAppName" appVersion:@"testAppVersion" libVersion:@"testLibVersion" env:2 endpoint:@"text.proxy"];
 
-         NSMutableDictionary * actualSessionStartedBody = [sut bodyForSessionStartedCall];
-         
-         expect([actualSessionStartedBody objectForKey:@"env"]).to.equal(@"staging");
+         NSMutableDictionary * actualBody = [sut bodyForTrackSchemaCall:@"TestEvent" schema:[NSDictionary new] eventId:nil eventHash:nil];
+
+         expect([actualBody objectForKey:@"env"]).to.equal(@"staging");
      });
 });
 SpecEnd

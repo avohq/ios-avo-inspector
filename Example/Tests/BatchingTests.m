@@ -99,11 +99,10 @@ SpecBegin(Batching)
 
         it(@"Sends batch if number of events is x times batch size", ^{
             [AvoInspector setBatchSize:10];
-            
+
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-            OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
             OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andReturn(@{@"type": @"test"});
-        
+
             __block int postBatchCount = 0;
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
               postBatchCount += 1;
@@ -113,41 +112,40 @@ SpecBegin(Batching)
             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
             [sut enterForeground];
             int startBatchCount = postBatchCount;
-        
+
             // When
             for (int i = 0; i < [AvoInspector getBatchSize] - 1; i++) {
-                [sut handleSessionStarted];
+                [sut handleTrackSchema:@"Event1" schema:[NSDictionary new] eventId:nil eventHash:nil];
             }
-        
+
             // Then
             expect(postBatchCount).to.equal(startBatchCount);
-        
+
             // When
             [sut handleTrackSchema:@"Test" schema:[NSDictionary new] eventId:nil eventHash:nil];
-        
+
             // Then
             expect(postBatchCount).to.equal(startBatchCount + 1);
-        
+
             // When
             for (int i = 0; i < [AvoInspector getBatchSize] - 1; i++) {
                 [sut handleTrackSchema:@"Test" schema:[NSDictionary new] eventId:nil eventHash:nil];
             }
-        
+
             // Then
             expect(postBatchCount).to.equal(startBatchCount + 1);
-        
+
             // When
-            [sut handleSessionStarted];
-        
+            [sut handleTrackSchema:@"FinalEvent" schema:[NSDictionary new] eventId:nil eventHash:nil];
+
             // Then
             expect(postBatchCount).to.equal(startBatchCount + 2);
         });
 
         it(@"Sends batch if time has come", ^{
             [AvoInspector setBatchSize:30];
-        
+
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-            OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
             OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andReturn(@{@"type": @"test"});
 
             __block int postBatchCount = 0;
@@ -161,7 +159,7 @@ SpecBegin(Batching)
             int startBatchCount = postBatchCount;
 
             // When
-            [sut handleSessionStarted];
+            [sut handleTrackSchema:@"Event1" schema:[NSDictionary new] eventId:nil eventHash:nil];
 
             // Then
             expect(postBatchCount).to.equal(startBatchCount);
@@ -219,17 +217,17 @@ SpecBegin(Batching)
 
         it(@"Sets flush attempt timestamp", ^{
             id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn(@{@"type": @"test"});
+            OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andReturn(@{@"type": @"test"});
 
             AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
             sut.batchFlushAttemptTime = 0;
             [sut enterForeground];
-            
+
             // When
             for (int i = 0; i < [AvoInspector getBatchSize]; i++) {
-               [sut handleSessionStarted];
+               [sut handleTrackSchema:@"Event" schema:[NSDictionary new] eventId:nil eventHash:nil];
             }
-        
+
             // Then
             double now = [[NSDate date] timeIntervalSince1970];
             expect(sut.batchFlushAttemptTime).toNot.equal(0);
@@ -239,52 +237,50 @@ SpecBegin(Batching)
 
          it(@"Filters malformed events before sending", ^{
              id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn(@{@"no-type": @"malformed-test"});
+             OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andReturn(@{@"no-type": @"malformed-test"});
 
              AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
-            
+
             __block int postBatchCount = 0;
             void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
               postBatchCount += 1;
             };
             OCMStub([mockNetworksCallsHandler callInspectorWithBatchBody:[OCMArg any] completionHandler:[OCMArg any]]).andDo(theBlock);
-        
+
              // When
             [sut.events addObject:@""];
             for (int i = 0; i < 10 * [AvoInspector getBatchSize]; i++) {
-                [sut handleSessionStarted];
+                [sut handleTrackSchema:@"Event" schema:[NSDictionary new] eventId:nil eventHash:nil];
             }
-         
+
              // Then
              expect(postBatchCount).to.equal(0);
          });
         
         it(@"Parses Codegen event id and hash", ^{
              id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
              OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:@"testEventId" eventHash:@"testEventHash"]).andReturn(@{@"type": @"test"});
 
              AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
              [sut enterForeground];
-         
+
              // When
              [sut handleTrackSchema:@"Test" schema:[NSDictionary new] eventId:@"testEventId" eventHash:@"testEventHash"];
-         
+
              // Then
              OCMVerify([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:@"testEventId" eventHash:@"testEventHash"]);
          });
-        
+
         it(@"Parses empty event id and hash", ^{
              id mockNetworksCallsHandler = OCMClassMock([AvoNetworkCallsHandler class]);
-             OCMStub([mockNetworksCallsHandler bodyForSessionStartedCall]).andReturn([NSMutableDictionary new]);
              OCMStub([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]).andReturn(@{@"type": @"test"});
 
              AvoBatcher * sut = [[AvoBatcher alloc] initWithNetworkCallsHandler:mockNetworksCallsHandler];
              [sut enterForeground];
-         
+
              // When
              [sut handleTrackSchema:@"Test" schema:[NSDictionary new] eventId:nil eventHash:nil];
-         
+
              // Then
              OCMVerify([mockNetworksCallsHandler bodyForTrackSchemaCall:[OCMArg any] schema:[OCMArg any] eventId:nil eventHash:nil]);
          });

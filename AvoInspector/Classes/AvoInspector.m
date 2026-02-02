@@ -12,9 +12,20 @@
 #import "AvoDeduplicator.h"
 #import "AvoSchemaExtractor.h"
 
-@interface AvoInspector ()
+@interface AvoStorageImpl : NSObject <AvoStorage>
+@end
 
-@property (readwrite, nonatomic) AvoSessionTracker * sessionTracker;
+@implementation AvoStorageImpl
+- (BOOL)isInitialized { return YES; }
+- (NSString *)getItem:(NSString *)key {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:key];
+}
+- (void)setItem:(NSString *)key :(NSString *)value {
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
+}
+@end
+
+@interface AvoInspector ()
 
 @property (readwrite, nonatomic) NSString * appVersion;
 @property (readwrite, nonatomic) NSString * appName;
@@ -37,6 +48,15 @@
 static BOOL logging = NO;
 static int maxBatchSize = 30;
 static int batchFlushTime = 30;
+
++ (id<AvoStorage>)avoStorage {
+    static AvoStorageImpl *sharedStorage = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedStorage = [[AvoStorageImpl alloc] init];
+    });
+    return sharedStorage;
+}
 
 + (BOOL) isLogging {
     return logging;
@@ -104,9 +124,7 @@ static int batchFlushTime = 30;
         
         self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion env:(int)self.env endpoint: proxyEndpoint];
         self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler];
-        
-        self.sessionTracker = [[AvoSessionTracker alloc] initWithBatcher:self.avoBatcher];
-        
+
         self.avoDeduplicator = [AvoDeduplicator sharedDeduplicator];
         
         self.apiKey = apiKey;
@@ -147,7 +165,6 @@ static int batchFlushTime = 30;
 - (void)enterForeground {
     @try {
         [self.avoBatcher enterForeground];
-        [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
     }
     @catch (NSException *exception) {
         [self printAvoGenericError:exception];
@@ -239,16 +256,14 @@ static int batchFlushTime = 30;
 }
 
 -(void) internalTrackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash {
-    
+
     @try {
         for(NSString *key in [schema allKeys]) {
             if (![[schema objectForKey:key] isKindOfClass:[AvoEventSchemaType class]]) {
                 [NSException raise:@"Schema types should be of type AvoEventSchemaType" format:@"Provided %@", [[[schema objectForKey:key] class] description]];
             }
         }
-        
-        [self.sessionTracker startOrProlongSession:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
-        
+
         [self.avoBatcher handleTrackSchema:eventName schema:schema eventId: eventId eventHash:eventHash];
     }
     @catch (NSException *exception) {

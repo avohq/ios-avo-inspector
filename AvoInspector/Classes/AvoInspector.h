@@ -7,9 +7,10 @@
 
 #import <Foundation/Foundation.h>
 #import "Inspector.h"
-#import "AvoSessionTracker.h"
+#import "AvoStorage.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 
 typedef NS_ENUM(NSUInteger, AvoInspectorEnv) {
     AvoInspectorEnvProd = 0,
@@ -19,8 +20,6 @@ typedef NS_ENUM(NSUInteger, AvoInspectorEnv) {
 
 @interface AvoInspector : NSObject <Inspector>
 
-@property (readonly, nonatomic) AvoSessionTracker * sessionTracker;
-
 @property (readonly, nonatomic) NSString * appVersion;
 @property (readonly, nonatomic) NSString * libVersion;
 
@@ -29,6 +28,8 @@ typedef NS_ENUM(NSUInteger, AvoInspectorEnv) {
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env;
 
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env proxyEndpoint: (NSString *) proxyEndpoint;
+
++ (id<AvoStorage>)avoStorage;
 
 @end
 

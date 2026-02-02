@@ -10,12 +10,14 @@
 #endif
 #endif
 
+#import "AvoAnonymousId.h"
 #import "AvoBatcher.h"
 #import "AvoDeduplicator.h"
+#import "AvoGuid.h"
 #import "AvoInspector.h"
 #import "AvoNetworkCallsHandler.h"
 #import "AvoSchemaExtractor.h"
-#import "AvoSessionTracker.h"
+#import "AvoStorage.h"
 #import "AvoUtils.h"
 #import "AvoBoolean.h"
 #import "AvoEventSchemaType.h"
