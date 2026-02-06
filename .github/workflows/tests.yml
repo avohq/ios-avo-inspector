@@ -16,17 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up iOS project environment
-        run: |
-            set -eo pipefail
-
-            echo "::group::Install Bundler"
-            gem install bundler # Bundler provides a consistent environment for Ruby projects by tracking and installing the exact gems and versions that are needed.
-
-            echo "::group::Install Gems"
-            bundle install # To install gems, this script must be executed from the project folder, where "Gemfile" is located. Usually it is root folder of the project.
-        working-directory: ${{ env.project-path }}
-
       - name: Set up Cocoapods cache
         uses: actions/cache@v4
         id: cocoapods-cache
@@ -38,7 +27,7 @@ jobs:
 
       - name: Install iOS project dependencies
         if: steps.cocoapods-cache.outputs.cache-hit != 'true'
-        run: bundle exec pod install
+        run: pod install
         working-directory: ${{ env.project-path }}
 
       - name: Test
