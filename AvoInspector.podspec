@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AvoInspector'
-  s.version          = '2.0.1'
+  s.version          = '2.1.0'
   s.summary          = 'Avo Inspector iOS SDK'
 
   s.description      = <<-DESC
@@ -20,7 +20,7 @@ A powerful suite of features that analyze your current state of tracking and gui
   s.author           = { 'Avo (https://www.avo.app)' => 'friends@avo.app' }
   s.source           = { :git => 'https://github.com/avohq/ios-avo-inspector.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '12.0'
 
   s.source_files = 'AvoInspector/Classes/**/*'
   s.resource_bundles = {"AvoInspector" => ["AvoInspector/PrivacyInfo.xcprivacy"]}

@@ -10,14 +10,11 @@ jobs:
 
     env:
       project-path: ./Example
-      simulator: iOS Simulator,OS=15.0,name=iPhone 11
+      simulator: iOS Simulator,OS=latest,name=iPhone 16
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_13.1.app
 
       - name: Set up iOS project environment
         run: |
