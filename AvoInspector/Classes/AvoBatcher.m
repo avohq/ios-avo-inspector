@@ -65,14 +65,6 @@
     [self postAllAvailableEventsAndClearCache:YES];
 }
 
-- (void) handleSessionStarted {
-    NSMutableDictionary * sessionStartedBody = [self.networkCallsHandler bodyForSessionStartedCall];
-    
-    [self saveEvent:sessionStartedBody];
-    
-    [self checkIfBatchNeedsToBeSent];
-}
-
 // schema is [ String : AvoEventSchemaType ]
 - (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash {
     NSMutableDictionary * trackSchemaBody = [self.networkCallsHandler bodyForTrackSchemaCall:eventName schema: schema eventId: eventId eventHash: eventHash];

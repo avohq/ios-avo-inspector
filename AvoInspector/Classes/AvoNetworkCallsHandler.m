@@ -9,6 +9,7 @@
 #import "AvoUtils.h"
 #import "AvoInspector.h"
 #import "AvoObject.h"
+#import "AvoAnonymousId.h"
 
 @interface AvoNetworkCallsHandler()
 
@@ -109,13 +110,6 @@
     return propsSchema;
 }
 
-- (NSMutableDictionary *) bodyForSessionStartedCall  {
-     NSMutableDictionary * baseBody = [self createBaseCallBody];
-    
-    [baseBody setValue:@"sessionStarted" forKey:@"type"];
-    return baseBody;
-}
-
 // Shared network logic
 
 - (NSMutableDictionary *) createBaseCallBody {
@@ -125,7 +119,9 @@
     [body setValue:self.appVersion forKey:@"appVersion"];
     [body setValue:self.libVersion forKey:@"libVersion"];
     [body setValue:@(self.samplingRate) forKey:@"samplingRate"];
-    [body setValue:AvoSessionTracker.sessionId forKey:@"sessionId"];
+    [body setValue:@"" forKey:@"sessionId"];
+    [body setValue:@"" forKey:@"trackingId"];
+    [body setValue:[AvoAnonymousId anonymousId] forKey:@"anonymousId"];
     [body setValue:[AvoNetworkCallsHandler formatTypeToString:self.env] forKey:@"env"];
     [body setValue:@"ios" forKey:@"libPlatform"];
     [body setValue:[[NSUUID UUID] UUIDString] forKey:@"messageId"];
@@ -149,10 +145,8 @@
     if ([AvoInspector isLogging]) {
         for (NSDictionary *batchItem in batchBody) {
             NSString * type = [batchItem objectForKey:@"type"];
-            
-            if ([type  isEqual:@"sessionStarted"]) {
-                NSLog(@"[avo] Avo Inspector: Sending session started event");
-            } else if ([type  isEqual:@"event"]) {
+
+            if ([type  isEqual:@"event"]) {
                 NSString * eventName = [batchItem objectForKey:@"eventName"];
                 NSString * eventProps = [batchItem objectForKey:@"eventProperties"];
 
@@ -160,7 +154,7 @@
             } else {
                 NSLog(@"[avo] Avo Inspector: Error! Unknown event type.");
             }
-            
+
         }
     }
     
@@ -168,7 +162,7 @@
     NSData *bodyData = [NSJSONSerialization  dataWithJSONObject:batchBody
                                                           options:NSJSONWritingPrettyPrinted
                                                             error:&error];
-    
+
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:self.endpoint]];
     [request setHTTPMethod:@"POST"];
 
