@@ -224,15 +224,16 @@ SpecBegin(Batching)
             [sut enterForeground];
 
             // When
+            double before = [[NSDate date] timeIntervalSince1970];
             for (int i = 0; i < [AvoInspector getBatchSize]; i++) {
                [sut handleTrackSchema:@"Event" schema:[NSDictionary new] eventId:nil eventHash:nil];
             }
+            double after = [[NSDate date] timeIntervalSince1970];
 
             // Then
-            double now = [[NSDate date] timeIntervalSince1970];
             expect(sut.batchFlushAttemptTime).toNot.equal(0);
-            expect(sut.batchFlushAttemptTime).to.beLessThan(now);
-            expect(sut.batchFlushAttemptTime).to.beGreaterThan(now - 1);
+            expect(sut.batchFlushAttemptTime).to.beGreaterThanOrEqualTo(before);
+            expect(sut.batchFlushAttemptTime).to.beLessThanOrEqualTo(after);
         });
 
          it(@"Filters malformed events before sending", ^{
