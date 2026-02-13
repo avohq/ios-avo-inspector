@@ -184,7 +184,10 @@
     }];
     [task resume];
 
-    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.timeout * NSEC_PER_SEC)));
+    long waitResult = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.timeout * NSEC_PER_SEC)));
+    if (waitResult != 0) {
+        [task cancel];
+    }
 
     return wireResponse;
 }
