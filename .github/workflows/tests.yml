@@ -10,7 +10,6 @@ jobs:
 
     env:
       project-path: ./Example
-      simulator: iOS Simulator,OS=latest,name=iPhone 16
 
     steps:
       - name: Checkout repository
@@ -33,5 +32,34 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -destination platform='${{ env.simulator }}' clean test | xcpretty
+          DESTINATION_ID="$( (xcrun simctl list devices available | grep -E 'iPhone|iPad' | sed -En 's/.*\(([0-9A-F-]{36})\).*/\1/p' | head -n1) || true )"
+
+          if [ -z "$DESTINATION_ID" ]; then
+            echo "No available iOS Simulator device found. Trying to create one..."
+
+            RUNTIME_ID="$( (xcrun simctl list runtimes | grep '^iOS ' | sed -E 's/.*- (com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+).*/\1/' | head -n1) || true )"
+            if [ -z "$RUNTIME_ID" ]; then
+              echo "No iOS simulator runtime found."
+              xcrun simctl list runtimes
+              exit 1
+            fi
+
+            DEVICE_TYPE_ID="$( (xcrun simctl list devicetypes | grep 'iPhone 16 (' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimDeviceType\.[^)]+)\).*/\1/' | head -n1) || true )"
+            if [ -z "$DEVICE_TYPE_ID" ]; then
+              echo "iPhone 16 device type not found."
+              xcrun simctl list devicetypes
+              exit 1
+            fi
+
+            DESTINATION_ID="$(xcrun simctl create "CI-iPhone-16" "$DEVICE_TYPE_ID" "$RUNTIME_ID" || true)"
+            if [ -z "$DESTINATION_ID" ]; then
+              echo "Failed to create simulator device."
+              xcrun simctl list devices
+              exit 1
+            fi
+          fi
+
+          xcrun simctl boot "$DESTINATION_ID" || true
+          echo "Using destination id: $DESTINATION_ID"
+          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -sdk iphonesimulator -destination "id=$DESTINATION_ID" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE_SPECIFIER="" clean test | xcpretty
         working-directory: ${{ env.project-path }}

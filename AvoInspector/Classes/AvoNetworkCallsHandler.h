@@ -9,6 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class AvoValidationResult;
+@class AvoEventSpecMetadata;
+@class AvoEventSchemaType;
+
 @interface AvoNetworkCallsHandler : NSObject
 
 @property (readonly, nonatomic) NSString *apiKey;
@@ -21,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) callInspectorWithBatchBody: (NSArray *) batchBody completionHandler:(void (^)(NSError *error))completionHandler;
 
 - (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash;
+
+- (NSMutableDictionary *) bodyForValidatedEventSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash validationResult:(AvoValidationResult *) validationResult streamId:(NSString *) streamId;
+
+- (void) reportValidatedEvent:(NSDictionary *) body;
+
++ (NSString *)formatTypeToString:(int)formatType;
 
 @end
 

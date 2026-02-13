@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		000F4B6B77DB28A21F58A99E /* Pods_AvoStateOfTracking_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477A7DB1E300D6CCCB497073 /* Pods_AvoStateOfTracking_Example.framework */; };
+		301AB520EE651FAEF0985BF7 /* AvoEventSpecCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 58BBA119ADBF687E498F0256 /* AvoEventSpecCacheTests.m */; };
+		58750A8C25B41A11A5226238 /* AvoEventValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A0A3986F479ECA7F6844E4 /* AvoEventValidatorTests.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -34,6 +36,7 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		B8B2BD2AC15B597DC70A16F7 /* Pods_AvoStateOfTracking_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0385A7D967CD2A317A48054A /* Pods_AvoStateOfTracking_Tests.framework */; };
+		BAD0466DD8B620F27723BBB6 /* AvoEventSpecFetcherTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B497389F519CACB0D85717 /* AvoEventSpecFetcherTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,7 @@
 		0385A7D967CD2A317A48054A /* Pods_AvoStateOfTracking_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		18EDCD8FB8CCED3A1897C0A4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		477A7DB1E300D6CCCB497073 /* Pods_AvoStateOfTracking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		58BBA119ADBF687E498F0256 /* AvoEventSpecCacheTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AvoEventSpecCacheTests.m; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* AvoInspector_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvoInspector_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -69,6 +73,7 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* SimpleTypeSchemaExtractionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleTypeSchemaExtractionTests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		67B497389F519CACB0D85717 /* AvoEventSpecFetcherTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AvoEventSpecFetcherTests.m; sourceTree = "<group>"; };
 		6E1A24CC23E9A667008F5724 /* InitializationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InitializationTests.m; sourceTree = "<group>"; };
 		6E4B4F94241C263000D69313 /* TrackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackTests.m; sourceTree = "<group>"; };
 		6E4B4F96241C2A9B00D69313 /* EnvironmentMappingTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EnvironmentMappingTest.m; sourceTree = "<group>"; };
@@ -87,6 +92,7 @@
 		BEB89237300F3787D57D1AAA /* Pods-AvoStateOfTracking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		C40667EBF43F696F5D928212 /* Pods-AvoStateOfTracking_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		DC6F3BAF63606FC6F49B5F57 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		E9A0A3986F479ECA7F6844E4 /* AvoEventValidatorTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AvoEventValidatorTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +197,9 @@
 				6E4B4F96241C2A9B00D69313 /* EnvironmentMappingTest.m */,
 				6EA10B3724BC8EB300DB3748 /* DeduplicatorTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
+				58BBA119ADBF687E498F0256 /* AvoEventSpecCacheTests.m */,
+				E9A0A3986F479ECA7F6844E4 /* AvoEventValidatorTests.m */,
+				67B497389F519CACB0D85717 /* AvoEventSpecFetcherTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -447,6 +456,9 @@
 				6E65550423E5B3F700F271C8 /* ListSchemaExtractionTests.m in Sources */,
 				6E1A24CD23E9A667008F5724 /* InitializationTests.m in Sources */,
 				6EA681E523ED6A8600A89C34 /* NetworkCallsHandlerTests.m in Sources */,
+				301AB520EE651FAEF0985BF7 /* AvoEventSpecCacheTests.m in Sources */,
+				58750A8C25B41A11A5226238 /* AvoEventValidatorTests.m in Sources */,
+				BAD0466DD8B620F27723BBB6 /* AvoEventSpecFetcherTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
