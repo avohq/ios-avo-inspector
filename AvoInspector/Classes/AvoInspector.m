@@ -134,7 +134,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 
         self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];
         self.appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
-        self.libVersion = @"2.2.0";
+        self.libVersion = @"2.2.1";
 
         self.notificationCenter = [NSNotificationCenter defaultCenter];
 
@@ -357,6 +357,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 
     // Defensive copy to prevent caller mutations affecting async validation
     NSDictionary *capturedParams = [params copy];
+    NSDictionary *capturedEventProperties = eventProperties != nil ? [eventProperties copy] : nil;
 
     __weak AvoInspector *weakSelf = self;
     [self.eventSpecFetcher fetchEventSpec:fetchParams completion:^(AvoEventSpecResponse * _Nullable specResponse) {
@@ -373,10 +374,10 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
             // Validate and send the validated event
             AvoValidationResult *validationResult = [AvoEventValidator validateEvent:capturedParams specResponse:specResponse];
             if (validationResult != nil) {
-                [strongSelf sendEventWithValidation:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult eventProperties:eventProperties];
+                [strongSelf sendEventWithValidation:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult eventProperties:capturedEventProperties];
             } else {
                 // Validation returned nil — send through batched path
-                [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:eventProperties];
+                [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:capturedEventProperties];
             }
         } else {
             // Cache nil to avoid re-fetching within TTL, send through batched path
@@ -384,7 +385,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
             if ([AvoInspector isLogging]) {
                 NSLog(@"[avo] Avo Inspector: Event spec fetch returned nil for event: %@. Cached empty response. Sending without validation.", eventName);
             }
-            [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:eventProperties];
+            [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:capturedEventProperties];
         }
     }];
 }
