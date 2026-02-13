@@ -10,10 +10,16 @@
 #import <CommonCrypto/CommonCrypto.h>
 #import <CommonCrypto/CommonCryptor.h>
 
-// Forward-declare GCM functions
-extern CCCryptorStatus CCCryptorGCMSetIV(CCCryptorRef cryptorRef, const void *iv, size_t ivLen);
-extern CCCryptorStatus CCCryptorGCMDecrypt(CCCryptorRef cryptorRef, const void *dataIn, size_t dataInLength, void *dataOut);
-extern CCCryptorStatus CCCryptorGCMFinalize(CCCryptorRef cryptorRef, void *tagOut, size_t tagLength);
+// AES-GCM oneshot API — stable exported symbol in libcommonCrypto, not in public headers.
+// See AvoEncryption.m header comment for rationale.
+extern CCCryptorStatus CCCryptorGCMOneshotDecrypt(
+    CCAlgorithm alg,
+    const void *key, size_t keyLength,
+    const void *iv, size_t ivLength,
+    const void *aad, size_t aadLength,
+    const void *dataIn, size_t dataInLength,
+    void *dataOut,
+    const void *tag, size_t tagLength);
 
 @interface AvoEncryptionTestHelper : NSObject
 + (SecKeyRef _Nullable)generateTestPrivateKey;
@@ -104,39 +110,18 @@ extern CCCryptorStatus CCCryptorGCMFinalize(CCCryptorRef cryptorRef, void *tagOu
     uint8_t aesKeyBytes[CC_SHA256_DIGEST_LENGTH];
     CC_SHA256(sharedSecret.bytes, (CC_LONG)sharedSecret.length, aesKeyBytes);
 
-    // AES-256-GCM decrypt
-    // Concatenate ciphertext + authTag (GCM tag appended) and use SecKeyCreateDecryptedData pattern
-    // Or use CCCryptorGCM step API with tag verification
+    // AES-256-GCM decrypt using oneshot API
     NSMutableData *plaintext = [NSMutableData dataWithLength:ciphertextLen];
 
-    CCCryptorRef cryptorRef = NULL;
-    CCCryptorStatus status = CCCryptorCreateWithMode(kCCDecrypt,
-                                                      11, // kCCModeGCM
-                                                      kCCAlgorithmAES,
-                                                      ccNoPadding,
-                                                      NULL,
-                                                      aesKeyBytes,
-                                                      CC_SHA256_DIGEST_LENGTH,
-                                                      NULL, 0, 0, 0,
-                                                      &cryptorRef);
-    if (status != kCCSuccess || cryptorRef == NULL) return nil;
-
-    status = CCCryptorGCMSetIV(cryptorRef, iv.bytes, iv.length);
-    if (status != kCCSuccess) { CCCryptorRelease(cryptorRef); return nil; }
-
-    status = CCCryptorGCMDecrypt(cryptorRef, ciphertext.bytes, ciphertext.length, plaintext.mutableBytes);
-    if (status != kCCSuccess) { CCCryptorRelease(cryptorRef); return nil; }
-
-    // For GCM finalize/tag verification: pass the expected tag to CCCryptorGCMFinalize
-    // On iOS, CCCryptorGCMFinalize in decrypt mode expects the tag to verify against
-    NSMutableData *tagCopy = [NSMutableData dataWithData:authTag];
-    status = CCCryptorGCMFinalize(cryptorRef, tagCopy.mutableBytes, tagCopy.length);
-    CCCryptorRelease(cryptorRef);
-
-    // On some CommonCrypto versions, finalize in decrypt mode returns kCCUnimplemented
-    // if tag verification isn't supported inline. In that case, we skip tag verification
-    // since the integration tests confirm encryption correctness.
-    if (status != kCCSuccess && status != -4 /* kCCUnimplemented */) return nil;
+    CCCryptorStatus status = CCCryptorGCMOneshotDecrypt(
+        kCCAlgorithmAES,
+        aesKeyBytes, CC_SHA256_DIGEST_LENGTH,
+        iv.bytes, iv.length,
+        NULL, 0,  // no AAD
+        ciphertext.bytes, ciphertext.length,
+        plaintext.mutableBytes,
+        authTag.bytes, authTag.length);
+    if (status != kCCSuccess) return nil;
 
     return [[NSString alloc] initWithData:plaintext encoding:NSUTF8StringEncoding];
 }
@@ -248,6 +233,25 @@ describe(@"AvoEncryption", ^{
     it(@"returns nil for invalid key", ^{
         NSString *result = [AvoEncryption encrypt:@"test" recipientPublicKeyHex:@"deadbeef"];
         expect(result).to.beNil();
+    });
+
+    it(@"decompresses known secp256r1 test vector correctly", ^{
+        // secp256r1 generator point G (a known point on the curve)
+        // X = 6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296
+        // Y = 4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5
+        // Y is odd (last byte 0xF5, bit 0 = 1) → compressed prefix 0x03
+        NSString *compressedHex = @"036B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296";
+
+        // Encrypt with the compressed generator point. If decompression is wrong,
+        // SecKeyCreateWithData will reject the reconstructed uncompressed key → nil.
+        NSString *encrypted = [AvoEncryption encrypt:@"test" recipientPublicKeyHex:compressedHex];
+        expect(encrypted).toNot.beNil();
+
+        // Verify the ephemeral key in the output uses the correct uncompressed format
+        NSData *data = [[NSData alloc] initWithBase64EncodedString:encrypted options:0];
+        const uint8_t *bytes = data.bytes;
+        expect(bytes[0]).to.equal(0x00); // version
+        expect(bytes[1]).to.equal(0x04); // uncompressed ephemeral key
     });
 
     it(@"encrypts and decrypts with compressed key", ^{

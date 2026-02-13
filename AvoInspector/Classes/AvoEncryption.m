@@ -10,10 +10,18 @@
 #import <CommonCrypto/CommonCrypto.h>
 #import <CommonCrypto/CommonCryptor.h>
 
-// Forward-declare GCM functions that are in CommonCrypto but not always in public headers
-extern CCCryptorStatus CCCryptorGCMSetIV(CCCryptorRef cryptorRef, const void *iv, size_t ivLen);
-extern CCCryptorStatus CCCryptorGCMEncrypt(CCCryptorRef cryptorRef, const void *dataIn, size_t dataInLength, void *dataOut);
-extern CCCryptorStatus CCCryptorGCMFinalize(CCCryptorRef cryptorRef, void *tagOut, size_t tagLength);
+// AES-GCM oneshot API from CommonCrypto. These are stable, exported symbols in libcommonCrypto
+// (present since iOS 6) but not declared in the public <CommonCrypto/CommonCryptor.h> header.
+// Apple's public alternative, CryptoKit, is Swift-only and cannot be called from Objective-C
+// without a bridging layer. Forward-declaring is the standard approach for ObjC AES-GCM.
+extern CCCryptorStatus CCCryptorGCMOneshotEncrypt(
+    CCAlgorithm alg,
+    const void *key, size_t keyLength,
+    const void *iv, size_t ivLength,
+    const void *aad, size_t aadLength,
+    const void *dataIn, size_t dataInLength,
+    void *dataOut,
+    void *tagOut, size_t tagLength);
 
 // AES-GCM constants
 static const NSInteger kIVLength = 16;
@@ -524,42 +532,14 @@ static const uint8_t secp256r1_p_plus1_div4[32] = {
                     iv:(NSData *)iv
             ciphertext:(NSMutableData *)ciphertext
                authTag:(NSMutableData *)authTag {
-    // Use step-by-step CCCryptorGCM API for broad iOS compatibility
-    CCCryptorRef cryptorRef = NULL;
-    CCCryptorStatus status;
-
-    status = CCCryptorCreateWithMode(kCCEncrypt,
-                                      11, // kCCModeGCM = 11
-                                      kCCAlgorithmAES,
-                                      ccNoPadding,
-                                      NULL, // iv set separately for GCM
-                                      key.bytes,
-                                      key.length,
-                                      NULL, 0, 0, 0,
-                                      &cryptorRef);
-    if (status != kCCSuccess || cryptorRef == NULL) {
-        return NO;
-    }
-
-    // Set IV using CCCryptorGCMSetIV
-    status = CCCryptorGCMSetIV(cryptorRef, iv.bytes, iv.length);
-    if (status != kCCSuccess) {
-        CCCryptorRelease(cryptorRef);
-        return NO;
-    }
-
-    // Encrypt
-    status = CCCryptorGCMEncrypt(cryptorRef, plaintext.bytes, plaintext.length, ciphertext.mutableBytes);
-    if (status != kCCSuccess) {
-        CCCryptorRelease(cryptorRef);
-        return NO;
-    }
-
-    // Finalize and get auth tag
-    size_t tagLength = kAuthTagLength;
-    status = CCCryptorGCMFinalize(cryptorRef, authTag.mutableBytes, tagLength);
-    CCCryptorRelease(cryptorRef);
-
+    CCCryptorStatus status = CCCryptorGCMOneshotEncrypt(
+        kCCAlgorithmAES,
+        key.bytes, key.length,
+        iv.bytes, iv.length,
+        NULL, 0,  // no AAD
+        plaintext.bytes, plaintext.length,
+        ciphertext.mutableBytes,
+        authTag.mutableBytes, kAuthTagLength);
     return status == kCCSuccess;
 }
 
