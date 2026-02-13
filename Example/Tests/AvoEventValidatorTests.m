@@ -289,6 +289,39 @@ describe(@"AvoEventValidator", ^{
         });
     });
 
+    describe(@"List merge of nested children", ^{
+        it(@"preserves nested child failures across list items", ^{
+            AvoPropertyConstraints *leafX = makeConstraints(@"string", @{@"okX": @[@"evt1"]}, nil, nil, nil);
+            AvoPropertyConstraints *leafY = makeConstraints(@"string", @{@"okY": @[@"evt1"]}, nil, nil, nil);
+
+            AvoPropertyConstraints *nestedObject = makeConstraints(@"object", nil, nil, nil, nil);
+            nestedObject.children = @{@"x": leafX, @"y": leafY};
+
+            AvoPropertyConstraints *listConstraint = makeConstraints(@"object", nil, nil, nil, nil);
+            listConstraint.isList = @YES;
+            listConstraint.children = @{@"obj": nestedObject};
+
+            AvoEventSpecEntry *entry = makeEntry(@"b1", @"evt1", @[], @{@"items": listConstraint});
+            AvoEventSpecResponse *resp = makeResponse(@[entry]);
+
+            NSDictionary *props = @{
+                @"items": @[
+                    @{@"obj": @{@"x": @"badX", @"y": @"okY"}},
+                    @{@"obj": @{@"x": @"okX", @"y": @"badY"}}
+                ]
+            };
+
+            AvoValidationResult *result = [AvoEventValidator validateEvent:props specResponse:resp];
+            expect(result).toNot.beNil();
+
+            AvoPropertyValidationResult *items = result.propertyResults[@"items"];
+            expect(items).toNot.beNil();
+            expect(items.children[@"obj"]).toNot.beNil();
+            expect(items.children[@"obj"].children[@"x"]).toNot.beNil();
+            expect(items.children[@"obj"].children[@"y"]).toNot.beNil();
+        });
+    });
+
     describe(@"Bandwidth optimization", ^{
         it(@"returns smaller of failed/passed sets", ^{
             // Create 2 events: evt1 expects "expected", evt2 expects "other"

@@ -56,11 +56,11 @@ static const int MAX_EVENT_COUNT = 50;
 - (void)set:(NSString *)key spec:(AvoEventSpecResponse * _Nullable)spec {
     @synchronized (self.cache) {
         long long now = [self currentTimeMillis];
+        BOOL isUpdate = (self.cache[key] != nil);
 
         self.globalEventCount++;
-        if (self.globalEventCount >= MAX_EVENT_COUNT) {
+        if (!isUpdate && self.cache.count >= MAX_EVENT_COUNT) {
             [self evictOldest];
-            self.globalEventCount = 0;
         }
 
         AvoEventSpecCacheEntry *entry = [[AvoEventSpecCacheEntry alloc] initWithSpec:spec timestamp:now];
@@ -89,7 +89,6 @@ static const int MAX_EVENT_COUNT = 50;
 - (void)clear {
     @synchronized (self.cache) {
         [self.cache removeAllObjects];
-        self.globalEventCount = 0;
     }
 }
 

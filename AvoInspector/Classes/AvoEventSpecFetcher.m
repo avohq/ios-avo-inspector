@@ -117,17 +117,14 @@
 }
 
 - (NSString *)buildUrl:(AvoFetchEventSpecParams *)params {
-    NSString *apiKey = [self encodeURIComponent:params.apiKey];
-    NSString *streamId = [self encodeURIComponent:params.streamId];
-    NSString *eventName = [self encodeURIComponent:params.eventName];
-    return [NSString stringWithFormat:@"%@/trackingPlan/eventSpec?apiKey=%@&streamId=%@&eventName=%@",
-            self.baseUrl, apiKey, streamId, eventName];
-}
-
-- (NSString *)encodeURIComponent:(NSString *)value {
-    NSCharacterSet *allowedChars = [NSCharacterSet URLQueryAllowedCharacterSet];
-    NSString *encoded = [value stringByAddingPercentEncodingWithAllowedCharacters:allowedChars];
-    return encoded ? encoded : @"";
+    NSString *path = [self.baseUrl stringByAppendingString:@"/trackingPlan/eventSpec"];
+    NSURLComponents *components = [NSURLComponents componentsWithString:path];
+    components.queryItems = @[
+        [NSURLQueryItem queryItemWithName:@"apiKey" value:params.apiKey ?: @""],
+        [NSURLQueryItem queryItemWithName:@"streamId" value:params.streamId ?: @""],
+        [NSURLQueryItem queryItemWithName:@"eventName" value:params.eventName ?: @""]
+    ];
+    return components.URL.absoluteString ?: @"";
 }
 
 - (AvoEventSpecResponseWire * _Nullable)makeRequest:(NSString *)url {

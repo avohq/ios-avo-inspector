@@ -63,25 +63,26 @@ describe(@"AvoEventSpecCache", ^{
         expect(key).to.equal(@"apiKey:stream1:Event Name");
     });
 
-    it(@"evicts oldest entry when max event count reached", ^{
-        // Fill cache with 50 entries then trigger eviction
+    it(@"evicts oldest entry when max cache size is exceeded", ^{
+        // Fill cache to the max size, then add one more entry to trigger eviction.
         AvoEventSpecResponse *spec = [[AvoEventSpecResponse alloc] init];
-        for (int i = 0; i < 49; i++) {
+        for (int i = 0; i < 50; i++) {
             NSString *key = [NSString stringWithFormat:@"key%d", i];
             [cache set:key spec:spec];
         }
-        expect([cache size]).to.equal(49);
+        expect([cache size]).to.equal(50);
 
         // Backdate key0 to make it the oldest
         AvoEventSpecCacheEntry *oldestEntry = cache.cache[@"key0"];
         oldestEntry.lastAccessed = oldestEntry.lastAccessed - 10000;
 
-        // Add the 50th entry - this triggers eviction of the oldest (key0)
-        [cache set:@"key49" spec:spec];
+        // Add one more entry to trigger eviction of the oldest (key0)
+        [cache set:@"key50" spec:spec];
 
         expect([cache contains:@"key0"]).to.beFalsy();
         expect([cache contains:@"key1"]).to.beTruthy();
-        expect([cache contains:@"key49"]).to.beTruthy();
+        expect([cache contains:@"key50"]).to.beTruthy();
+        expect([cache size]).to.equal(50);
     });
 
     it(@"overwrites existing key", ^{
