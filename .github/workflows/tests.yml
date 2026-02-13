@@ -32,12 +32,12 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          DESTINATION_ID="$(xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations 2>/dev/null | grep 'platform:iOS Simulator' | grep -v 'placeholder' | sed -E 's/.*id:[[:space:]]*([^,}]+).*/\1/' | sed -E 's/[[:space:]]+//g' | head -n1)"
+          DESTINATION_ID="$( (xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations 2>/dev/null | grep 'platform:iOS Simulator' | grep -v 'placeholder' | sed -E 's/.*id:[[:space:]]*([^,}]+).*/\1/' | sed -E 's/[[:space:]]+//g' | head -n1) || true )"
 
           if [ -z "$DESTINATION_ID" ]; then
             echo "No iOS Simulator destination found in xcodebuild output. Trying to create one..."
 
-            RUNTIME_ID="$(xcrun simctl list runtimes | grep 'iOS' | grep -E '(available|is available)' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimRuntime\.[^)]+)\).*/\1/' | head -n1)"
+            RUNTIME_ID="$( (xcrun simctl list runtimes | grep 'iOS' | grep -E '(available|is available)' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimRuntime\.[^)]+)\).*/\1/' | head -n1) || true )"
             if [ -z "$RUNTIME_ID" ]; then
               echo "No available iOS simulator runtime found."
               xcrun simctl list runtimes
@@ -45,7 +45,7 @@ jobs:
               exit 1
             fi
 
-            DEVICE_TYPE_ID="$(xcrun simctl list devicetypes | grep 'iPhone 15 (' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimDeviceType\.[^)]+)\).*/\1/' | head -n1)"
+            DEVICE_TYPE_ID="$( (xcrun simctl list devicetypes | grep 'iPhone 15 (' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimDeviceType\.[^)]+)\).*/\1/' | head -n1) || true )"
             if [ -z "$DEVICE_TYPE_ID" ]; then
               echo "iPhone 15 device type not found."
               xcrun simctl list devicetypes
