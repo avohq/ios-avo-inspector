@@ -11,7 +11,7 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     self = [super init];
     if (self) {
-        _t = dict[@"t"];
+        _t = dict[@"t"] ?: @"";
         _r = [dict[@"r"] boolValue];
         _l = dict[@"l"];
 
@@ -40,9 +40,9 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     self = [super init];
     if (self) {
-        _b = dict[@"b"];
-        _eventId = dict[@"id"];
-        _vids = dict[@"vids"];
+        _b = dict[@"b"] ?: @"";
+        _eventId = dict[@"id"] ?: @"";
+        _vids = dict[@"vids"] ?: @[];
 
         NSDictionary *propsDict = dict[@"p"];
         if (propsDict) {
@@ -66,9 +66,9 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     self = [super init];
     if (self) {
-        _schemaId = dict[@"schemaId"];
-        _branchId = dict[@"branchId"];
-        _latestActionId = dict[@"latestActionId"];
+        _schemaId = dict[@"schemaId"] ?: @"";
+        _branchId = dict[@"branchId"] ?: @"";
+        _latestActionId = dict[@"latestActionId"] ?: @"";
         _sourceId = dict[@"sourceId"];
     }
     return self;
