@@ -10,7 +10,6 @@ jobs:
 
     env:
       project-path: ./Example
-      simulator: iOS Simulator,OS=latest,name=iPhone 16
 
     steps:
       - name: Checkout repository
@@ -33,5 +32,12 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -destination platform='${{ env.simulator }}' clean test | xcpretty
+          DESTINATION_ID="$(xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations 2>/dev/null | grep 'id:' | grep -v 'placeholder' | sed -E 's/.*id:[[:space:]]*([^,}]+).*/\1/' | sed -E 's/[[:space:]]+//g' | head -n1)"
+          if [ -z "$DESTINATION_ID" ]; then
+            echo "No valid destination id found for scheme AvoStateOfTracking-Example"
+            xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations
+            exit 1
+          fi
+          echo "Using destination id: $DESTINATION_ID"
+          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -destination "id=$DESTINATION_ID" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE_SPECIFIER="" clean test | xcpretty
         working-directory: ${{ env.project-path }}
