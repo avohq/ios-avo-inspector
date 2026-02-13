@@ -10,11 +10,11 @@ typedef void (^AvoEventSpecFetchCompletion)(AvoEventSpecResponse * _Nullable res
 @interface AvoEventSpecFetcher : NSObject
 
 - (instancetype)initWithTimeout:(NSTimeInterval)timeout
-                            env:(NSString *)env NS_DESIGNATED_INITIALIZER;
+                            env:(NSString *)env;
 
 - (instancetype)initWithTimeout:(NSTimeInterval)timeout
                             env:(NSString *)env
-                        baseUrl:(NSString *)baseUrl;
+                        baseUrl:(NSString *)baseUrl NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)init NS_UNAVAILABLE;
 
