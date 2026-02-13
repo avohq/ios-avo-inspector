@@ -405,6 +405,23 @@ static NSCache *allowedValuesCache = nil;
         target.failedEventIds = merged.failedEventIds;
         target.passedEventIds = merged.passedEventIds;
     }
+
+    if (source.children != nil) {
+        NSMutableDictionary<NSString *, AvoPropertyValidationResult *> *mergedChildren =
+            target.children != nil ? [target.children mutableCopy] : [NSMutableDictionary dictionary];
+
+        for (NSString *key in source.children) {
+            AvoPropertyValidationResult *existingChild = mergedChildren[key];
+            AvoPropertyValidationResult *newChild = source.children[key];
+            if (existingChild == nil) {
+                mergedChildren[key] = newChild;
+            } else {
+                [self mergeValidationResults:existingChild from:newChild allEventIds:allEventIds];
+            }
+        }
+
+        target.children = [mergedChildren copy];
+    }
 }
 
 #pragma mark - Constraint Checks

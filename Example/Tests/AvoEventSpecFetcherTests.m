@@ -42,6 +42,16 @@ describe(@"AvoEventSpecFetcher", ^{
         expect(url).to.contain(@"eventName=Test%20Event");
     });
 
+    it(@"escapes reserved query delimiters in parameter values", ^{
+        AvoEventSpecFetcher *fetcher = [[AvoEventSpecFetcher alloc] initWithTimeout:5.0 env:@"dev"];
+        AvoFetchEventSpecParams *params = [[AvoFetchEventSpecParams alloc] initWithApiKey:@"k&=y" streamId:@"s&t=r" eventName:@"Foo&Bar=Baz"];
+
+        NSString *url = [fetcher buildUrl:params];
+        expect(url).to.contain(@"apiKey=k%26%3Dy");
+        expect(url).to.contain(@"streamId=s%26t%3Dr");
+        expect(url).to.contain(@"eventName=Foo%26Bar%3DBaz");
+    });
+
     describe(@"Environment gating", ^{
         it(@"returns nil for prod env via callback", ^{
             AvoEventSpecFetcher *fetcher = [[AvoEventSpecFetcher alloc] initWithTimeout:5.0 env:@"prod"];

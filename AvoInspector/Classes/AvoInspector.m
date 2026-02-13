@@ -132,11 +132,6 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
             [AvoInspector setLogging:NO];
         }
 
-        if (env != AvoInspectorEnvProd) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^(void) {
-            });
-        }
-
         self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];
         self.appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
         self.libVersion = @"2.1.0";
@@ -395,17 +390,19 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 }
 
 -(void)handleBranchChangeAndCache:(NSString *)cacheKey specResponse:(AvoEventSpecResponse *)specResponse {
-    if (specResponse.metadata != nil && specResponse.metadata.branchId != nil) {
-        NSString *newBranchId = specResponse.metadata.branchId;
-        if (self.currentBranchId != nil && ![self.currentBranchId isEqualToString:newBranchId]) {
-            if ([AvoInspector isLogging]) {
-                NSLog(@"[avo] Avo Inspector: Branch changed from %@ to %@, clearing cache", self.currentBranchId, newBranchId);
+    @synchronized (self) {
+        if (specResponse.metadata != nil && specResponse.metadata.branchId != nil) {
+            NSString *newBranchId = specResponse.metadata.branchId;
+            if (self.currentBranchId != nil && ![self.currentBranchId isEqualToString:newBranchId]) {
+                if ([AvoInspector isLogging]) {
+                    NSLog(@"[avo] Avo Inspector: Branch changed from %@ to %@, clearing cache", self.currentBranchId, newBranchId);
+                }
+                [self.eventSpecCache clear];
             }
-            [self.eventSpecCache clear];
+            self.currentBranchId = newBranchId;
         }
-        self.currentBranchId = newBranchId;
+        [self.eventSpecCache set:cacheKey spec:specResponse];
     }
-    [self.eventSpecCache set:cacheKey spec:specResponse];
 }
 
 -(void)sendEventWithValidation:(NSString *)eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *)schema eventId:(NSString *)eventId eventHash:(NSString *)eventHash validationResult:(AvoValidationResult *)validationResult eventProperties:(NSDictionary * _Nullable) eventProperties {
