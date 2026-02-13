@@ -134,7 +134,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 
         self.appName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleIdentifierKey];
         self.appVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
-        self.libVersion = @"2.2.0";
+        self.libVersion = @"2.2.1";
 
         self.notificationCenter = [NSNotificationCenter defaultCenter];
 
