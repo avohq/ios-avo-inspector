@@ -32,27 +32,26 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          DESTINATION_ID="$( (xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations 2>/dev/null | grep 'platform:iOS Simulator' | grep -v 'placeholder' | sed -E 's/.*id:[[:space:]]*([^,}]+).*/\1/' | sed -E 's/[[:space:]]+//g' | head -n1) || true )"
+          DESTINATION_ID="$( (xcrun simctl list devices available | grep -E 'iPhone|iPad' | sed -En 's/.*\(([0-9A-F-]{36})\).*/\1/p' | head -n1) || true )"
 
           if [ -z "$DESTINATION_ID" ]; then
-            echo "No iOS Simulator destination found in xcodebuild output. Trying to create one..."
+            echo "No available iOS Simulator device found. Trying to create one..."
 
-            RUNTIME_ID="$( (xcrun simctl list runtimes | grep 'iOS' | grep -E '(available|is available)' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimRuntime\.[^)]+)\).*/\1/' | head -n1) || true )"
+            RUNTIME_ID="$( (xcrun simctl list runtimes | grep '^iOS ' | sed -E 's/.*- (com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+).*/\1/' | head -n1) || true )"
             if [ -z "$RUNTIME_ID" ]; then
-              echo "No available iOS simulator runtime found."
+              echo "No iOS simulator runtime found."
               xcrun simctl list runtimes
-              xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations
               exit 1
             fi
 
-            DEVICE_TYPE_ID="$( (xcrun simctl list devicetypes | grep 'iPhone 15 (' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimDeviceType\.[^)]+)\).*/\1/' | head -n1) || true )"
+            DEVICE_TYPE_ID="$( (xcrun simctl list devicetypes | grep 'iPhone 16 (' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimDeviceType\.[^)]+)\).*/\1/' | head -n1) || true )"
             if [ -z "$DEVICE_TYPE_ID" ]; then
-              echo "iPhone 15 device type not found."
+              echo "iPhone 16 device type not found."
               xcrun simctl list devicetypes
               exit 1
             fi
 
-            DESTINATION_ID="$(xcrun simctl create "CI-iPhone-15" "$DEVICE_TYPE_ID" "$RUNTIME_ID" || true)"
+            DESTINATION_ID="$(xcrun simctl create "CI-iPhone-16" "$DEVICE_TYPE_ID" "$RUNTIME_ID" || true)"
             if [ -z "$DESTINATION_ID" ]; then
               echo "Failed to create simulator device."
               xcrun simctl list devices
