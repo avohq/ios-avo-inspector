@@ -32,12 +32,35 @@ jobs:
       - name: Test
         run: |
           set -o pipefail
-          DESTINATION_ID="$(xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations 2>/dev/null | grep 'id:' | grep -v 'placeholder' | sed -E 's/.*id:[[:space:]]*([^,}]+).*/\1/' | sed -E 's/[[:space:]]+//g' | head -n1)"
+          DESTINATION_ID="$(xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations 2>/dev/null | grep 'platform:iOS Simulator' | grep -v 'placeholder' | sed -E 's/.*id:[[:space:]]*([^,}]+).*/\1/' | sed -E 's/[[:space:]]+//g' | head -n1)"
+
           if [ -z "$DESTINATION_ID" ]; then
-            echo "No valid destination id found for scheme AvoStateOfTracking-Example"
-            xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations
-            exit 1
+            echo "No iOS Simulator destination found in xcodebuild output. Trying to create one..."
+
+            RUNTIME_ID="$(xcrun simctl list runtimes | grep 'iOS' | grep -E '(available|is available)' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimRuntime\.[^)]+)\).*/\1/' | head -n1)"
+            if [ -z "$RUNTIME_ID" ]; then
+              echo "No available iOS simulator runtime found."
+              xcrun simctl list runtimes
+              xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -showdestinations
+              exit 1
+            fi
+
+            DEVICE_TYPE_ID="$(xcrun simctl list devicetypes | grep 'iPhone 15 (' | sed -E 's/.*\((com\.apple\.CoreSimulator\.SimDeviceType\.[^)]+)\).*/\1/' | head -n1)"
+            if [ -z "$DEVICE_TYPE_ID" ]; then
+              echo "iPhone 15 device type not found."
+              xcrun simctl list devicetypes
+              exit 1
+            fi
+
+            DESTINATION_ID="$(xcrun simctl create "CI-iPhone-15" "$DEVICE_TYPE_ID" "$RUNTIME_ID" || true)"
+            if [ -z "$DESTINATION_ID" ]; then
+              echo "Failed to create simulator device."
+              xcrun simctl list devices
+              exit 1
+            fi
           fi
+
+          xcrun simctl boot "$DESTINATION_ID" || true
           echo "Using destination id: $DESTINATION_ID"
-          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -destination "id=$DESTINATION_ID" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE_SPECIFIER="" clean test | xcpretty
+          xcodebuild -workspace AvoStateOfTracking.xcworkspace -scheme AvoStateOfTracking-Example -sdk iphonesimulator -destination "id=$DESTINATION_ID" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE_SPECIFIER="" clean test | xcpretty
         working-directory: ${{ env.project-path }}
