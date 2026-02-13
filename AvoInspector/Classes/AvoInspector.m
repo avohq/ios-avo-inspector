@@ -49,6 +49,7 @@
 @property (readwrite, nonatomic, nullable) AvoEventSpecFetcher *eventSpecFetcher;
 @property (readwrite, nonatomic, nullable) AvoEventSpecCache *eventSpecCache;
 @property (readwrite, nonatomic, nullable) NSString *currentBranchId;
+@property (readwrite, nonatomic, nullable) NSString *publicEncryptionKey;
 
 @end
 
@@ -103,6 +104,14 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 }
 
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env proxyEndpoint: (NSString *) proxyEndpoint {
+    return [self initWithApiKey:apiKey env:env proxyEndpoint:proxyEndpoint publicEncryptionKey:nil];
+}
+
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env publicEncryptionKey: (NSString * _Nullable) publicEncryptionKey {
+    return [self initWithApiKey:apiKey env:env proxyEndpoint:@"https://api.avo.app/inspector/v1/track" publicEncryptionKey:publicEncryptionKey];
+}
+
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env proxyEndpoint: (NSString *) proxyEndpoint publicEncryptionKey: (NSString * _Nullable) publicEncryptionKey {
     self = [super init];
     if (self) {
         if (env != AvoInspectorEnvProd && env != AvoInspectorEnvDev && env != AvoInspectorEnvStaging) {
@@ -111,6 +120,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
             self.env = env;
         }
 
+        self.publicEncryptionKey = publicEncryptionKey;
         self.avoSchemaExtractor = [AvoSchemaExtractor new];
 
         if (env == AvoInspectorEnvDev) {
@@ -128,12 +138,18 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 
         self.notificationCenter = [NSNotificationCenter defaultCenter];
 
-        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion env:(int)self.env endpoint: proxyEndpoint];
+        self.networkCallsHandler = [[AvoNetworkCallsHandler alloc] initWithApiKey:apiKey appName:self.appName appVersion:self.appVersion libVersion:self.libVersion env:(int)self.env endpoint:proxyEndpoint publicEncryptionKey:publicEncryptionKey];
         self.avoBatcher = [[AvoBatcher alloc] initWithNetworkCallsHandler:self.networkCallsHandler];
 
         self.avoDeduplicator = [AvoDeduplicator sharedDeduplicator];
 
         self.apiKey = apiKey;
+
+        if (publicEncryptionKey != nil && publicEncryptionKey.length > 0 && env != AvoInspectorEnvProd) {
+            if ([AvoInspector isLogging]) {
+                NSLog(@"[avo] Avo Inspector: Property value encryption enabled");
+            }
+        }
 
         // Initialize event spec fetcher and cache for non-prod environments
         // streamId is the anonymous ID, obtained internally from AvoAnonymousId
@@ -158,7 +174,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 }
 
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env {
-    self = [self initWithApiKey:apiKey env:env proxyEndpoint:@"https://api.avo.app/inspector/v1/track"];
+    self = [self initWithApiKey:apiKey env:env proxyEndpoint:@"https://api.avo.app/inspector/v1/track" publicEncryptionKey:nil];
     return self;
 }
 
@@ -250,7 +266,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 
         NSDictionary * schema = [self.avoSchemaExtractor extractSchema:params];
 
-        [self fetchAndValidateAsync:eventName eventParams:params eventSchema:schema eventId:eventId eventHash:eventHash];
+        [self fetchAndValidateAsync:eventName eventParams:params eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:params];
 
         return schema;
     }
@@ -264,7 +280,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 -(void) trackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema {
     @try {
         if ([self.avoDeduplicator shouldRegisterSchemaFromManually:eventName schema:schema]) {
-            [self internalTrackSchema:eventName eventSchema:schema eventId:nil eventHash:nil];
+            [self internalTrackSchema:eventName eventSchema:schema eventId:nil eventHash:nil eventProperties:nil];
         } else {
             if ([AvoInspector isLogging]) {
                 NSLog(@"[avo] Avo Inspector: Deduplicated schema %@", eventName);
@@ -276,7 +292,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
     }
 }
 
--(void) internalTrackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash {
+-(void) internalTrackSchema:(NSString *) eventName eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash eventProperties:(NSDictionary * _Nullable) eventProperties {
 
     @try {
         for(NSString *key in [schema allKeys]) {
@@ -285,7 +301,11 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
             }
         }
 
-        [self.avoBatcher handleTrackSchema:eventName schema:schema eventId: eventId eventHash:eventHash];
+        if (eventProperties != nil && eventProperties.count > 0) {
+            [self.avoBatcher handleTrackSchema:eventName schema:schema eventId:eventId eventHash:eventHash eventProperties:eventProperties];
+        } else {
+            [self.avoBatcher handleTrackSchema:eventName schema:schema eventId:eventId eventHash:eventHash];
+        }
     }
     @catch (NSException *exception) {
         [self.avoSchemaExtractor printAvoParsingError:exception];
@@ -302,12 +322,12 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
 
 #pragma mark - Event Spec Fetch & Validate
 
--(void)fetchAndValidateAsync:(NSString *)eventName eventParams:(NSDictionary<NSString *, id> *)params eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *)schema eventId:(NSString *)eventId eventHash:(NSString *)eventHash {
+-(void)fetchAndValidateAsync:(NSString *)eventName eventParams:(NSDictionary<NSString *, id> *)params eventSchema:(NSDictionary<NSString *, AvoEventSchemaType *> *)schema eventId:(NSString *)eventId eventHash:(NSString *)eventHash eventProperties:(NSDictionary * _Nullable) eventProperties {
 
     // If no fetcher (prod, etc.), fall through to existing path
     NSString *streamId = [AvoAnonymousId anonymousId];
     if (self.eventSpecFetcher == nil || self.eventSpecCache == nil || streamId == nil || [streamId isEqualToString:@"unknown"] || params == nil || params.count == 0) {
-        [self internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash];
+        [self internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:eventProperties];
         return;
     }
 
@@ -319,12 +339,12 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
         if (cachedSpec != nil) {
             AvoValidationResult *validationResult = [AvoEventValidator validateEvent:params specResponse:cachedSpec];
             if (validationResult != nil) {
-                [self sendEventWithValidation:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult];
+                [self sendEventWithValidation:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult eventProperties:eventProperties];
                 return;
             }
         }
         // Cache hit but nil spec or no validation result - use existing path
-        [self internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash];
+        [self internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:eventProperties];
         return;
     }
 
@@ -353,10 +373,10 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
             // Validate and send the validated event
             AvoValidationResult *validationResult = [AvoEventValidator validateEvent:capturedParams specResponse:specResponse];
             if (validationResult != nil) {
-                [strongSelf sendEventWithValidation:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult];
+                [strongSelf sendEventWithValidation:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult eventProperties:eventProperties];
             } else {
                 // Validation returned nil — send through batched path
-                [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash];
+                [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:eventProperties];
             }
         } else {
             // Cache nil to avoid re-fetching within TTL, send through batched path
@@ -364,7 +384,7 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
             if ([AvoInspector isLogging]) {
                 NSLog(@"[avo] Avo Inspector: Event spec fetch returned nil for event: %@. Cached empty response. Sending without validation.", eventName);
             }
-            [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash];
+            [strongSelf internalTrackSchema:eventName eventSchema:schema eventId:eventId eventHash:eventHash eventProperties:eventProperties];
         }
     }];
 }
@@ -385,10 +405,10 @@ static const NSTimeInterval EVENT_SPEC_FETCH_TIMEOUT = 5.0;
     }
 }
 
--(void)sendEventWithValidation:(NSString *)eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *)schema eventId:(NSString *)eventId eventHash:(NSString *)eventHash validationResult:(AvoValidationResult *)validationResult {
+-(void)sendEventWithValidation:(NSString *)eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *)schema eventId:(NSString *)eventId eventHash:(NSString *)eventHash validationResult:(AvoValidationResult *)validationResult eventProperties:(NSDictionary * _Nullable) eventProperties {
     @try {
         NSString *streamId = [AvoAnonymousId anonymousId];
-        NSMutableDictionary *body = [self.networkCallsHandler bodyForValidatedEventSchemaCall:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult streamId:streamId];
+        NSMutableDictionary *body = [self.networkCallsHandler bodyForValidatedEventSchemaCall:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult streamId:streamId eventProperties:eventProperties];
 
         if ([AvoInspector isLogging]) {
             NSLog(@"[avo] Avo Inspector: Sending validated event %@", eventName);

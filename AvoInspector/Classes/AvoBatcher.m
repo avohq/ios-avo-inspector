@@ -68,22 +68,32 @@
 // schema is [ String : AvoEventSchemaType ]
 - (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash {
     NSMutableDictionary * trackSchemaBody = [self.networkCallsHandler bodyForTrackSchemaCall:eventName schema: schema eventId: eventId eventHash: eventHash];
-    
+
+    [self saveAndLogEvent:trackSchemaBody schema:schema eventName:eventName];
+}
+
+- (void) handleTrackSchema: (NSString *) eventName schema: (NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString *) eventId eventHash:(NSString *) eventHash eventProperties:(NSDictionary * _Nullable) eventProperties {
+    NSMutableDictionary * trackSchemaBody = [self.networkCallsHandler bodyForTrackSchemaCall:eventName schema: schema eventId: eventId eventHash: eventHash eventProperties: eventProperties];
+
+    [self saveAndLogEvent:trackSchemaBody schema:schema eventName:eventName];
+}
+
+- (void) saveAndLogEvent:(NSMutableDictionary *)trackSchemaBody schema:(NSDictionary<NSString *, AvoEventSchemaType *> *)schema eventName:(NSString *)eventName {
     [self saveEvent:trackSchemaBody];
-    
+
     if ([AvoInspector isLogging]) {
-        
+
         NSString * schemaString = @"";
-        
+
         for(NSString *key in [schema allKeys]) {
             NSString *value = [[schema objectForKey:key] name];
             NSString *entry = [NSString stringWithFormat:@"\t\"%@\": \"%@\";\n", key, value];
             schemaString = [schemaString stringByAppendingString:entry];
         }
-        
+
         NSLog(@"[avo] Avo Inspector: Saved event %@ with schema {\n%@}", eventName, schemaString);
     }
-    
+
     [self checkIfBatchNeedsToBeSent];
 }
 

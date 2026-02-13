@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		000F4B6B77DB28A21F58A99E /* Pods_AvoStateOfTracking_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477A7DB1E300D6CCCB497073 /* Pods_AvoStateOfTracking_Example.framework */; };
+		1BFBEEE38BE0FE929AF8B956 /* AvoEncryptionIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E26A5F901066963861F636 /* AvoEncryptionIntegrationTests.m */; };
+		2D3C54CD8AB3824C81547AA6 /* AvoEncryptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 116077C7B279A33311E05AEF /* AvoEncryptionTests.m */; };
 		301AB520EE651FAEF0985BF7 /* AvoEventSpecCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 58BBA119ADBF687E498F0256 /* AvoEventSpecCacheTests.m */; };
 		58750A8C25B41A11A5226238 /* AvoEventValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A0A3986F479ECA7F6844E4 /* AvoEventValidatorTests.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
@@ -51,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		0385A7D967CD2A317A48054A /* Pods_AvoStateOfTracking_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		116077C7B279A33311E05AEF /* AvoEncryptionTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AvoEncryptionTests.m; sourceTree = "<group>"; };
 		18EDCD8FB8CCED3A1897C0A4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		477A7DB1E300D6CCCB497073 /* Pods_AvoStateOfTracking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvoStateOfTracking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		58BBA119ADBF687E498F0256 /* AvoEventSpecCacheTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AvoEventSpecCacheTests.m; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		87E70B6034DD8F288503AB25 /* Pods-AvoStateOfTracking_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Example.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Example/Pods-AvoStateOfTracking_Example.release.xcconfig"; sourceTree = "<group>"; };
+		93E26A5F901066963861F636 /* AvoEncryptionIntegrationTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AvoEncryptionIntegrationTests.m; sourceTree = "<group>"; };
 		B28235AFC6E48D36D0E38644 /* AvoInspector.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AvoInspector.podspec; path = ../AvoInspector.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B98C773A43DE3E8F6C478C85 /* Pods-AvoStateOfTracking_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.release.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BEB89237300F3787D57D1AAA /* Pods-AvoStateOfTracking_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvoStateOfTracking_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AvoStateOfTracking_Tests/Pods-AvoStateOfTracking_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -200,6 +204,8 @@
 				58BBA119ADBF687E498F0256 /* AvoEventSpecCacheTests.m */,
 				E9A0A3986F479ECA7F6844E4 /* AvoEventValidatorTests.m */,
 				67B497389F519CACB0D85717 /* AvoEventSpecFetcherTests.m */,
+				116077C7B279A33311E05AEF /* AvoEncryptionTests.m */,
+				93E26A5F901066963861F636 /* AvoEncryptionIntegrationTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -459,6 +465,8 @@
 				301AB520EE651FAEF0985BF7 /* AvoEventSpecCacheTests.m in Sources */,
 				58750A8C25B41A11A5226238 /* AvoEventValidatorTests.m in Sources */,
 				BAD0466DD8B620F27723BBB6 /* AvoEventSpecFetcherTests.m in Sources */,
+				2D3C54CD8AB3824C81547AA6 /* AvoEncryptionTests.m in Sources */,
+				1BFBEEE38BE0FE929AF8B956 /* AvoEncryptionIntegrationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
