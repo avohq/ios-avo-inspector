@@ -29,6 +29,13 @@ typedef NS_ENUM(NSUInteger, AvoInspectorEnv) {
 
 -(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env proxyEndpoint: (NSString *) proxyEndpoint;
 
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env
+          publicEncryptionKey: (NSString * _Nullable) publicEncryptionKey;
+
+-(instancetype) initWithApiKey: (NSString *) apiKey env: (AvoInspectorEnv) env
+                proxyEndpoint: (NSString *) proxyEndpoint
+          publicEncryptionKey: (NSString * _Nullable) publicEncryptionKey;
+
 + (id<AvoStorage>)avoStorage;
 
 @end

@@ -13,6 +13,7 @@
 #import "AvoAnonymousId.h"
 #import "AvoBatcher.h"
 #import "AvoDeduplicator.h"
+#import "AvoEncryption.h"
 #import "AvoEventSpecCache.h"
 #import "AvoEventSpecFetcher.h"
 #import "AvoEventSpecFetchTypes.h"

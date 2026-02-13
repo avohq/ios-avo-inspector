@@ -11,6 +11,8 @@
 #import "AvoObject.h"
 #import "AvoAnonymousId.h"
 #import "AvoEventSpecFetchTypes.h"
+#import "AvoEncryption.h"
+#import "AvoList.h"
 
 @interface AvoNetworkCallsHandler()
 
@@ -21,6 +23,7 @@
 @property (readwrite, nonatomic) NSString *libVersion;
 @property (readwrite, nonatomic) NSURLSession *urlSession;
 @property (readwrite, nonatomic) NSString *endpoint;
+@property (readwrite, nonatomic, nullable) NSString *publicEncryptionKey;
 
 @property (readwrite, nonatomic) double samplingRate;
 
@@ -29,6 +32,10 @@
 @implementation AvoNetworkCallsHandler
 
 - (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion env: (int) env endpoint: (NSString *) endpoint {
+    return [self initWithApiKey:apiKey appName:appName appVersion:appVersion libVersion:libVersion env:env endpoint:endpoint publicEncryptionKey:nil];
+}
+
+- (instancetype) initWithApiKey: (NSString *) apiKey appName: (NSString *)appName appVersion: (NSString *) appVersion libVersion: (NSString *) libVersion env: (int) env endpoint: (NSString *) endpoint publicEncryptionKey: (NSString * _Nullable) publicEncryptionKey {
     self = [super init];
     if (self) {
         self.endpoint = endpoint;
@@ -39,18 +46,23 @@
         self.samplingRate = 1.0;
         self.env = env;
         self.urlSession = [NSURLSession sharedSession];
+        self.publicEncryptionKey = publicEncryptionKey;
     }
     return self;
 }
 
 - (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash {
+    return [self bodyForTrackSchemaCall:eventName schema:schema eventId:eventId eventHash:eventHash eventProperties:nil];
+}
+
+- (NSMutableDictionary *) bodyForTrackSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash eventProperties:(NSDictionary * _Nullable) eventProperties {
     NSMutableArray * propsSchema = [NSMutableArray new];
-    
+
     for(NSString *key in [schema allKeys]) {
         NSString *value = [[schema objectForKey:key] name];
-        
+
         NSMutableDictionary *prop = [NSMutableDictionary new];
-        
+
         [prop setObject:key forKey:@"propertyName"];
         if ([[schema objectForKey:key] isKindOfClass:[AvoObject class]]) {
             NSError *error = nil;
@@ -60,9 +72,9 @@
                               error:&error];
             if (!error && [nestedSchema isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *results = nestedSchema;
-                
+
                 [prop setObject:@"object" forKey:@"propertyType"];
-                
+
                 [prop setObject:[self bodyFromJson:results] forKey:@"children"];
             }
         } else {
@@ -70,9 +82,13 @@
         }
         [propsSchema addObject:prop];
     }
-    
+
+    if ([self shouldEncrypt] && eventProperties != nil) {
+        [AvoNetworkCallsHandler addEncryptedValues:propsSchema eventProperties:eventProperties publicEncryptionKey:self.publicEncryptionKey];
+    }
+
     NSMutableDictionary * baseBody = [self createBaseCallBody];
-    
+
     if (eventId != nil) {
         [baseBody setValue:@YES forKey:@"avoFunction"];
         [baseBody setValue:eventId forKey:@"eventId"];
@@ -80,11 +96,11 @@
     } else {
         [baseBody setValue:@NO forKey:@"avoFunction"];
     }
-    
+
     [baseBody setValue:@"event" forKey:@"type"];
     [baseBody setValue:eventName forKey:@"eventName"];
     [baseBody setValue:propsSchema forKey:@"eventProperties"];
-    
+
     return baseBody;
 }
 
@@ -127,6 +143,10 @@
     [body setValue:@"ios" forKey:@"libPlatform"];
     [body setValue:[[NSUUID UUID] UUIDString] forKey:@"messageId"];
     [body setValue:[AvoUtils currentTimeAsISO8601UTCString] forKey:@"createdAt"];
+
+    if (self.publicEncryptionKey != nil && self.publicEncryptionKey.length > 0) {
+        [body setValue:self.publicEncryptionKey forKey:@"publicEncryptionKey"];
+    }
 
     return body;
 }
@@ -207,6 +227,10 @@
 }
 
 - (NSMutableDictionary *) bodyForValidatedEventSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash validationResult:(AvoValidationResult *) validationResult streamId:(NSString *) streamId {
+    return [self bodyForValidatedEventSchemaCall:eventName schema:schema eventId:eventId eventHash:eventHash validationResult:validationResult streamId:streamId eventProperties:nil];
+}
+
+- (NSMutableDictionary *) bodyForValidatedEventSchemaCall:(NSString *) eventName schema:(NSDictionary<NSString *, AvoEventSchemaType *> *) schema eventId:(NSString * _Nullable) eventId eventHash:(NSString * _Nullable) eventHash validationResult:(AvoValidationResult *) validationResult streamId:(NSString *) streamId eventProperties:(NSDictionary * _Nullable) eventProperties {
 
     NSMutableArray *propsSchema = [NSMutableArray new];
 
@@ -239,6 +263,10 @@
         }
 
         [propsSchema addObject:prop];
+    }
+
+    if ([self shouldEncrypt] && eventProperties != nil) {
+        [AvoNetworkCallsHandler addEncryptedValues:propsSchema eventProperties:eventProperties publicEncryptionKey:self.publicEncryptionKey];
     }
 
     NSMutableDictionary *baseBody = [self createBaseCallBody];
@@ -356,6 +384,72 @@
     }
 
     return result;
+}
+
+#pragma mark - Encryption
+
+- (BOOL) shouldEncrypt {
+    return self.publicEncryptionKey != nil
+        && self.publicEncryptionKey.length > 0
+        && (self.env == 1 || self.env == 2); // dev = 1, staging = 2
+}
+
++ (void) addEncryptedValues:(NSMutableArray *)properties eventProperties:(NSDictionary *)eventProperties publicEncryptionKey:(NSString *)publicEncryptionKey {
+    if (properties == nil || eventProperties == nil || publicEncryptionKey == nil) {
+        return;
+    }
+
+    for (NSUInteger i = 0; i < properties.count; i++) {
+        @try {
+            NSMutableDictionary *prop = properties[i];
+            NSString *propertyName = prop[@"propertyName"];
+            NSString *propertyType = prop[@"propertyType"];
+            id value = eventProperties[propertyName];
+
+            if (value == nil) {
+                continue;
+            }
+
+            if ([propertyType isEqualToString:@"object"] && prop[@"children"] != nil && [value isKindOfClass:[NSDictionary class]]) {
+                // Recurse into object children
+                NSMutableArray *children = prop[@"children"];
+                [self addEncryptedValues:children eventProperties:(NSDictionary *)value publicEncryptionKey:publicEncryptionKey];
+            } else if (![propertyType hasPrefix:@"list"]) {
+                // Primitive type: encrypt the JSON-stringified value
+                NSString *jsonValue = [self jsonStringifyValue:value];
+                if (jsonValue != nil) {
+                    NSString *encrypted = [AvoEncryption encrypt:jsonValue recipientPublicKeyHex:publicEncryptionKey];
+                    if (encrypted != nil) {
+                        prop[@"encryptedPropertyValue"] = encrypted;
+                    }
+                }
+            }
+            // list types are skipped
+        } @catch (NSException *e) {
+            if ([AvoInspector isLogging]) {
+                NSLog(@"[avo] Avo Inspector: Failed to encrypt property at index %lu: %@", (unsigned long)i, e);
+            }
+        }
+    }
+}
+
++ (NSString * _Nullable) jsonStringifyValue:(id) value {
+    @try {
+        // Wrap value in an array to get proper JSON representation
+        NSArray *wrapper = @[value];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:wrapper options:0 error:nil];
+        if (jsonData == nil) {
+            return nil;
+        }
+        NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        if (json == nil || json.length < 2) {
+            return nil;
+        }
+        // Strip surrounding brackets: [value] -> value
+        return [json substringWithRange:NSMakeRange(1, json.length - 2)];
+    } @catch (NSException *e) {
+        return nil;
+    }
 }
 
 @end
