@@ -28,7 +28,9 @@
             objectSchema = [objectSchema stringByAppendingString:[NSString stringWithFormat:@"\"%@\",", [[self.fields valueForKey:fieldKey] name]]];
         }
     }
-    objectSchema = [objectSchema substringToIndex:[objectSchema length] - 1];
+    if ([self.fields count] > 0) {
+        objectSchema = [objectSchema substringToIndex:[objectSchema length] - 1];
+    }
     objectSchema = [objectSchema stringByAppendingString:@"}"];
     
     return [NSString stringWithFormat:@"%@", objectSchema];
