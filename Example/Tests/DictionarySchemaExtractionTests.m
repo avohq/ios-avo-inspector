@@ -95,6 +95,23 @@ it(@"can extract nullable string int float boolean list(string) object{field0:st
    .to.equal( @"{\"strKey\":\"string\",\"intKey\":\"int\",\"nullStrKey\":\"null\",\"nestedObjKey\":{\"field0\":\"string\",\"filed1\":\"int\",\"filed3\":\"list(null)\"},\"listKey\":\"list(string)\",\"boolKey\":\"boolean\",\"floatKey\":\"float\"}");
 });
 
+it(@"can extract empty nested dictionary", ^{
+    NSMutableDictionary * testParams = [NSMutableDictionary new];
+
+    NSMutableDictionary * userDict = [NSMutableDictionary new];
+    [userDict setValue:@"Alex" forKey:@"name"];
+    [userDict setValue:@{} forKey:@"experiments"];
+
+    [testParams setObject:userDict forKey:@"user"];
+
+    NSDictionary * extractedSchema = [sut extractSchema:testParams];
+
+    AvoObject * userSchema = [extractedSchema objectForKey:@"user"];
+    expect([userSchema class]).equal([AvoObject class]);
+    expect([userSchema name]).to.contain(@"\"name\":\"string\"");
+    expect([userSchema name]).to.contain(@"\"experiments\":{}");
+});
+
 it(@"can extract list with double nested objects", ^{
     NSMutableDictionary * testParams = [NSMutableDictionary new];
    
