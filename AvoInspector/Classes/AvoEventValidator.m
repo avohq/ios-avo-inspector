@@ -481,9 +481,14 @@ static NSCache *allowedValuesCache = nil;
 
         if (regex == nil) continue;
 
-        NSUInteger matches = [regex numberOfMatchesInString:stringValue
-                                                   options:0
-                                                     range:NSMakeRange(0, stringValue.length)];
+        NSUInteger matches = [self safeNumberOfMatchesWithRegex:regex inString:stringValue timeout:2.0];
+        if (matches == NSNotFound) {
+            // Timed out — skip this constraint (fail-open) and log warning
+            if ([AvoInspector isLogging]) {
+                NSLog(@"[avo] Avo Inspector: Skipping regex constraint '%@' due to timeout", pattern);
+            }
+            continue;
+        }
         if (matches == 0) {
             [failedIds addObjectsFromArray:eventIds];
         }
@@ -533,6 +538,61 @@ static NSCache *allowedValuesCache = nil;
     }
 }
 
+#pragma mark - ReDoS Protection
+
++ (BOOL)isPatternPotentiallyDangerous:(NSString *)pattern {
+    // Detect nested quantifiers: a group containing a quantifier that is itself quantified
+    // e.g. (a+)+, (.*)*$, ([a-z]+)*, etc.
+    NSError *error = nil;
+    NSRegularExpression *nestedQuantifier =
+        [NSRegularExpression regularExpressionWithPattern:@"\\([^)]*[+*][^)]*\\)[+*]"
+                                                 options:0
+                                                   error:&error];
+    if (error != nil || nestedQuantifier == nil) {
+        return NO;
+    }
+
+    NSUInteger matches = [nestedQuantifier numberOfMatchesInString:pattern
+                                                           options:0
+                                                             range:NSMakeRange(0, pattern.length)];
+    if (matches > 0) {
+        if ([AvoInspector isLogging]) {
+            NSLog(@"[avo] Avo Inspector: Potentially dangerous regex pattern rejected: '%@'", pattern);
+        }
+        return YES;
+    }
+    return NO;
+}
+
++ (NSUInteger)safeNumberOfMatchesWithRegex:(NSRegularExpression *)regex
+                                  inString:(NSString *)string
+                                   timeout:(NSTimeInterval)timeout {
+    __block NSUInteger result = NSNotFound;
+
+    dispatch_queue_t queue = dispatch_queue_create("com.avo.inspector.regex", DISPATCH_QUEUE_SERIAL);
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+    dispatch_async(queue, ^{
+        result = [regex numberOfMatchesInString:string
+                                        options:0
+                                          range:NSMakeRange(0, string.length)];
+        dispatch_semaphore_signal(semaphore);
+    });
+
+    long timedOut = dispatch_semaphore_wait(semaphore,
+        dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)));
+
+    if (timedOut != 0) {
+        if ([AvoInspector isLogging]) {
+            NSLog(@"[avo] Avo Inspector: Regex execution timed out after %.0fs for pattern '%@'",
+                  timeout, regex.pattern);
+        }
+        return NSNotFound;
+    }
+
+    return result;
+}
+
 #pragma mark - Helpers
 
 + (NSString * _Nullable)convertValueToString:(id _Nullable)value {
@@ -580,6 +640,10 @@ static NSCache *allowedValuesCache = nil;
     NSRegularExpression *cached = [regexCache objectForKey:pattern];
     if (cached != nil) {
         return cached;
+    }
+
+    if ([self isPatternPotentiallyDangerous:pattern]) {
+        return nil;
     }
 
     @try {
