@@ -360,6 +360,73 @@ describe(@"AvoEventValidator", ^{
         });
     });
 
+    describe(@"ReDoS protection", ^{
+        it(@"rejects dangerous patterns with nested quantifiers", ^{
+            BOOL dangerous = [AvoEventValidator isPatternPotentiallyDangerous:@"(a+)+$"];
+            expect(dangerous).to.beTruthy();
+
+            BOOL dangerous2 = [AvoEventValidator isPatternPotentiallyDangerous:@"(.*)*"];
+            expect(dangerous2).to.beTruthy();
+
+            BOOL dangerous3 = [AvoEventValidator isPatternPotentiallyDangerous:@"([a-z]+)*"];
+            expect(dangerous3).to.beTruthy();
+        });
+
+        it(@"allows safe patterns", ^{
+            BOOL safe1 = [AvoEventValidator isPatternPotentiallyDangerous:@"^[0-9]+$"];
+            expect(safe1).to.beFalsy();
+
+            BOOL safe2 = [AvoEventValidator isPatternPotentiallyDangerous:@"^[a-zA-Z]{1,100}$"];
+            expect(safe2).to.beFalsy();
+
+            BOOL safe3 = [AvoEventValidator isPatternPotentiallyDangerous:@"\\d+\\.\\d+"];
+            expect(safe3).to.beFalsy();
+        });
+
+        it(@"completes ReDoS input within 5 seconds even for evil pattern", ^{
+            // Even if a dangerous pattern somehow gets through the static check,
+            // the timeout mechanism should catch it at 2s.
+            // Build a known-evil regex manually for this test.
+            NSRegularExpression *evilRegex =
+                [NSRegularExpression regularExpressionWithPattern:@"(a+)+$" options:0 error:nil];
+
+            // Build a string that triggers catastrophic backtracking
+            NSMutableString *evilInput = [NSMutableString string];
+            for (int i = 0; i < 20000; i++) {
+                [evilInput appendString:@"a"];
+            }
+            [evilInput appendString:@"!"];
+
+            NSDate *start = [NSDate date];
+            NSUInteger result = [AvoEventValidator safeNumberOfMatchesWithRegex:evilRegex
+                                                                      inString:evilInput
+                                                                       timeout:2.0];
+            NSTimeInterval elapsed = -[start timeIntervalSinceNow];
+
+            // Should have timed out (returned NSNotFound) well under 5 seconds
+            expect(elapsed).to.beLessThan(5.0);
+            expect(result).to.equal(NSNotFound);
+        });
+
+        it(@"skips constraint for dangerous regex pattern in validation", ^{
+            // Use a dangerous pattern — should be rejected and constraint skipped
+            AvoPropertyConstraints *constraint = makeConstraints(@"string",
+                nil, nil, @{@"(a+)+$": @[@"evt1"]}, nil);
+
+            AvoEventSpecEntry *entry = makeEntry(@"b1", @"evt1", @[], @{@"prop": constraint});
+            AvoEventSpecResponse *resp = makeResponse(@[entry]);
+
+            // Even though the value doesn't match, the dangerous pattern is skipped
+            AvoValidationResult *result = [AvoEventValidator validateEvent:@{@"prop": @"test"} specResponse:resp];
+            expect(result).toNot.beNil();
+            // No failure because the constraint was skipped
+            AvoPropertyValidationResult *propResult = result.propertyResults[@"prop"];
+            expect(propResult).toNot.beNil();
+            expect(propResult.failedEventIds).to.beNil();
+            expect(propResult.passedEventIds).to.beNil();
+        });
+    });
+
     describe(@"Metadata", ^{
         it(@"includes metadata in validation result", ^{
             AvoPropertyConstraints *constraint = makeConstraints(@"string",
