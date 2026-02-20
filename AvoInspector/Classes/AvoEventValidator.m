@@ -569,10 +569,14 @@ static NSCache *allowedValuesCache = nil;
                                    timeout:(NSTimeInterval)timeout {
     __block NSUInteger result = NSNotFound;
 
-    dispatch_queue_t queue = dispatch_queue_create("com.avo.inspector.regex", DISPATCH_QUEUE_SERIAL);
+    static dispatch_queue_t regexQueue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regexQueue = dispatch_queue_create("com.avo.inspector.regex", DISPATCH_QUEUE_SERIAL);
+    });
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
-    dispatch_async(queue, ^{
+    dispatch_async(regexQueue, ^{
         result = [regex numberOfMatchesInString:string
                                         options:0
                                           range:NSMakeRange(0, string.length)];
