@@ -8,27 +8,14 @@
 #import "AvoEncryption.h"
 #import <Security/Security.h>
 #import <CommonCrypto/CommonCrypto.h>
-#import <CommonCrypto/CommonCryptor.h>
-
-// AES-GCM oneshot API from CommonCrypto. These are stable, exported symbols in libcommonCrypto
-// (present since iOS 6) but not declared in the public <CommonCrypto/CommonCryptor.h> header.
-// Apple's public alternative, CryptoKit, is Swift-only and cannot be called from Objective-C
-// without a bridging layer. Forward-declaring is the standard approach for ObjC AES-GCM.
-extern CCCryptorStatus CCCryptorGCMOneshotEncrypt(
-    CCAlgorithm alg,
-    const void *key, size_t keyLength,
-    const void *iv, size_t ivLength,
-    const void *aad, size_t aadLength,
-    const void *dataIn, size_t dataInLength,
-    void *dataOut,
-    void *tagOut, size_t tagLength);
+#import "AvoInspector-Swift.h"
 
 // AES-GCM constants
-static const NSInteger kIVLength = 16;
+static const NSInteger kNonceLength = 12;
 static const NSInteger kAuthTagLength = 16;
 static const NSInteger kUncompressedKeyLength = 65;
 static const NSInteger kVersionByteLength = 1;
-static const uint8_t kVersionByte = 0x00;
+static const uint8_t kVersionByte = 0x01;
 
 @implementation AvoEncryption
 
@@ -79,8 +66,8 @@ static const uint8_t kVersionByte = 0x00;
         NSData *aesKey = [self sha256:sharedSecret];
 
         // 5. Generate random IV
-        NSMutableData *iv = [NSMutableData dataWithLength:kIVLength];
-        int result = SecRandomCopyBytes(kSecRandomDefault, kIVLength, iv.mutableBytes);
+        NSMutableData *nonce = [NSMutableData dataWithLength:kNonceLength];
+        int result = SecRandomCopyBytes(kSecRandomDefault, kNonceLength, nonce.mutableBytes);
         if (result != errSecSuccess) {
             CFRelease(ephemeralPrivateKey);
             CFRelease(ephemeralPublicKey);
@@ -92,9 +79,9 @@ static const uint8_t kVersionByte = 0x00;
         NSMutableData *ciphertext = [NSMutableData dataWithLength:plaintextData.length];
         NSMutableData *authTag = [NSMutableData dataWithLength:kAuthTagLength];
 
-        BOOL encryptOk = [self aesGcmEncrypt:plaintextData
+        BOOL encryptOk = [AvoGCMEncryptor encrypt:plaintextData
                                          key:aesKey
-                                          iv:iv
+                                          iv:nonce
                                   ciphertext:ciphertext
                                      authTag:authTag];
         CFRelease(ephemeralPrivateKey);
@@ -111,13 +98,13 @@ static const uint8_t kVersionByte = 0x00;
             return nil;
         }
 
-        // 8. Assemble: [Version(1)] + [EphemeralPubKey(65)] + [IV(16)] + [AuthTag(16)] + [Ciphertext]
+        // 8. Assemble: [Version(1)] + [EphemeralPubKey(65)] + [Nonce(12)] + [AuthTag(16)] + [Ciphertext]
         NSMutableData *output = [NSMutableData dataWithCapacity:
-                                 kVersionByteLength + kUncompressedKeyLength + kIVLength + kAuthTagLength + ciphertext.length];
+                                 kVersionByteLength + kUncompressedKeyLength + kNonceLength + kAuthTagLength + ciphertext.length];
         uint8_t version = kVersionByte;
         [output appendBytes:&version length:1];
         [output appendData:ephemeralPubData];
-        [output appendData:iv];
+        [output appendData:nonce];
         [output appendData:authTag];
         [output appendData:ciphertext];
 
@@ -523,24 +510,6 @@ static const uint8_t secp256r1_p_plus1_div4[32] = {
     }
 
     return nil;
-}
-
-#pragma mark - AES-256-GCM
-
-+ (BOOL)aesGcmEncrypt:(NSData *)plaintext
-                   key:(NSData *)key
-                    iv:(NSData *)iv
-            ciphertext:(NSMutableData *)ciphertext
-               authTag:(NSMutableData *)authTag {
-    CCCryptorStatus status = CCCryptorGCMOneshotEncrypt(
-        kCCAlgorithmAES,
-        key.bytes, key.length,
-        iv.bytes, iv.length,
-        NULL, 0,  // no AAD
-        plaintext.bytes, plaintext.length,
-        ciphertext.mutableBytes,
-        authTag.mutableBytes, kAuthTagLength);
-    return status == kCCSuccess;
 }
 
 @end
