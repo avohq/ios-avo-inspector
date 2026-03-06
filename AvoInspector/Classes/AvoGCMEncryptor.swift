@@ -14,9 +14,7 @@ internal class AvoGCMEncryptor: NSObject {
             authTag.setData(Data(sealedBox.tag))
             return true
         } catch {
-            #if DEBUG
             NSLog("[avo] Avo Inspector: AES-GCM encryption failed: \(error)")
-            #endif
             return false
         }
     }

@@ -65,7 +65,7 @@ static const uint8_t kVersionByte = 0x01;
         // 4. KDF: SHA-256(sharedSecret) -> 32-byte AES key
         NSData *aesKey = [self sha256:sharedSecret];
 
-        // 5. Generate random IV
+        // 5. Generate random nonce
         NSMutableData *nonce = [NSMutableData dataWithLength:kNonceLength];
         int result = SecRandomCopyBytes(kSecRandomDefault, kNonceLength, nonce.mutableBytes);
         if (result != errSecSuccess) {
@@ -112,9 +112,9 @@ static const uint8_t kVersionByte = 0x01;
         return [output base64EncodedStringWithOptions:0];
     }
     @catch (NSException *exception) {
-#ifdef DEBUG
-        NSLog(@"[avo] Avo Inspector: Encryption failed: %@", exception);
-#endif
+        if ([AvoInspector isLogging]) {
+            NSLog(@"[avo] Avo Inspector: Encryption failed: %@", exception);
+        }
         return nil;
     }
 }
@@ -181,6 +181,9 @@ static const uint8_t kVersionByte = 0x01;
     // directly, so return the compressed bytes unchanged.  The caller,
     // createECPublicKeyFromUncompressedData:, passes the data straight to
     // SecKeyCreateWithData which handles the decompression internally.
+    if ([AvoInspector isLogging]) {
+        NSLog(@"[avo] Avo Inspector: Compressed public key decompression requires iOS 16+. Attempting direct use with Security framework.");
+    }
     return compressedKey;
 }
 
@@ -252,7 +255,9 @@ static const uint8_t kVersionByte = 0x01;
 + (NSData *)sha256:(NSData *)data {
     uint8_t hash[CC_SHA256_DIGEST_LENGTH];
     CC_SHA256(data.bytes, (CC_LONG)data.length, hash);
-    return [NSData dataWithBytes:hash length:CC_SHA256_DIGEST_LENGTH];
+    NSData *hashData = [NSData dataWithBytes:hash length:CC_SHA256_DIGEST_LENGTH];
+    memset(hash, 0, CC_SHA256_DIGEST_LENGTH);
+    return hashData;
 }
 
 + (NSData * _Nullable)exportUncompressedPublicKey:(SecKeyRef)publicKey {
