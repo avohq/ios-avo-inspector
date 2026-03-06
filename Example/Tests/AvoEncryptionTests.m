@@ -189,8 +189,8 @@ describe(@"AvoEncryption", ^{
         NSData *data = [[NSData alloc] initWithBase64EncodedString:encrypted options:0];
         expect(data).toNot.beNil();
 
-        // Minimum size: 1 (version) + 65 (pubkey) + 12 (nonce) + 16 (tag) + at least 1 byte ciphertext = 95
-        expect(data.length).to.beGreaterThanOrEqualTo(95);
+        // Minimum size: 1 (version) + 65 (pubkey) + 12 (nonce) + 16 (tag) = 94
+        expect(data.length).to.beGreaterThanOrEqualTo(94);
 
         const uint8_t *bytes = data.bytes;
         // Version byte

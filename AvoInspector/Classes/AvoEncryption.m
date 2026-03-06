@@ -256,7 +256,7 @@ static const uint8_t kVersionByte = 0x01;
     uint8_t hash[CC_SHA256_DIGEST_LENGTH];
     CC_SHA256(data.bytes, (CC_LONG)data.length, hash);
     NSData *hashData = [NSData dataWithBytes:hash length:CC_SHA256_DIGEST_LENGTH];
-    memset(hash, 0, CC_SHA256_DIGEST_LENGTH);
+    memset_s(hash, CC_SHA256_DIGEST_LENGTH, 0, CC_SHA256_DIGEST_LENGTH);
     return hashData;
 }
 
