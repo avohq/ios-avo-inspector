@@ -193,7 +193,7 @@ static const uint8_t kVersionByte = 0x01;
     if (tempKey == NULL) {
         if (error != NULL) CFRelease(error);
         if ([AvoInspector isLogging]) {
-            NSLog(@"[avo] Avo Inspector: Compressed public key decompression is not supported on this iOS version (requires iOS 16+). Encryption will be skipped.");
+            NSLog(@"[avo] Avo Inspector: Compressed public key (0x02/0x03 prefix) is not supported on iOS 13-15. Please provide an uncompressed key (0x04 prefix, 65 bytes) or target iOS 16+. Encryption will be skipped.");
         }
         return nil;
     }
@@ -201,7 +201,7 @@ static const uint8_t kVersionByte = 0x01;
     CFRelease(tempKey);
     if (uncompressed == nil) {
         if ([AvoInspector isLogging]) {
-            NSLog(@"[avo] Avo Inspector: Failed to export uncompressed public key on iOS 13-15. Encryption will be skipped.");
+            NSLog(@"[avo] Avo Inspector: Failed to decompress public key on iOS 13-15. Please provide an uncompressed key (0x04 prefix, 65 bytes). Encryption will be skipped.");
         }
     }
     return uncompressed;
