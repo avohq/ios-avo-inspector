@@ -6,6 +6,7 @@
 //
 
 #import "AvoEncryption.h"
+#import "AvoInspector.h"
 #import <Security/Security.h>
 #import <CommonCrypto/CommonCrypto.h>
 #import "AvoGCMEncryptor.h"
