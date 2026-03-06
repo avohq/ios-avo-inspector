@@ -8,7 +8,7 @@
 #import "AvoEncryption.h"
 #import <Security/Security.h>
 #import <CommonCrypto/CommonCrypto.h>
-#import "AvoInspector-Swift.h"
+#import "AvoGCMEncryptor.h"
 
 // AES-GCM constants
 static const NSInteger kNonceLength = 12;

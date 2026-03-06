@@ -18,6 +18,7 @@
 #import "AvoEventSpecFetcher.h"
 #import "AvoEventSpecFetchTypes.h"
 #import "AvoEventValidator.h"
+#import "AvoGCMEncryptor.h"
 #import "AvoGuid.h"
 #import "AvoInspector.h"
 #import "AvoNetworkCallsHandler.h"
