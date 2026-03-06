@@ -18,6 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
              iv:(NSData *)iv
      ciphertext:(NSMutableData *)ciphertext
         authTag:(NSMutableData *)authTag;
+
+/// Decompresses a 33-byte SEC1 compressed P-256 public key using CryptoKit.
+/// Returns the 65-byte uncompressed point (0x04 || X || Y), or nil on failure.
+/// Requires iOS 16+.
++ (nullable NSData *)decompressPublicKey:(NSData *)compressedKey API_AVAILABLE(ios(16.0));
 @end
 
 NS_ASSUME_NONNULL_END

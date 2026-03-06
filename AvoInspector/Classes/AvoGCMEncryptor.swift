@@ -14,8 +14,24 @@ internal class AvoGCMEncryptor: NSObject {
             authTag.setData(Data(sealedBox.tag))
             return true
         } catch {
+            #if DEBUG
             NSLog("[avo] Avo Inspector: AES-GCM encryption failed: \(error)")
+            #endif
             return false
         }
+    }
+
+    /// Decompresses a 33-byte SEC1 compressed P-256 public key into the 65-byte
+    /// uncompressed form (0x04 || X || Y).  Returns nil on any parse failure.
+    /// Requires iOS 16+ for CryptoKit compressed-key parsing.
+    @available(iOS 16.0, *)
+    @objc static func decompressPublicKey(_ compressedKey: NSData) -> NSData? {
+        guard let publicKey = try? P256.KeyAgreement.PublicKey(
+            compressedRepresentation: compressedKey as Data
+        ) else {
+            return nil
+        }
+        // x963Representation is the 65-byte uncompressed point: 0x04 || X(32) || Y(32)
+        return publicKey.x963Representation as NSData
     }
 }
