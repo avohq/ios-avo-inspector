@@ -177,24 +177,41 @@ static const uint8_t kVersionByte = 0x01;
         // Returns the 65-byte uncompressed point (0x04 || X || Y).
         return [AvoGCMEncryptor decompressPublicKey:compressedKey];
     }
-    // iOS 13–15: SecKeyCreateWithData accepts compressed EC keys (0x02/0x03 prefix)
-    // directly, so return the compressed bytes unchanged.  The caller,
-    // createECPublicKeyFromUncompressedData:, passes the data straight to
-    // SecKeyCreateWithData which handles the decompression internally.
-    if ([AvoInspector isLogging]) {
-        NSLog(@"[avo] Avo Inspector: Compressed public key decompression requires iOS 16+. Attempting direct use with Security framework.");
+    // iOS 13–15: Attempt to decompress via Security framework round-trip.
+    // SecKeyCreateWithData may accept compressed EC keys on some OS versions,
+    // and SecKeyCopyExternalRepresentation always returns uncompressed form.
+    NSDictionary *attributes = @{
+        (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
+        (id)kSecAttrKeyClass: (id)kSecAttrKeyClassPublic,
+        (id)kSecAttrKeySizeInBits: @256,
+    };
+    CFErrorRef error = NULL;
+    SecKeyRef tempKey = SecKeyCreateWithData((__bridge CFDataRef)compressedKey,
+                                             (__bridge CFDictionaryRef)attributes,
+                                             &error);
+    if (tempKey == NULL) {
+        if (error != NULL) CFRelease(error);
+        if ([AvoInspector isLogging]) {
+            NSLog(@"[avo] Avo Inspector: Compressed public key decompression is not supported on this iOS version (requires iOS 16+). Encryption will be skipped.");
+        }
+        return nil;
     }
-    return compressedKey;
+    NSData *uncompressed = [self exportUncompressedPublicKey:tempKey];
+    CFRelease(tempKey);
+    if (uncompressed == nil) {
+        if ([AvoInspector isLogging]) {
+            NSLog(@"[avo] Avo Inspector: Failed to export uncompressed public key on iOS 13-15. Encryption will be skipped.");
+        }
+    }
+    return uncompressed;
 }
 
 #pragma mark - SecKey Operations
 
 + (SecKeyRef _Nullable)createECPublicKeyFromUncompressedData:(NSData *)keyData {
-    // The Security framework on iOS accepts both uncompressed (0x04-prefixed, 65 bytes)
-    // and compressed (0x02/0x03-prefixed, 33 bytes) EC public key points when using
-    // kSecAttrKeyTypeECSECPrimeRandom. On iOS 16+ we always receive the uncompressed
-    // form from CryptoKit; on iOS 13-15 we may receive the compressed form and rely on
-    // the Security framework to decompress it.
+    // Expects a 65-byte uncompressed EC public key (0x04 || X || Y).
+    // Compressed keys are resolved to uncompressed form in decompressPublicKey:
+    // before reaching this method.
     NSDictionary *attributes = @{
         (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
         (id)kSecAttrKeyClass: (id)kSecAttrKeyClassPublic,
