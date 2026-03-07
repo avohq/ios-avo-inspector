@@ -54,9 +54,8 @@
                 || [@"s" isEqualToString:@(objCtype)]
                 || [@"q" isEqualToString:@(objCtype)]) {
                 return [AvoInt new];
-            } else if ([@"c" isEqualToString:@(objCtype)]
-                       || [@"B" isEqualToString:@(objCtype)]) {
-                return [AvoBoolean new];
+            } else if ([@"c" isEqualToString:@(objCtype)]) {
+                return [AvoString new];
             } else {
                 return [AvoFloat new];
             }
