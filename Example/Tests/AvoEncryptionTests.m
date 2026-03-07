@@ -60,22 +60,22 @@ extern CCCryptorStatus CCCryptorGCMOneshotDecrypt(
 
 + (NSString * _Nullable)decrypt:(NSString *)base64Encrypted privateKey:(SecKeyRef)privateKey {
     NSData *data = [[NSData alloc] initWithBase64EncodedString:base64Encrypted options:0];
-    if (data == nil || data.length < 98) return nil;
+    if (data == nil || data.length < 95) return nil;
 
     const uint8_t *bytes = data.bytes;
 
     // Version byte
-    if (bytes[0] != 0x00) return nil;
+    if (bytes[0] != 0x01) return nil;
 
     // Parse ephemeral public key (65 bytes)
     NSData *ephemeralPubData = [data subdataWithRange:NSMakeRange(1, 65)];
-    // IV (16 bytes)
-    NSData *iv = [data subdataWithRange:NSMakeRange(66, 16)];
+    // Nonce (12 bytes)
+    NSData *iv = [data subdataWithRange:NSMakeRange(66, 12)];
     // Auth tag (16 bytes)
-    NSData *authTag = [data subdataWithRange:NSMakeRange(82, 16)];
+    NSData *authTag = [data subdataWithRange:NSMakeRange(78, 16)];
     // Ciphertext (rest)
-    NSUInteger ciphertextLen = data.length - 98;
-    NSData *ciphertext = [data subdataWithRange:NSMakeRange(98, ciphertextLen)];
+    NSUInteger ciphertextLen = data.length - 94;
+    NSData *ciphertext = [data subdataWithRange:NSMakeRange(94, ciphertextLen)];
 
     // Reconstruct ephemeral public key
     NSDictionary *keyAttrs = @{
@@ -189,12 +189,12 @@ describe(@"AvoEncryption", ^{
         NSData *data = [[NSData alloc] initWithBase64EncodedString:encrypted options:0];
         expect(data).toNot.beNil();
 
-        // Minimum size: 1 (version) + 65 (pubkey) + 16 (iv) + 16 (tag) + at least 1 byte ciphertext
-        expect(data.length).to.beGreaterThanOrEqualTo(99);
+        // Minimum size: 1 (version) + 65 (pubkey) + 12 (nonce) + 16 (tag) = 94
+        expect(data.length).to.beGreaterThanOrEqualTo(94);
 
         const uint8_t *bytes = data.bytes;
         // Version byte
-        expect(bytes[0]).to.equal(0x00);
+        expect(bytes[0]).to.equal(0x01);
         // Ephemeral public key starts with 0x04 (uncompressed)
         expect(bytes[1]).to.equal(0x04);
     });
@@ -250,7 +250,7 @@ describe(@"AvoEncryption", ^{
         // Verify the ephemeral key in the output uses the correct uncompressed format
         NSData *data = [[NSData alloc] initWithBase64EncodedString:encrypted options:0];
         const uint8_t *bytes = data.bytes;
-        expect(bytes[0]).to.equal(0x00); // version
+        expect(bytes[0]).to.equal(0x01); // version
         expect(bytes[1]).to.equal(0x04); // uncompressed ephemeral key
     });
 

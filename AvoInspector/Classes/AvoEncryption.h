@@ -19,8 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
  2. Generate ephemeral P-256 keypair
  3. ECDH shared secret
  4. KDF: SHA-256(sharedSecret) -> 32-byte AES key
- 5. AES-256-GCM encrypt with random 16-byte IV
- 6. Serialize: [Version(1)] + [EphemeralPubKey(65)] + [IV(16)] + [AuthTag(16)] + [Ciphertext]
+ 5. AES-256-GCM encrypt with random 12-byte nonce
+ 6. Serialize: [Version(1)] + [EphemeralPubKey(65)] + [Nonce(12)] + [AuthTag(16)] + [Ciphertext]
  7. Base64 encode
 
  @param plaintext The string to encrypt
